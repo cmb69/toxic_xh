@@ -80,12 +80,17 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that a classes field is rendered.
+     * Tests that the classes input is rendered.
      *
      * @return void
+     *
+     * @global array The configuration of the plugins.
      */
-    public function testRendersClassesField()
+    public function testRendersClassesInput()
     {
+        global $plugin_cf;
+
+        $plugin_cf['toxic']['classes_available'] = '';
         $this->_assertRenders(
             array(
                 'tag' => 'input',
@@ -93,6 +98,42 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
                     'type' => 'text',
                     'name' => 'toxic_classes',
                     'value' => 'test'
+                ),
+                'parent' => array(
+                    'tag' => 'label',
+                    'content' => 'Classes'
+                ),
+                'ancestor' => array('tag' => 'form')
+            )
+        );
+    }
+
+    /**
+     * Tests that the class select element is rendered.
+     *
+     * @return void
+     *
+     * @global array The configuration of the plugins.
+     */
+    public function testRendersClassesSelect()
+    {
+        global $plugin_cf;
+
+        $plugin_cf['toxic']['classes_available'] = 'one,two,three,test';
+        $this->_assertRenders(
+            array(
+                'tag' => 'select',
+                'attributes' => array(
+                    'name' => 'toxic_classes'
+                ),
+                'children' => array(
+                    'count' => 4,
+                    'only' => array('tag' => 'option')
+                ),
+                'child' => array(
+                    'tag' => 'option',
+                    'content' => 'test',
+                    'attributes' => array('selected' => 'selected')
                 ),
                 'parent' => array(
                     'tag' => 'label',

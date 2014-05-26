@@ -172,23 +172,87 @@ class Toxic_TabCommand
 
         return '<form id="toxic_tab" action="' . $sn . '?' . $su
             . '" method="post">'
-            . $this->_renderClassesField() . $this->_renderButtons()
+            . $this->_renderClassField() . $this->_renderButtons()
             . '</form>';
     }
 
     /**
-     * Renders the classes field.
+     * Renders the class field.
+     *
+     * @return string (X)HTML.
+     *
+     * @global array The configuration of the plugins.
+     */
+    private function _renderClassField()
+    {
+        global $plugin_cf;
+
+        $result = '<label>Classes ';
+        if ($plugin_cf['toxic']['classes_available'] == '') {
+            $result .= $this->_renderClassInput();
+        } else {
+            $result .= $this->_renderClassSelect();
+        }
+        $result .= '</label>';
+        return $result;
+    }
+
+    /**
+     * Renders the class input element.
      *
      * @return string (X)HTML.
      */
-    private function _renderClassesField()
+    private function _renderClassInput()
     {
-        return '<label>Classes '
-            . tag(
-                'input type="text" name="toxic_classes" value="'
-                . $this->_pageData['toxic_classes'] . '"'
-            )
-            . '</label>';
+        return tag(
+            'input type="text" name="toxic_classes" value="'
+            . $this->_pageData['toxic_classes'] . '"'
+        );
+    }
+
+    /**
+     * Renders the class select element.
+     *
+     * @return string (X)HTML.
+     */
+    private function _renderClassSelect()
+    {
+        return '<select name="toxic_classes">' . $this->_renderOptions()
+            . '</select>';
+    }
+
+    /**
+     * Renders the class option elements.
+     *
+     * @return string (X)HTML.
+     */
+    private function _renderOptions()
+    {
+        $result = '';
+        foreach ($this->_getAvailableClasses() as $class) {
+            $result .= '<option';
+            if ($class == $this->_pageData['toxic_classes']) {
+                $result .= ' selected="selected"';
+            }
+            $result .= '>' . $class . '</option>';
+        }
+        return $result;
+    }
+
+    /**
+     * Returns the available classes.
+     *
+     * @return array
+     *
+     * @global array The configuration of the plugins.
+     */
+    private function _getAvailableClasses()
+    {
+        global $plugin_cf;
+
+        $classes = $plugin_cf['toxic']['classes_available'];
+        $classes = explode(',', $classes);
+        return array_map('trim', $classes);
     }
 
     /**
