@@ -27,6 +27,8 @@ if (!defined('CMSIMPLE_XH_VERSION')) {
  */
 require_once $pth['folder']['plugin_classes'] . 'Presentation.php';
 
+require_once $pth['folder']['plugin'] . 'li.php';
+
 /**
  * The plugin version.
  */
