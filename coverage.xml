@@ -10,7 +10,6 @@
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">classes</directory>
             <file>index.php</file>
-            <file>li.php</file>
             <file>toxic_view.php</file>
         </whitelist>
     </filter>

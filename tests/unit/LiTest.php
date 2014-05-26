@@ -17,7 +17,7 @@
 require_once './vendor/autoload.php';
 require_once '../../cmsimple/functions.php';
 require_once '../../cmsimple/classes/PageDataRouter.php';
-require_once './li.php';
+require_once './classes/Presentation.php';
 
 /**
  * Testing li().
@@ -110,6 +110,7 @@ class LiTest extends PHPUnit_Framework_TestCase
         global $cf;
 
         $cf = array(
+            'locator' => array('show_homepage' => 'true'),
             'menu' => array(
                 'levelcatch' => '10',
                 'levels' => '3',
@@ -158,19 +159,17 @@ class LiTest extends PHPUnit_Framework_TestCase
 
         $pd_router = $this->getMockBuilder('XH_PageDataRouter')
             ->disableOriginalConstructor()->getMock();
-        $pd_router->expects($this->any())
-            ->method('find_page')
-            ->will(
-                $this->returnCallback(
-                    function ($pageIndex) {
-                        $useHeaderLocation = $pageIndex == 7 ? '2' : '0';
-                        return array(
-                            'toxic_classes' => '',
-                            'use_header_location' => $useHeaderLocation
-                        );
-                    }
-                )
-            );
+        $pd_router->expects($this->any())->method('find_page')->will(
+            $this->returnCallback(
+                function ($pageIndex) {
+                    return array(
+                        'toxic_classes' => ($pageIndex >= 1 && $pageIndex <= 7)
+                            ? 'blog' : '',
+                        'use_header_location' => ($pageIndex == 7) ? '2' : '0'
+                    );
+                }
+            )
+        );
     }
 
     /**
@@ -218,7 +217,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testNoMenuItemsDisplayNothing()
     {
-        $this->assertEmpty(Toxic_li(array(), 1));
+        $this->assertEmpty((new Toxic_LiCommand(array(), 1))->render());
     }
 
     /**
@@ -595,7 +594,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     private function _renderAllPages($forOrFrom = 1)
     {
-        return Toxic_li(range(0, 10), $forOrFrom);
+        return (new Toxic_LiCommand(range(0, 10), $forOrFrom))->render();
     }
 
     /**
@@ -619,7 +618,10 @@ class LiTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->assertTag($matcher, Toxic_li(array(2, 4, 6), 'submenu'));
+        $this->assertTag(
+            $matcher,
+            (new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render()
+        );
     }
 
     /**
@@ -642,7 +644,10 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'class' => 'submenu'
             )
         );
-        $this->assertTag($matcher, Toxic_li(array(2, 4, 6), 'submenu'));
+        $this->assertTag(
+            $matcher,
+            (new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render()
+        );
     }
 }
 

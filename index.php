@@ -27,12 +27,24 @@ if (!defined('CMSIMPLE_XH_VERSION')) {
  */
 require_once $pth['folder']['plugin_classes'] . 'Presentation.php';
 
-require_once $pth['folder']['plugin'] . 'li.php';
-
 /**
  * The plugin version.
  */
 define('TOXIC_VERSION', '@TOXIC_VERSION@');
+
+/**
+ * Returns a menu structure of the pages.
+ *
+ * @param array $ta The indexes of the pages.
+ * @param mixed $st The menu level to start with or the type of menu.
+ *
+ * @return string The (X)HTML.
+ */
+function Toxic_li($ta, $st)
+{
+    $liCommand = new Toxic_LiCommand($ta, $st);
+    return $liCommand->render();
+}
 
 /**
  * The controller.
