@@ -163,7 +163,7 @@ class LiTest extends PHPUnit_Framework_TestCase
             $this->returnCallback(
                 function ($pageIndex) {
                     return array(
-                        'toxic_classes' => ($pageIndex >= 1 && $pageIndex <= 7)
+                        'toxic_class' => ($pageIndex >= 1 && $pageIndex <= 7)
                             ? 'blog' : '',
                         'use_header_location' => ($pageIndex == 7) ? '2' : '0'
                     );

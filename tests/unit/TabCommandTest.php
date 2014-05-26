@@ -52,11 +52,11 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
         $su = 'Welcome';
         $plugin_tx = array(
             'toxic' => array(
-                'label_classes' => 'Classes',
+                'label_class' => 'Class',
                 'label_save' => 'Save'
             )
         );
-        $pageData = array('toxic_classes' => 'test');
+        $pageData = array('toxic_class' => 'test');
         $this->_subject = new Toxic_TabCommand($pageData);
     }
 
@@ -80,13 +80,13 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that the classes input is rendered.
+     * Tests that the class input is rendered.
      *
      * @return void
      *
      * @global array The configuration of the plugins.
      */
-    public function testRendersClassesInput()
+    public function testRendersClassInput()
     {
         global $plugin_cf;
 
@@ -96,12 +96,12 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
                 'tag' => 'input',
                 'attributes' => array(
                     'type' => 'text',
-                    'name' => 'toxic_classes',
+                    'name' => 'toxic_class',
                     'value' => 'test'
                 ),
                 'parent' => array(
                     'tag' => 'label',
-                    'content' => 'Classes'
+                    'content' => 'Class'
                 ),
                 'ancestor' => array('tag' => 'form')
             )
@@ -115,7 +115,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
      *
      * @global array The configuration of the plugins.
      */
-    public function testRendersClassesSelect()
+    public function testRendersClassSelect()
     {
         global $plugin_cf;
 
@@ -124,10 +124,10 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
             array(
                 'tag' => 'select',
                 'attributes' => array(
-                    'name' => 'toxic_classes'
+                    'name' => 'toxic_class'
                 ),
                 'children' => array(
-                    'count' => 4,
+                    'count' => 5,
                     'only' => array('tag' => 'option')
                 ),
                 'child' => array(
@@ -137,7 +137,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
                 ),
                 'parent' => array(
                     'tag' => 'label',
-                    'content' => 'Classes'
+                    'content' => 'Class'
                 ),
                 'ancestor' => array('tag' => 'form')
             )

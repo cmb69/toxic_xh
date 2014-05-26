@@ -58,7 +58,7 @@ class Toxic_Controller
     {
         global $pth, $toxic, $pd_router, $plugin_tx;
 
-        $pd_router->add_interest('toxic_classes');
+        $pd_router->add_interest('toxic_class');
         if (XH_ADM) {
             $pd_router->add_tab(
                 $plugin_tx['toxic']['label_tab'],
@@ -181,13 +181,14 @@ class Toxic_TabCommand
      *
      * @return string (X)HTML.
      *
+     * @global array The localization of the plugins.
      * @global array The configuration of the plugins.
      */
     private function _renderClassField()
     {
-        global $plugin_cf;
+        global $plugin_tx, $plugin_cf;
 
-        $result = '<label>Classes ';
+        $result = '<label>' . $plugin_tx['toxic']['label_class'] . ' ';
         if ($plugin_cf['toxic']['classes_available'] == '') {
             $result .= $this->_renderClassInput();
         } else {
@@ -205,8 +206,8 @@ class Toxic_TabCommand
     private function _renderClassInput()
     {
         return tag(
-            'input type="text" name="toxic_classes" value="'
-            . $this->_pageData['toxic_classes'] . '"'
+            'input type="text" name="toxic_class" value="'
+            . $this->_pageData['toxic_class'] . '"'
         );
     }
 
@@ -217,7 +218,7 @@ class Toxic_TabCommand
      */
     private function _renderClassSelect()
     {
-        return '<select name="toxic_classes">' . $this->_renderOptions()
+        return '<select name="toxic_class">' . $this->_renderOptions()
             . '</select>';
     }
 
@@ -231,7 +232,7 @@ class Toxic_TabCommand
         $result = '';
         foreach ($this->_getAvailableClasses() as $class) {
             $result .= '<option';
-            if ($class == $this->_pageData['toxic_classes']) {
+            if ($class == $this->_pageData['toxic_class']) {
                 $result .= ' selected="selected"';
             }
             $result .= '>' . $class . '</option>';
@@ -252,6 +253,7 @@ class Toxic_TabCommand
 
         $classes = $plugin_cf['toxic']['classes_available'];
         $classes = explode(',', $classes);
+        array_unshift($classes, '');
         return array_map('trim', $classes);
     }
 
@@ -469,8 +471,8 @@ class Toxic_LiCommand
                 }
             }
             $pageData = $pd_router->find_page($this->_ta[$i]);
-            if ($pageData['toxic_classes']) {
-                $t .= ' ' . $pageData['toxic_classes'];
+            if ($pageData['toxic_class']) {
+                $t .= ' ' . $pageData['toxic_class'];
             }
             $t .= '">';
             if ($tf) {
