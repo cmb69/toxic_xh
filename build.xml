@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- $Id$ -->
-
-<project name="Toxic" default="default">
-
-    <!-- Properties -->
+<project name="Toxic" default="help">
 
     <property name="styledir" value="C:\xampp\php\data\phing\etc"/>
-
-    <!-- Filesets -->
 
     <fileset id="php-sources" dir=".">
         <include name="classes/*.php"/>
@@ -20,25 +14,25 @@
         <include name="*Test.php"/>
     </fileset>
 
+    <target name="help" description="lists available targets">
+        <exec command="phing -l" outputProperty="help"/>
+        <echo>${help}</echo>
+    </target>
 
-    <!-- Checks -->
-
-    <target name="sniff">
+    <target name="sniff" description="checks adherence to PEAR CS">
         <phpcodesniffer standard="PEAR" format="full">
             <fileset refid="php-sources"/>
             <fileset refid="unit-tests"/>
         </phpcodesniffer>
     </target>
 
-    <target name="compat">
+    <target name="compat" description="checks PHP requirements">
         <exec command="phpcompatinfo --configuration phpcompatinfo.xml print
                                      --exclude-pattern toxic ."
               logoutput="true"/>
     </target>
 
-    <!-- Tests -->
-
-    <target name="unit-tests">
+    <target name="unit-tests" description="runs all unit tests">
         <phpunit haltonerror="true" haltonfailure="true">
             <formatter type="plain" usefile="false"/>
             <batchtest>
@@ -47,7 +41,7 @@
         </phpunit>
     </target>
 
-<!--    <target name="attack-tests">
+    <!--<target name="attack-tests" description="runs all attack tests">
         <fail unless="env.CMSIMPLEDIR" message="CMSIMPLEDIR undefined!"/>
         <phpunit haltonerror="true" haltonfailure="true">
             <formatter type="plain" usefile="false"/>
@@ -57,17 +51,13 @@
                 </fileset>
             </batchtest>
         </phpunit>
-    </target>
--->
-    <!-- Code coverage -->
+    </target>-->
 
-    <target name="coverage">
+    <target name="coverage" description="generates coverage report">
         <exec command="phpunit --configuration coverage.xml" logoutput="true"/>
     </target>
 
-    <!-- Documentation -->
-
-    <target name="php-doc">
+    <target name="doc" description="generates the developer documentation">
         <phpdoc title="Toxic_XH Developer Documentation" destdir="doc/php"
                 output="HTML:Smarty:HandS" defaultpackagename="Toxic"
                 defaultcategoryname="CMSimple_XH">
@@ -79,17 +69,11 @@
         </phpdoc>
     </target>
 
-<!--    <target name="js-doc">
-        <exec command="jsdoc -destination doc/js pagemanager.js" checkreturn="true"/>
-    </target>
--->
-    <target name="doc" depends="php-doc"/>
-
-    <!-- Build -->
-
-    <target name="build">
+    <target name="build" description="builds distributable ZIP archive">
         <fail unless="version" message="version is not defined!"/>
-        <svnexport revision="" repositoryurl="." todir="export"/>
+        <exec command="git archive -o export.tar HEAD" checkreturn="true"/>
+        <untar file="export.tar" todir="export"/>
+        <delete file="export.tar"/>
         <move todir="dist">
             <fileset dir="export">
                 <include name="index.php"/>
@@ -103,12 +87,11 @@
         </move>
         <move todir="dist">
             <fileset dir="export">
-                <exclude name="tests/**"/>
-                <exclude name="toxic.komodoproject"/>
                 <exclude name="build.xml"/>
+                <exclude name="composer.*"/>
                 <exclude name="coverage.xml"/>
-                <exclude name="phpcompatinfo.xml"/>
-                <exclude name="TODO"/>
+                <exclude name="phpcompatinfo.*"/>
+                <exclude name="tests/**"/>
             </fileset>
         </move>
         <delete dir="export"/>
