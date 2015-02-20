@@ -10,7 +10,6 @@
  * @author    The CMSimple_XH developers <devs@cmsimple-xh.org>
  * @copyright 2014 The CMSimple_XH developers <http://cmsimple-xh.org/?The_Team>
  * @license   http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
- * @version   SVN: $Id$
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
