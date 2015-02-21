@@ -13,7 +13,7 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
-require_once './classes/Presentation.php';
+require_once './classes/CommandFactory.php';
 
 /**
  * Testing the command factory.

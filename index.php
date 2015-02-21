@@ -30,11 +30,6 @@ EOT
 }
 
 /**
- * The presentation layer.
- */
-require_once $pth['folder']['plugin_classes'] . 'Presentation.php';
-
-/**
  * The plugin version.
  */
 define('TOXIC_VERSION', '@TOXIC_VERSION@');

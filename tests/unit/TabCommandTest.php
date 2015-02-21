@@ -14,7 +14,7 @@
  */
 
 require_once '../../cmsimple/functions.php';
-require_once './classes/Presentation.php';
+require_once './classes/TabCommand.php';
 
 /**
  * Testing the tab command.
