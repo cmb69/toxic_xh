@@ -9,6 +9,9 @@
  * Back-end.
  */
 
+.toxic_license {
+    text-align: justify;
+}
 .toxic_logo {
     float: left;
     margin-right: 8px;
