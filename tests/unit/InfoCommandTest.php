@@ -31,7 +31,7 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      *
      * @var Toxic_InfoCommand
      */
-    private $_subject;
+    protected $subject;
 
     /**
      * Sets up the test fixture.
@@ -54,7 +54,7 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
                 'caption_info' => 'Info'
             )
         );
-        $this->_subject = new Toxic_InfoCommand();
+        $this->subject = new Toxic_InfoCommand();
     }
 
     /**
@@ -64,7 +64,7 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersHeading()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'h1',
                 'content' => "Toxic \xE2\x80\x93 Info"
@@ -79,7 +79,7 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersVersion()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'p',
                 'content' => 'Version: 1.0'
@@ -94,7 +94,7 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersCopyright()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'p',
                 'content' => 'Copyright'
@@ -109,7 +109,7 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersLicense()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'p',
                 'attributes' => array('class' => 'toxic_license'),
@@ -125,9 +125,9 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    private function _assertRenders($matcher)
+    protected function assertRenders($matcher)
     {
-        @$this->assertTag($matcher, $this->_subject->render());
+        @$this->assertTag($matcher, $this->subject->render());
     }
 }
 

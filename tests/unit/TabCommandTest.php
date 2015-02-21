@@ -32,7 +32,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
      *
      * @var Toxic_TabCommand
      */
-    private $_subject;
+    protected $subject;
 
     /**
      * Sets up the test fixture.
@@ -56,7 +56,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
             )
         );
         $pageData = array('toxic_class' => 'test');
-        $this->_subject = new Toxic_TabCommand($pageData);
+        $this->subject = new Toxic_TabCommand($pageData);
     }
 
     /**
@@ -66,7 +66,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersForm()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'form',
                 'id' => 'toxic_tab',
@@ -90,7 +90,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
         global $plugin_cf;
 
         $plugin_cf['toxic']['classes_available'] = '';
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'input',
                 'attributes' => array(
@@ -119,7 +119,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
         global $plugin_cf;
 
         $plugin_cf['toxic']['classes_available'] = 'one,two,three,test';
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'select',
                 'attributes' => array(
@@ -150,7 +150,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersSubmitButton()
     {
-        $this->_assertRenders(
+        $this->assertRenders(
             array(
                 'tag' => 'button',
                 'attributes' => array('name' => 'save_page_data'),
@@ -171,9 +171,9 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    private function _assertRenders($matcher)
+    protected function assertRenders($matcher)
     {
-        @$this->assertTag($matcher, $this->_subject->render());
+        @$this->assertTag($matcher, $this->subject->render());
     }
 }
 

@@ -34,35 +34,35 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @var Toxic_Controller
      */
-    private $_subject;
+    protected $subject;
 
     /**
      * The command factory mock.
      *
      * @var Toxic_CommandFactory
      */
-    private $_commandFactory;
+    protected $commandFactory;
 
     /**
      * The info command mock.
      *
      * @var Toxic_InfoCommand
      */
-    private $_infoCommand;
+    protected $infoCommand;
 
     /**
      * The pring_plugin_admin() mock.
      *
      * @var PHPUnit_Extensions_MockFunction
      */
-    private $_printPluginAdmin;
+    protected $printPluginAdmin;
 
     /**
      * The plugin_admin_common() mock.
      *
      * @var PHPUnit_Extensions_MockFunction
      */
-    private $_pluginAdminCommon;
+    protected $pluginAdminCommon;
 
     /**
      * Sets up the test fixture.
@@ -77,7 +77,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     {
         global $pth, $pd_router, $plugin_tx;
 
-        $this->_defineConstant('XH_ADM', false);
+        $this->defineConstant('XH_ADM', false);
         $pth = array(
             'folder' => array(
                 'plugins' => './plugins/'
@@ -90,18 +90,18 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         );
         $pd_router = $this->getMockBuilder('XH_PageDataRouter')
             ->disableOriginalConstructor()->getMock();
-        $this->_printPluginAdmin = new PHPUnit_Extensions_MockFunction(
-            'print_plugin_admin', $this->_subject
+        $this->printPluginAdmin = new PHPUnit_Extensions_MockFunction(
+            'print_plugin_admin', $this->subject
         );
-        $this->_pluginAdminCommon = new PHPUnit_Extensions_MockFunction(
-            'plugin_admin_common', $this->_subject
+        $this->pluginAdminCommon = new PHPUnit_Extensions_MockFunction(
+            'plugin_admin_common', $this->subject
         );
-        $this->_commandFactory = $this->getMock('Toxic_CommandFactory');
-        $this->_infoCommand = $this->getMock('Toxic_InfoCommand');
-        $this->_commandFactory->expects($this->any())
+        $this->commandFactory = $this->getMock('Toxic_CommandFactory');
+        $this->infoCommand = $this->getMock('Toxic_InfoCommand');
+        $this->commandFactory->expects($this->any())
             ->method('makeInfoCommand')
-            ->will($this->returnValue($this->_infoCommand));
-        $this->_subject = new Toxic_Controller($this->_commandFactory);
+            ->will($this->returnValue($this->infoCommand));
+        $this->subject = new Toxic_Controller($this->commandFactory);
     }
 
     /**
@@ -117,7 +117,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
         $pd_router->expects($this->once())->method('add_interest')
             ->with('toxic_class');
-        $this->_subject->dispatch();
+        $this->subject->dispatch();
     }
 
     /**
@@ -131,10 +131,10 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     {
         global $pd_router;
 
-        $this->_defineConstant('XH_ADM', true);
+        $this->defineConstant('XH_ADM', true);
         $pd_router->expects($this->once())->method('add_tab')
             ->with('Toxic', './plugins/toxic/toxic_view.php');
-        $this->_subject->dispatch();
+        $this->subject->dispatch();
     }
 
     /**
@@ -153,11 +153,11 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $toxic = 'true';
         $admin = 'plugin_language';
         $action = 'plugin_edit';
-        $this->_defineConstant('XH_ADM', true);
-        $this->_printPluginAdmin->expects($this->once())->with('off');
-        $this->_pluginAdminCommon->expects($this->once())
+        $this->defineConstant('XH_ADM', true);
+        $this->printPluginAdmin->expects($this->once())->with('off');
+        $this->pluginAdminCommon->expects($this->once())
             ->with($action, $admin, 'toxic');
-        $this->_subject->dispatch();
+        $this->subject->dispatch();
     }
 
     /**
@@ -174,10 +174,10 @@ class ControllerTest extends PHPUnit_Framework_TestCase
 
         $toxic = 'true';
         $admin = '';
-        $this->_defineConstant('XH_ADM', true);
-        $this->_printPluginAdmin->expects($this->once())->with('off');
-        $this->_infoCommand->expects($this->once())->method('render');
-        $this->_subject->dispatch();
+        $this->defineConstant('XH_ADM', true);
+        $this->printPluginAdmin->expects($this->once())->with('off');
+        $this->infoCommand->expects($this->once())->method('render');
+        $this->subject->dispatch();
     }
 
     /**
@@ -188,7 +188,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    private function _defineConstant($name, $value)
+    protected function defineConstant($name, $value)
     {
         if (!defined($name)) {
             define($name, $value);

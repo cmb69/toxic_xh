@@ -31,7 +31,7 @@ class CommandFactoryTest extends PHPUnit_Framework_TestCase
      *
      * @var Toxic_CommandFactory
      */
-    private $_subject;
+    protected $subject;
 
     /**
      * Sets up the test fixture.
@@ -40,7 +40,7 @@ class CommandFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->_subject = new Toxic_CommandFactory();
+        $this->subject = new Toxic_CommandFactory();
     }
 
     /**
@@ -51,7 +51,7 @@ class CommandFactoryTest extends PHPUnit_Framework_TestCase
     public function testMakeTabCommand()
     {
         $this->assertInstanceOf(
-            'Toxic_TabCommand', $this->_subject->makeTabCommand(array())
+            'Toxic_TabCommand', $this->subject->makeTabCommand(array())
         );
     }
 
@@ -63,7 +63,7 @@ class CommandFactoryTest extends PHPUnit_Framework_TestCase
     public function testMakeInfoCommand()
     {
         $this->assertInstanceOf(
-            'Toxic_InfoCommand', $this->_subject->makeInfoCommand()
+            'Toxic_InfoCommand', $this->subject->makeInfoCommand()
         );
     }
 }

@@ -29,7 +29,7 @@ class Toxic_Controller
      *
      * @var Toxic_CommandFactory
      */
-    private $_commandFactory;
+    protected $commandFactory;
 
     /**
      * Initializes a new instance.
@@ -40,7 +40,7 @@ class Toxic_Controller
      */
     public function __construct(Toxic_CommandFactory $commandFactory)
     {
-        $this->_commandFactory = $commandFactory;
+        $this->commandFactory = $commandFactory;
     }
 
     /**
@@ -64,7 +64,7 @@ class Toxic_Controller
                 $pth['folder']['plugins'] . 'toxic/toxic_view.php'
             );
             if (isset($toxic) && $toxic == 'true') {
-                $this->_handleAdministration();
+                $this->handleAdministration();
             }
         }
     }
@@ -78,14 +78,14 @@ class Toxic_Controller
      * @global string The value of the <var>action</var> GP parameter.
      * @global string The HTML for the contents area.
      */
-    private function _handleAdministration()
+    protected function handleAdministration()
     {
         global $admin, $action, $o;
 
         $o .= print_plugin_admin('off');
         switch ($admin) {
         case '':
-            $o .= $this->_commandFactory->makeInfoCommand()->render();
+            $o .= $this->commandFactory->makeInfoCommand()->render();
             break;
         default:
             $o .= plugin_admin_common($action, $admin, 'toxic');

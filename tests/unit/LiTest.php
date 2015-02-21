@@ -29,9 +29,19 @@ require_once './classes/LiCommand.php';
  */
 class LiTest extends PHPUnit_Framework_TestCase
 {
-    private $_liStub;
+    /**
+     * The li() stub.
+     *
+     * @var object
+     */
+    protected $liStub;
 
-    private $_hideStub;
+    /**
+     * The hide() stub.
+     *
+     * @var object
+     */
+    protected $hideStub;
 
     /**
      * Sets up the default fixture.
@@ -46,11 +56,11 @@ class LiTest extends PHPUnit_Framework_TestCase
 
         $pth = array('folder' => array('classes' => './cmsimple/classes/'));
         $s = 0;
-        $this->_setUpPageStructure();
-        $this->_setUpConfiguration();
-        $this->_setUpEditMode(false);
-        $this->_setUpPageDataRouterMock();
-        $this->_setUpFunctionStubs();
+        $this->setUpPageStructure();
+        $this->setUpConfiguration();
+        $this->setUpEditMode(false);
+        $this->setUpPageDataRouterMock();
+        $this->setUpFunctionStubs();
     }
 
     /**
@@ -63,7 +73,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      * @global array The URLs of the pages.
      * @global array The levels of the pages.
      */
-    private function _setUpPageStructure()
+    protected function setUpPageStructure()
     {
         global $cl, $h, $u, $l;
 
@@ -104,7 +114,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      *
      * @global array The configuration of the core.
      */
-    private function _setUpConfiguration()
+    protected function setUpConfiguration()
     {
         global $cf;
 
@@ -133,7 +143,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      *
      * @global bool Whether edit mode is enabled.
      */
-    private function _setUpEditMode($flag)
+    protected function setUpEditMode($flag)
     {
         global $edit;
 
@@ -152,7 +162,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      *
      * @global XH_PageDataRouter The page data router.
      */
-    private function _setUpPageDataRouterMock()
+    protected function setUpPageDataRouterMock()
     {
         global $pd_router;
 
@@ -176,10 +186,10 @@ class LiTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    private function _setUpFunctionStubs()
+    protected function setUpFunctionStubs()
     {
-        $this->_liStub = new PHPUnit_Extensions_MockFunction('a', $this);
-        $this->_liStub->expects($this->any())->will(
+        $this->liStub = new PHPUnit_Extensions_MockFunction('a', $this);
+        $this->liStub->expects($this->any())->will(
             $this->returnCallback(
                 function ($pageIndex, $suffix) {
                     global $u;
@@ -188,8 +198,8 @@ class LiTest extends PHPUnit_Framework_TestCase
                 }
             )
         );
-        $this->_hideStub = new PHPUnit_Extensions_MockFunction('hide', $this);
-        $this->_hideStub->expects($this->any())->will(
+        $this->hideStub = new PHPUnit_Extensions_MockFunction('hide', $this);
+        $this->hideStub->expects($this->any())->will(
             $this->returnCallback(
                 function ($pageIndex) {
                     return in_array($pageIndex, array(4, 5));
@@ -205,8 +215,8 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function tearDown()
     {
-        $this->_liStub->restore();
-        $this->_hideStub->restore();
+        $this->liStub->restore();
+        $this->hideStub->restore();
     }
 
     /**
@@ -237,7 +247,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'tag' => 'li'
             )
         );
-        $this->_assertMatches($matcher);
+        $this->assertMatches($matcher);
     }
 
     /**
@@ -272,7 +282,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'attributes' => array('class' => $class)
             )
         );
-        $this->_assertMatches($matcher);
+        $this->assertMatches($matcher);
     }
 
     /**
@@ -299,7 +309,7 @@ class LiTest extends PHPUnit_Framework_TestCase
             'tag' => 'span',
             'content' => 'Welcome'
         );
-        $this->_assertMatches($matcher);
+        $this->assertMatches($matcher);
     }
 
     /**
@@ -313,7 +323,7 @@ class LiTest extends PHPUnit_Framework_TestCase
             'tag' => 'a',
             'content' => 'Blog'
         );
-        $this->_assertMatches($matcher);
+        $this->assertMatches($matcher);
     }
 
     /**
@@ -323,9 +333,9 @@ class LiTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    private function _assertMatches($matcher)
+    protected function assertMatches($matcher)
     {
-        @$this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -343,7 +353,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Hidden'
             )
         );
-        @$this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -362,7 +372,7 @@ class LiTest extends PHPUnit_Framework_TestCase
             'tag' => 'ul',
             'attributes' => array('class' => $class)
         );
-        @$this->assertTag($matcher, $this->_renderAllPages($forOrFrom));
+        @$this->assertTag($matcher, $this->renderAllPages($forOrFrom));
     }
 
     /**
@@ -405,7 +415,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Blog'
             )
         );
-        @$this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -423,7 +433,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Welcome'
             )
         );
-        @$this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -441,7 +451,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Blog'
             )
         );
-        @$this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -464,7 +474,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Welcome'
             )
         );
-        @$this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -495,7 +505,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Blog'
             )
         );
-        @$this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -537,7 +547,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'About'
             )
         );
-        @$this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -565,7 +575,7 @@ class LiTest extends PHPUnit_Framework_TestCase
             'content' => 'Cold',
             'attributes' => array('target' => '_blank')
         );
-        @$this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -575,13 +585,13 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testPageDoesntOpenInNewWindowInEditMode()
     {
-        $this->_setUpEditMode(true);
+        $this->setUpEditMode(true);
         $matcher = array(
             'tag' => 'a',
             'content' => 'Cold',
             'attributes' => array('target' => '_blank')
         );
-        @$this->assertNotTag($matcher, $this->_renderAllPages());
+        @$this->assertNotTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -591,7 +601,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      *
      * @return string (X)HTML.
      */
-    private function _renderAllPages($forOrFrom = 1)
+    protected function renderAllPages($forOrFrom = 1)
     {
         return (new Toxic_LiCommand(range(0, 10), $forOrFrom))->render();
     }

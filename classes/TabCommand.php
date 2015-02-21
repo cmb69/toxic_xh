@@ -29,7 +29,7 @@ class Toxic_TabCommand
      *
      * @var array
      */
-    private $_pageData;
+    protected $pageData;
 
     /**
      * Initializes a new instance.
@@ -40,7 +40,7 @@ class Toxic_TabCommand
      */
     public function __construct($pageData)
     {
-        $this->_pageData = $pageData;
+        $this->pageData = $pageData;
     }
 
     /**
@@ -57,7 +57,7 @@ class Toxic_TabCommand
 
         return '<form id="toxic_tab" action="' . $sn . '?' . $su
             . '" method="post">'
-            . $this->_renderClassField() . $this->_renderButtons()
+            . $this->renderClassField() . $this->renderButtons()
             . '</form>';
     }
 
@@ -69,15 +69,15 @@ class Toxic_TabCommand
      * @global array The localization of the plugins.
      * @global array The configuration of the plugins.
      */
-    private function _renderClassField()
+    protected function renderClassField()
     {
         global $plugin_tx, $plugin_cf;
 
         $result = '<label>' . $plugin_tx['toxic']['label_class'] . ' ';
         if ($plugin_cf['toxic']['classes_available'] == '') {
-            $result .= $this->_renderClassInput();
+            $result .= $this->renderClassInput();
         } else {
-            $result .= $this->_renderClassSelect();
+            $result .= $this->renderClassSelect();
         }
         $result .= '</label>';
         return $result;
@@ -88,11 +88,11 @@ class Toxic_TabCommand
      *
      * @return string (X)HTML.
      */
-    private function _renderClassInput()
+    protected function renderClassInput()
     {
         return tag(
             'input type="text" name="toxic_class" value="'
-            . $this->_pageData['toxic_class'] . '"'
+            . $this->pageData['toxic_class'] . '"'
         );
     }
 
@@ -101,9 +101,9 @@ class Toxic_TabCommand
      *
      * @return string (X)HTML.
      */
-    private function _renderClassSelect()
+    protected function renderClassSelect()
     {
-        return '<select name="toxic_class">' . $this->_renderOptions()
+        return '<select name="toxic_class">' . $this->renderOptions()
             . '</select>';
     }
 
@@ -112,12 +112,12 @@ class Toxic_TabCommand
      *
      * @return string (X)HTML.
      */
-    private function _renderOptions()
+    protected function renderOptions()
     {
         $result = '';
-        foreach ($this->_getAvailableClasses() as $class) {
+        foreach ($this->getAvailableClasses() as $class) {
             $result .= '<option';
-            if ($class == $this->_pageData['toxic_class']) {
+            if ($class == $this->pageData['toxic_class']) {
                 $result .= ' selected="selected"';
             }
             $result .= '>' . $class . '</option>';
@@ -132,7 +132,7 @@ class Toxic_TabCommand
      *
      * @global array The configuration of the plugins.
      */
-    private function _getAvailableClasses()
+    protected function getAvailableClasses()
     {
         global $plugin_cf;
 
@@ -147,10 +147,10 @@ class Toxic_TabCommand
      *
      * @return string ()XHTML.
      */
-    private function _renderButtons()
+    protected function renderButtons()
     {
         return '<div class="toxic_tab_buttons">'
-            . $this->_renderSubmitButton() . '</div>';
+            . $this->renderSubmitButton() . '</div>';
     }
 
     /**
@@ -160,7 +160,7 @@ class Toxic_TabCommand
      *
      * @global array  The localization of the plugins.
      */
-    private function _renderSubmitButton()
+    protected function renderSubmitButton()
     {
         global $plugin_tx;
 

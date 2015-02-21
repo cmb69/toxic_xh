@@ -31,8 +31,8 @@ class Toxic_InfoCommand
      */
     public function render()
     {
-        return $this->_renderHeading() . $this->_renderVersion()
-            . $this->_renderCopyright() . $this->_renderLicense();
+        return $this->renderHeading() . $this->renderVersion()
+            . $this->renderCopyright() . $this->renderLicense();
     }
 
     /**
@@ -42,7 +42,7 @@ class Toxic_InfoCommand
      *
      * @global array The localization of the plugins.
      */
-    private function _renderHeading()
+    protected function renderHeading()
     {
         global $plugin_tx;
 
@@ -55,7 +55,7 @@ class Toxic_InfoCommand
      *
      * @return string (X)HTML.
      */
-    private function _renderVersion()
+    protected function renderVersion()
     {
         return '<p>Version: ' . TOXIC_VERSION . '</p>';
     }
@@ -65,7 +65,7 @@ class Toxic_InfoCommand
      *
      * @return string (X)HTML.
      */
-    private function _renderCopyright()
+    protected function renderCopyright()
     {
         return '<p>Copyright &copy; 2014-2015'
             . ' <a href="http://3-magi.net/">Christoph M. Becker</a>';
@@ -76,7 +76,7 @@ class Toxic_InfoCommand
      *
      * @return string (X)HTML.
      */
-    private function _renderLicense()
+    protected function renderLicense()
     {
         return <<<EOT
 <p class="toxic_license">This program is free software: you can
