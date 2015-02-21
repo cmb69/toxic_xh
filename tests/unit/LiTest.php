@@ -325,7 +325,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     private function _assertMatches($matcher)
     {
-        $this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -343,7 +343,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Hidden'
             )
         );
-        $this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -362,7 +362,7 @@ class LiTest extends PHPUnit_Framework_TestCase
             'tag' => 'ul',
             'attributes' => array('class' => $class)
         );
-        $this->assertTag($matcher, $this->_renderAllPages($forOrFrom));
+        @$this->assertTag($matcher, $this->_renderAllPages($forOrFrom));
     }
 
     /**
@@ -405,7 +405,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Blog'
             )
         );
-        $this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -423,7 +423,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Welcome'
             )
         );
-        $this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -441,7 +441,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Blog'
             )
         );
-        $this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -464,7 +464,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Welcome'
             )
         );
-        $this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -495,7 +495,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'Blog'
             )
         );
-        $this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -537,7 +537,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'content' => 'About'
             )
         );
-        $this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -565,7 +565,7 @@ class LiTest extends PHPUnit_Framework_TestCase
             'content' => 'Cold',
             'attributes' => array('target' => '_blank')
         );
-        $this->assertTag($matcher, $this->_renderAllPages());
+        @$this->assertTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -581,7 +581,7 @@ class LiTest extends PHPUnit_Framework_TestCase
             'content' => 'Cold',
             'attributes' => array('target' => '_blank')
         );
-        $this->assertNotTag($matcher, $this->_renderAllPages());
+        @$this->assertNotTag($matcher, $this->_renderAllPages());
     }
 
     /**
@@ -617,7 +617,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->assertTag(
+        @$this->assertTag(
             $matcher,
             (new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render()
         );
@@ -643,7 +643,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                 'class' => 'submenu'
             )
         );
-        $this->assertTag(
+        @$this->assertTag(
             $matcher,
             (new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render()
         );
