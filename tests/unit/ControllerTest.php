@@ -64,6 +64,8 @@ class ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected $pluginAdminCommon;
 
+    protected $registerStandardPluginMenuItems;
+
     /**
      * Sets up the test fixture.
      *
@@ -96,6 +98,10 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->pluginAdminCommon = new PHPUnit_Extensions_MockFunction(
             'plugin_admin_common', $this->subject
         );
+        $this->registerStandardPluginMenuItems
+            = new PHPUnit_Extensions_MockFunction(
+                'XH_registerStandardPluginMenuItems', $this->subject
+            );
         $this->commandFactory = $this->getMock('Toxic_CommandFactory');
         $this->infoCommand = $this->getMock('Toxic_InfoCommand');
         $this->commandFactory->expects($this->any())

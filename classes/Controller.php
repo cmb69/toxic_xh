@@ -48,25 +48,57 @@ class Toxic_Controller
      *
      * @return void
      *
-     * @global array             The paths of system files and folders.
-     * @global string            Whether the toxic administration is requested.
      * @global XH_PageDataRouter The page data router.
-     * @global array             The localization of the plugins.
      */
     public function dispatch()
     {
-        global $pth, $toxic, $pd_router, $plugin_tx;
+        global $pd_router;
 
         $pd_router->add_interest('toxic_class');
         if (XH_ADM) {
-            $pd_router->add_tab(
-                $plugin_tx['toxic']['label_tab'],
-                $pth['folder']['plugins'] . 'toxic/toxic_view.php'
-            );
-            if (isset($toxic) && $toxic == 'true') {
+            $this->addPageDataTab();
+            if (function_exists('XH_registerStandardPluginMenuItems')) {
+                XH_registerStandardPluginMenuItems(false);
+            }
+            if ($this->isAdministrationRequested()) {
                 $this->handleAdministration();
             }
         }
+    }
+
+    /**
+     * Adds the page data tab.
+     *
+     * @return void
+     *
+     * @global array             The paths of system files and folders.
+     * @global XH_PageDataRouter The page data router.
+     * @global array             The localization of the plugins.
+     */
+    protected function addPageDataTab()
+    {
+        global $pth, $pd_router, $plugin_tx;
+
+        $pd_router->add_tab(
+            $plugin_tx['toxic']['label_tab'],
+            $pth['folder']['plugins'] . 'toxic/toxic_view.php'
+        );
+    }
+
+    /**
+     * Returns whether the administration is requested.
+     *
+     * @return bool
+     *
+     * @global string Whether the toxic administration is requested.
+     */
+    protected function isAdministrationRequested()
+    {
+        global $toxic;
+
+        return function_exists('XH_wantsPluginAdministration')
+            && XH_wantsPluginAdministration('toxic')
+            || isset($toxic) && $toxic == 'true';
     }
 
     /**
