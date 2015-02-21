@@ -4,3 +4,12 @@
 .toxic_tab_buttons {
     text-align: right;
 }
+
+/*
+ * Back-end.
+ */
+
+.toxic_logo {
+    float: left;
+    margin-right: 8px;
+}

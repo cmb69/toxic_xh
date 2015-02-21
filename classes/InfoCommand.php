@@ -31,7 +31,8 @@ class Toxic_InfoCommand
      */
     public function render()
     {
-        return $this->renderHeading() . $this->renderVersion()
+        return $this->renderHeading()
+            . $this->renderLogo() . $this->renderVersion()
             . $this->renderCopyright() . $this->renderLicense();
     }
 
@@ -48,6 +49,24 @@ class Toxic_InfoCommand
 
         return '<h1>Toxic &ndash; ' . $plugin_tx['toxic']['caption_info']
             . '</h1>';
+    }
+
+    /**
+     * Renders the logo.
+     *
+     * @return string (X)HTML.
+     *
+     * @global array The paths of system files and folders.
+     * @global array The localization of the plugins.
+     */
+    protected function renderLogo()
+    {
+        global $pth, $plugin_tx;
+
+        return tag(
+            'img class="toxic_logo" src="' . $pth['folder']['plugins']
+            . 'toxic/toxic.png" alt="' . $plugin_tx['toxic']['alt_logo'] . '"'
+        );
     }
 
     /**
