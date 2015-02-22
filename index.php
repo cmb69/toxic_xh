@@ -35,6 +35,19 @@ EOT
 define('TOXIC_VERSION', '@TOXIC_VERSION@');
 
 /**
+ * Returns a table of contents.
+ *
+ * @param int $start The menu level to start with.
+ * @param int $end   The menu level to end with.
+ *
+ * @return string (X)HTML.
+ */
+function toxic($start = null, $end = null)
+{
+    return toc($start, $end, 'Toxic_li');
+}
+
+/**
  * Returns a menu structure of the pages.
  *
  * @param array $ta The indexes of the pages.
