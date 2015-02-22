@@ -156,7 +156,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
                 'attributes' => array('name' => 'save_page_data'),
                 'content' => 'Save',
                 'parent' => array(
-                    'tag' => 'div',
+                    'tag' => 'p',
                     'attributes' => array('class' => 'toxic_tab_buttons')
                 ),
                 'ancestor' => array('tag' => 'form')

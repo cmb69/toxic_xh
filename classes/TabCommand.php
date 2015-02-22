@@ -73,13 +73,13 @@ class Toxic_TabCommand
     {
         global $plugin_tx, $plugin_cf;
 
-        $result = '<label>' . $plugin_tx['toxic']['label_class'] . ' ';
+        $result = '<p><label>' . $plugin_tx['toxic']['label_class'] . ' ';
         if ($plugin_cf['toxic']['classes_available'] == '') {
             $result .= $this->renderClassInput();
         } else {
             $result .= $this->renderClassSelect();
         }
-        $result .= '</label>';
+        $result .= '</label></p>';
         return $result;
     }
 
@@ -111,12 +111,19 @@ class Toxic_TabCommand
      * Renders the class option elements.
      *
      * @return string (X)HTML.
+     *
+     * @global array The localization of the plugins.
      */
     protected function renderOptions()
     {
+        global $plugin_tx;
+
         $result = '';
         foreach ($this->getAvailableClasses() as $class) {
             $result .= '<option';
+            if ($class == '') {
+                 $result .= ' label="' . $plugin_tx['toxic']['label_none'] . '"';
+            }
             if ($class == $this->pageData['toxic_class']) {
                 $result .= ' selected="selected"';
             }
@@ -149,8 +156,8 @@ class Toxic_TabCommand
      */
     protected function renderButtons()
     {
-        return '<div class="toxic_tab_buttons">'
-            . $this->renderSubmitButton() . '</div>';
+        return '<p class="toxic_tab_buttons">'
+            . $this->renderSubmitButton() . '</p>';
     }
 
     /**
