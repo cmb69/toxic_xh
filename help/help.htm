@@ -10,9 +10,13 @@
 <body>
 
 <h1>Toxic_XH - a CMSimple_XH Plugin</h1>
-<img src="../toxic.png" style="float:left; margin-right:16px" alt="Plugin
-Icon">
-<p></p>
+<img src="../toxic.png" style="float: left; margin-right: 8px" alt="Ionizing
+radiation sign">
+<p>Toxic_XH facilitates to have enhanced TOCs (table of contents) on your site,
+which add features that are not available via CMSimple_XH's built-in toc() and
+li(), similar to those offered by <a
+href="http://cmsimplewiki.com/doku.php/addons/advanced_toc">AdvancedTOC</a> and
+<a href="http://cmsimplewiki.com/doku.php/addons/xtoc">xtoc</a>.</p>
 
 <ul id="nav">
 <li><a href="#notice">Important Notice</a></li>
@@ -20,7 +24,7 @@ Icon">
 <li><a href="#installation">Installation</a></li>
 <li><a href="#settings">Settings</a></li>
 <li><a href="#usage">Usage</a></li>
-<li><a href="#limitations">Limitations</a></li>
+<!--<li><a href="#limitations">Limitations</a></li>-->
 <li><a href="#license">License</a></li>
 <li><a href="#credits">Credits</a></li>
 </ul>
@@ -31,8 +35,8 @@ Icon">
 problems!</strong></p>
 
 <h2 id="notice">Important Notice</h2>
-<p><strong>Toxic_XH couldn't be tested so far in various environments. It
-is a so called alpha version. Use with utmost caution!</strong></p>
+<p><strong>Toxic_XH hasn't been tested so far in various environments. It is a
+so called alpha version. Use with utmost caution!</strong></p>
 <div class="toplink"><a href="#">back to top</a></div>
 
 <h2 id="requirements">Requirements</h2>
@@ -68,10 +72,31 @@ customize them according to your needs.</p>
 <div class="toplink"><a href="#">back to top</a></div>
 
 <h2 id="usage">Usage</h2>
+<p>Prepare your template by replacing the template tags</p>
+<pre>&lt;?php echo toc(&hellip;)?&gt;</pre>
+<p>with</p>
+<pre>&lt;?php echo toxic(&hellip;)?&gt;</pre>
+<p>and</p>
+<pre>&lt;?php echo li(&hellip;)?&gt;</pre>
+<p>with</p>
+<pre>&lt;?php echo toxic_li(&hellip;)?&gt;</pre>
+<p>This enables the settings in the page data tab "Toxic" which you can define
+for each individual page.</p>
+<p>You can enter a catogory for any page, which means that this very page is the
+first page of the category. The category itself is put as separate menu item
+into the menu and has purely informational or visual character, but not
+functional (for instance, the category is not a link). Each category item has
+the CSS class toxic_category, which you can use to style it. Note that the
+category entry accepts arbitrary (X)HTML markup, so you could use an image
+instead of text for the category.</p>
+<p>You can choose an individual CSS class for each menu item, which will be
+available on the respective list item (&lt;li&gt;) in addition to the
+CMSimple_XH standard CSS class (s)doc(s). You can then add respective rules to
+the template's stylesheet, to design the menu item according to your wishes.</p>
 <div class="toplink"><a href="#">back to top</a></div>
 
-<h2 id="limitations">Limitations</h2>
-<div class="toplink"><a href="#">back to top</a></div>
+<!--<h2 id="limitations">Limitations</h2>
+<div class="toplink"><a href="#">back to top</a></div>-->
 
 <h2 id="license">License</h2>
 <p>Toxic_XH is licensed under
