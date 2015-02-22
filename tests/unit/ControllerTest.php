@@ -111,18 +111,18 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that the class field is registered.
+     * Tests that the fields are registered.
      *
      * @return void
      *
      * @global XH_PageDataRouter The page data router.
      */
-    public function testRegistersClassField()
+    public function testRegistersFields()
     {
         global $pd_router;
 
-        $pd_router->expects($this->once())->method('add_interest')
-            ->with('toxic_class');
+        $pd_router->expects($this->exactly(2))->method('add_interest')
+            ->withConsecutive(['toxic_category'], ['toxic_class']);
         $this->subject->dispatch();
     }
 

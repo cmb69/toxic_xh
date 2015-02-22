@@ -95,6 +95,7 @@ class Toxic_LiCommand
                         . "\n";
                 }
             }
+            $t .= $this->renderCategoryItem($i);
             $t .= '<li class="';
             if (!$tf) {
                 $t .= 's';
@@ -118,10 +119,7 @@ class Toxic_LiCommand
                     break;
                 }
             }
-            $pageData = $pd_router->find_page($this->ta[$i]);
-            if ($pageData['toxic_class']) {
-                $t .= ' ' . $pageData['toxic_class'];
-            }
+            $t .= $this->renderClass($i);
             $t .= '">';
             if ($tf) {
                 $pageData = $pd_router->find_page($this->ta[$i]);
@@ -167,6 +165,49 @@ class Toxic_LiCommand
             $t .= '</ul>' . "\n";
         }
         return $t;
+    }
+
+    /**
+     * Renders a category item.
+     *
+     * @param int $index A page index.
+     *
+     * @return string (X)HTML.
+     *
+     * @global XH_PageDataRouter The page data router.
+     */
+    protected function renderCategoryItem($index)
+    {
+        global $pd_router;
+
+        $html = '';
+        $pageData = $pd_router->find_page($this->ta[$index]);
+        if ($pageData['toxic_category']) {
+            $html .= '<li class="toxic_category">' . $pageData['toxic_category']
+                . '</li>';
+        }
+        return $html;
+    }
+
+    /**
+     * Renders the item's class attribute.
+     *
+     * @param int $index A page index.
+     *
+     * @return string (X)HTML.
+     *
+     * @global XH_PageDataRouter The page data router.
+     */
+    protected function renderClass($index)
+    {
+        global $pd_router;
+
+        $pageData = $pd_router->find_page($this->ta[$index]);
+        if ($pageData['toxic_class']) {
+            return ' ' . $pageData['toxic_class'];
+        } else {
+            return '';
+        }
     }
 }
 

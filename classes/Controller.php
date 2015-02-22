@@ -47,14 +47,10 @@ class Toxic_Controller
      * Dispatch according to the request.
      *
      * @return void
-     *
-     * @global XH_PageDataRouter The page data router.
      */
     public function dispatch()
     {
-        global $pd_router;
-
-        $pd_router->add_interest('toxic_class');
+        $this->registerFields();
         if (XH_ADM) {
             $this->addPageDataTab();
             if (function_exists('XH_registerStandardPluginMenuItems')) {
@@ -64,6 +60,21 @@ class Toxic_Controller
                 $this->handleAdministration();
             }
         }
+    }
+
+    /**
+     * Registers the page data fields.
+     *
+     * @return void
+     *
+     * @global XH_PageDataRouter The page data router.
+     */
+    protected function registerFields()
+    {
+        global $pd_router;
+
+        $pd_router->add_interest('toxic_category');
+        $pd_router->add_interest('toxic_class');
     }
 
     /**

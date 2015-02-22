@@ -1,6 +1,7 @@
 <?php
 
 $plugin_tx['toxic']['caption_info']="Info";
+$plugin_tx['toxic']['label_category']="Category";
 $plugin_tx['toxic']['label_class']="Class";
 $plugin_tx['toxic']['label_none']="&ndash; NONE &ndash;";
 $plugin_tx['toxic']['label_save']="Save";

@@ -57,8 +57,28 @@ class Toxic_TabCommand
 
         return '<form id="toxic_tab" action="' . $sn . '?' . $su
             . '" method="post">'
+            . $this->renderCategory()
             . $this->renderClassField() . $this->renderButtons()
             . '</form>';
+    }
+
+    /**
+     * Renders the category.
+     *
+     * @return string (X)HTML.
+     *
+     * @global array The localization of the core.
+     */
+    protected function renderCategory()
+    {
+        global $plugin_tx;
+
+        return '<p><label>' . $plugin_tx['toxic']['label_category'] . ' '
+            . tag(
+                'input type="text" name="toxic_category" value="'
+                . XH_hsc($this->pageData['toxic_category']) . '"'
+            )
+            . '</label></p>';
     }
 
     /**
