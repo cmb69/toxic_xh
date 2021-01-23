@@ -32,7 +32,7 @@ EOT
 /**
  * The plugin version.
  */
-define('TOXIC_VERSION', '@TOXIC_VERSION@');
+define('TOXIC_VERSION', '1alpha1');
 
 /**
  * Returns a table of contents.
