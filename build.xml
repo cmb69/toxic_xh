@@ -48,7 +48,6 @@
   </target>
 
   <target name="build" description="builds distributable ZIP archive">
-    <fail unless="version" message="version is not defined!"/>
     <exec executable="git" checkreturn="true">
       <arg line="archive -o export.tar HEAD"/>
     </exec>
@@ -56,16 +55,32 @@
     <delete file="export.tar"/>
     <move todir="dist">
       <fileset dir="export">
+        <include name="views/*.php"/>
+      </fileset>
+      <filterchain>
+        <replaceregexp>
+          <regexp pattern="&lt;\?(?!=|php)" replace="&lt;?php "/>
+        </replaceregexp>
+      </filterchain>
+    </move>
+    <move todir="dist">
+      <fileset dir="export">
+        <exclude name=".github/**"/>
+        <exclude name=".phive/**"/>
+        <exclude name="help/template.htm"/>
+        <exclude name="tests/**"/>
+        <exclude name="README*.md"/>
         <exclude name="build.xml"/>
         <exclude name="composer.*"/>
-        <exclude name="coverage.xml"/>
-        <exclude name="tests/**"/>
+        <exclude name="phpstan.*"/>
+        <exclude name="phpunit.xml"/>
+        <exclude name="teplad.xml"/>
       </fileset>
     </move>
     <delete dir="export"/>
     <copy file="dist/config/config.php" tofile="dist/config/defaultconfig.php"/>
     <copy file="dist/languages/en.php" tofile="dist/languages/default.php"/>
-    <zip destfile="Toxic_XH-${version}.zip" basedir="dist" prefix="toxic/"/>
+    <zip destfile="Toxic_XH-1alpha1.zip" basedir="dist" prefix="toxic/"/>
     <delete dir="dist"/>
   </target>
 
