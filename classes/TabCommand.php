@@ -50,10 +50,8 @@ class TabCommand
         global $plugin_tx;
 
         return '<p><label>' . $plugin_tx['toxic']['label_category'] . ' '
-            . tag(
-                'input type="text" name="toxic_category" value="'
-                . XH_hsc($this->pageData['toxic_category']) . '"'
-            )
+            . '<input type="text" name="toxic_category" value="'
+                . XH_hsc($this->pageData['toxic_category']) . '">'
             . '</label></p>';
     }
 
@@ -73,10 +71,8 @@ class TabCommand
 
     private function renderClassInput(): string
     {
-        return tag(
-            'input type="text" name="toxic_class" value="'
-            . $this->pageData['toxic_class'] . '"'
-        );
+        return '<input type="text" name="toxic_class" value="'
+            . $this->pageData['toxic_class'] . '">';
     }
 
     private function renderClassSelect(): string

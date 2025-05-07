@@ -45,10 +45,8 @@ class InfoCommand
     {
         global $pth, $plugin_tx;
 
-        return tag(
-            'img class="toxic_logo" src="' . $pth['folder']['plugins']
-            . 'toxic/toxic.png" alt="' . $plugin_tx['toxic']['alt_logo'] . '"'
-        );
+        return '<img class="toxic_logo" src="' . $pth['folder']['plugins']
+            . 'toxic/toxic.png" alt="' . $plugin_tx['toxic']['alt_logo'] . '">';
     }
 
     private function renderVersion(): string
