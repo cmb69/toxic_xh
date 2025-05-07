@@ -185,7 +185,7 @@ class TabCommand
     /**
      * Renders the submit button.
      *
-     * @return void
+     * @return string
      *
      * @global array  The localization of the plugins.
      */

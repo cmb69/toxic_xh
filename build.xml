@@ -23,6 +23,10 @@
     </exec>
   </target>
 
+  <target name="stan" description="run static analysis">
+    <exec executable="phpstan" passthru="true" checkreturn="true"/>
+  </target>
+
   <target name="unit-tests" description="runs all unit tests">
     <exec executable="phpunit" passthru="true" checkreturn="true"/>
   </target>

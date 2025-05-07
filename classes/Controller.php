@@ -53,7 +53,7 @@ class Controller
     public function dispatch()
     {
         $this->registerFields();
-        if (XH_ADM) {
+        if (XH_ADM) { // @phpstan-ignore-line
             $this->addPageDataTab();
             if (function_exists('XH_registerStandardPluginMenuItems')) {
                 XH_registerStandardPluginMenuItems(false);
@@ -133,7 +133,7 @@ class Controller
             $o .= $this->commandFactory->makeInfoCommand()->render();
             break;
         default:
-            $o .= plugin_admin_common($action, $admin, 'toxic');
+            $o .= plugin_admin_common($action, $admin, 'toxic'); // @phpstan-ignore-line
         }
     }
 }

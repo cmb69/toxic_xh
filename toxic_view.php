@@ -13,6 +13,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
+use Toxic\TabCommand;
+
 /**
  * Renders the page data tab view.
  *
@@ -22,7 +24,7 @@
  */
 function Toxic_view($pageData)
 {
-    $tabCommand = new Toxic_TabCommand($pageData);
+    $tabCommand = new TabCommand($pageData);
     return $tabCommand->render();
 }
 

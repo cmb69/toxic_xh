@@ -74,7 +74,7 @@ class LiCommand
 
         $tl = count($this->ta);
         if ($tl < 1) {
-            return;
+            return "";
         }
         $t = '';
         if ($this->st == 'submenu' || $this->st == 'search') {
@@ -125,7 +125,7 @@ class LiCommand
             $t .= '">';
             if ($tf) {
                 $pageData = $pd_router->find_page($this->ta[$i]);
-                $x = !(XH_ADM && $edit)
+                $x = !(XH_ADM && $edit) // @phpstan-ignore-line
                     && $pageData['use_header_location'] === '2'
                         ? '" target="_blank' : '';
                 $t .= a($this->ta[$i], $x);
