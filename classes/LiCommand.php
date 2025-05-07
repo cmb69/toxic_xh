@@ -64,7 +64,7 @@ class LiCommand
             $t .= '<ul class="' . $this->st . '">' . "\n";
         }
         $b = 0;
-        if ($this->st > 0) {
+        if ((int) $this->st > 0) {
             $b = (int) $this->st - 1;
             $this->st = 'menulevel';
         }
