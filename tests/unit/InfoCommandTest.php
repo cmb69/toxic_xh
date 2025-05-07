@@ -2,49 +2,37 @@
 
 namespace Toxic;
 
+use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
+use Plib\FakeSystemChecker;
+use Plib\View;
 
 class InfoCommandTest extends TestCase
 {
-    /** @var InfoCommand */
-    private $subject;
+    /** @var FakeSystemChecker */
+    private $systemChecker;
+
+    /** @var View */
+    private $view;
 
     public function setUp(): void
     {
-        global $pth, $plugin_tx;
+        $this->systemChecker = new FakeSystemChecker();
+        $this->view = new View("./views/", XH_includeVar("./languages/en.php", "plugin_tx")["toxic"]);
+    }
 
-        $pth = [
-            "folder" => ["plugins" => ""],
-        ];
-        $plugin_tx = array(
-            'toxic' => array(
-                'caption_info' => 'Info'
-            )
+    private function sut(): InfoCommand
+    {
+        return new InfoCommand(
+            "./plugins/toxic/",
+            $this->systemChecker,
+            $this->view
         );
-        $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
-        $this->subject = new InfoCommand();
     }
 
-    public function testRendersHeading(): void
+    public function testRendersPluginInfo(): void
     {
-        $this->assertStringContainsString("<h1>Toxic &ndash; Info</h1>", $this->subject->render());
-    }
-
-    public function testRendersVersion(): void
-    {
-        $this->assertStringContainsString("<p>Version: 1alpha1</p>", $this->subject->render());
-    }
-
-    public function testRendersCopyright(): void
-    {
-        $this->assertStringContainsString("<p>Copyright", $this->subject->render());
-    }
-
-    public function testRendersLicense(): void
-    {
-        $this->assertStringContainsString(
-            "<p class=\"toxic_license\">This program is free software:",
-            $this->subject->render()
-        );
+        $response = $this->sut()->render();
+        Approvals::verifyHtml($response);
     }
 }

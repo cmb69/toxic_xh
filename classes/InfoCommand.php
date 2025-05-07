@@ -21,56 +21,71 @@
 
 namespace Toxic;
 
+use Plib\SystemChecker;
+use Plib\View;
+
 class InfoCommand
 {
+    /** @var string */
+    private $pluginFolder;
+
+    /** @var SystemChecker */
+    private $systemChecker;
+
+    /** @var View */
+    private $view;
+
+    public function __construct(string $pluginFolder, SystemChecker $systemChecker, View $view)
+    {
+        $this->pluginFolder = $pluginFolder;
+        $this->systemChecker = $systemChecker;
+        $this->view = $view;
+    }
+
     public function render(): string
     {
-        return $this->renderHeading()
-            . $this->renderLogo() . $this->renderVersion()
-            . $this->renderCopyright() . $this->renderLicense();
+        return "<h1>Toxic " . Dic::VERSION . "</h1>\n"
+            . "<h2>" . $this->view->text("syscheck_heading") . "</h2>\n"
+            . $this->systemChecks();
     }
 
-    private function renderHeading(): string
+    private function systemChecks(): string
     {
-        global $plugin_tx;
-
-        return '<h1>Toxic &ndash; ' . $plugin_tx['toxic']['caption_info']
-            . '</h1>';
-    }
-
-    private function renderLogo(): string
-    {
-        global $pth, $plugin_tx;
-
-        return '<img class="toxic_logo" src="' . $pth['folder']['plugins']
-            . 'toxic/toxic.png" alt="' . $plugin_tx['toxic']['alt_logo'] . '">';
-    }
-
-    private function renderVersion(): string
-    {
-        return '<p>Version: ' . Dic::VERSION . '</p>';
-    }
-
-    private function renderCopyright(): string
-    {
-        return '<p>Copyright &copy; 2014-2015'
-            . ' <a href="http://3-magi.net/">Christoph M. Becker</a>';
-    }
-
-    private function renderLicense(): string
-    {
-        return <<<EOT
-<p class="toxic_license">This program is free software: you can
-redistribute it and/or modify it under the terms of the GNU General Public
-License as published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.</p>
-<p class="toxic_license">This program is distributed in the hope that it will be
-useful, but <em>without any warranty</em>; without even the implied warranty of
-<em>merchantability</em> or <em>fitness for a particular purpose</em>. See the
-GNU General Public License for more details.</p>
-<p class="toxic_license">You should have received a copy of the GNU
-General Public License along with this program. If not, see <a
-href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
-EOT;
+        $checks = [];
+        $version = "7.1.0";
+        $state = $this->systemChecker->checkVersion(PHP_VERSION, $version);
+        $checks[] = $this->view->message(
+            $state ? "success" : "fail",
+            "syscheck_phpversion",
+            $version,
+            $this->view->plain("syscheck_" . ($state ? "good" : "bad"))
+        );
+        $version = "1.7.0";
+        $state = $this->systemChecker->checkVersion(CMSIMPLE_XH_VERSION, "CMSimple_XH $version");
+        $checks[] = $this->view->message(
+            $state ? "success" : "fail",
+            "syscheck_xhversion",
+            $version,
+            $this->view->plain("syscheck_" . ($state ? "good" : "bad"))
+        );
+        $version = "1.8";
+        $state = $this->systemChecker->checkPlugin("plib", $version);
+        $checks[] = $this->view->message(
+            $state ? "success" : "fail",
+            "syscheck_plibversion",
+            $version,
+            $this->view->plain("syscheck_" . ($state ? "good" : "bad"))
+        );
+        foreach (["config", "css", "languages"] as $folder) {
+            $folder = $this->pluginFolder . $folder;
+            $state = $this->systemChecker->checkWritability($folder);
+            $checks[] = $this->view->message(
+                $state ? "success" : "warning",
+                "syscheck_writable",
+                $folder,
+                $this->view->plain("syscheck_" . ($state ? "good" : "bad"))
+            );
+        }
+        return implode("", $checks);
     }
 }

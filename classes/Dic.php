@@ -21,6 +21,7 @@
 
 namespace Toxic;
 
+use Plib\SystemChecker;
 use Plib\View;
 use XH\Pages;
 
@@ -47,7 +48,8 @@ class Dic
 
     public static function makeInfoCommand(): InfoCommand
     {
-        return new InfoCommand();
+        global $pth;
+        return new InfoCommand($pth["folder"]["plugins"] . "toxic/", new SystemChecker(), self::view());
     }
 
     private static function view(): View
