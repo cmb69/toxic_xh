@@ -17,15 +17,6 @@ use PHPUnit\Framework\TestCase;
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
-/**
- * Testing the command factory.
- *
- * @category Testing
- * @package  Toxic
- * @author   Christoph M. Becker <cmbecker69@gmx.de>
- * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
- * @link     http://3-magi.net/?CMSimple_XH/Toxic_XH
- */
 class CommandFactoryTest extends TestCase
 {
     /** @var CommandFactory  */

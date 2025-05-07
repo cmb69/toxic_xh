@@ -19,15 +19,6 @@ use XH\PageDataRouter;
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
-/**
- * Testing li().
- *
- * @category Testing
- * @package  Toxic
- * @author   The CMSimple_XH developers <devs@cmsimple-xh.org>
- * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
- * @link     http://3-magi.net/?CMSimple_XH/Toxic_XH
- */
 class LiTest extends TestCase
 {
     /** @var object */
