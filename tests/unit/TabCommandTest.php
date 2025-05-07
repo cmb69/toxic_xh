@@ -70,5 +70,3 @@ class TabCommandTest extends TestCase
         Approvals::verifyHtml($this->subject->render());
     }
 }
-
-?>

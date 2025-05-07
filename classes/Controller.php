@@ -81,13 +81,11 @@ class Controller
 
         $o .= print_plugin_admin('off');
         switch ($admin) {
-        case '':
-            $o .= $this->commandFactory->makeInfoCommand()->render();
-            break;
-        default:
-            $o .= plugin_admin_common($action, $admin, 'toxic'); // @phpstan-ignore-line
+            case '':
+                $o .= $this->commandFactory->makeInfoCommand()->render();
+                break;
+            default:
+                $o .= plugin_admin_common($action, $admin, 'toxic'); // @phpstan-ignore-line
         }
     }
 }
-
-?>

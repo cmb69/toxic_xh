@@ -75,5 +75,3 @@ class InfoCommandTest extends TestCase
         );
     }
 }
-
-?>

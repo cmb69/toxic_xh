@@ -79,5 +79,3 @@ href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.</p>
 EOT;
     }
 }
-
-?>

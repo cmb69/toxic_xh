@@ -329,5 +329,3 @@ class LiTest extends TestCase
         Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render());
     }
 }
-
-?>

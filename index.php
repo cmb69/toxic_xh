@@ -50,5 +50,3 @@ $_Toxic_controller = new Controller(
     new CommandFactory()
 );
 $_Toxic_controller->dispatch();
-
-?>

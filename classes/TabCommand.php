@@ -127,5 +127,3 @@ class TabCommand
             . $plugin_tx['toxic']['label_save'] . '</button>';
     }
 }
-
-?>

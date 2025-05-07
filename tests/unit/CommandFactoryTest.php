@@ -38,17 +38,11 @@ class CommandFactoryTest extends TestCase
 
     public function testMakeTabCommand(): void
     {
-        $this->assertInstanceOf(
-            TabCommand::class, $this->subject->makeTabCommand(array())
-        );
+        $this->assertInstanceOf(TabCommand::class, $this->subject->makeTabCommand(array()));
     }
 
     public function testMakeInfoCommand(): void
     {
-        $this->assertInstanceOf(
-            InfoCommand::class, $this->subject->makeInfoCommand()
-        );
+        $this->assertInstanceOf(InfoCommand::class, $this->subject->makeInfoCommand());
     }
 }
-
-?>

@@ -13,10 +13,9 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
-require_once './vendor/autoload.php';
-require_once '../../cmsimple/classes/PageDataRouter.php';
-require_once '../../cmsimple/adminfuncs.php';
-require_once './classes/Controller.php';
+namespace Toxic;
+
+use PHPUnit\Framework\TestCase;
 
 /**
  * Testing the controller.
@@ -27,7 +26,7 @@ require_once './classes/Controller.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
-class ControllerTest extends PHPUnit_Framework_TestCase
+class ControllerTest extends TestCase
 {
     /** @var Controller */
     protected $subject;
@@ -63,16 +62,12 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         );
         $pd_router = $this->getMockBuilder('XH_PageDataRouter')
             ->disableOriginalConstructor()->getMock();
-        $this->printPluginAdmin = new PHPUnit_Extensions_MockFunction(
-            'print_plugin_admin', $this->subject
+        $this->printPluginAdmin = new PHPUnit_Extensions_MockFunction('print_plugin_admin', $this->subject);
+        $this->pluginAdminCommon = new PHPUnit_Extensions_MockFunction('plugin_admin_common', $this->subject);
+        $this->registerStandardPluginMenuItems = new PHPUnit_Extensions_MockFunction(
+            'XH_registerStandardPluginMenuItems',
+            $this->subject
         );
-        $this->pluginAdminCommon = new PHPUnit_Extensions_MockFunction(
-            'plugin_admin_common', $this->subject
-        );
-        $this->registerStandardPluginMenuItems
-            = new PHPUnit_Extensions_MockFunction(
-                'XH_registerStandardPluginMenuItems', $this->subject
-            );
         $this->commandFactory = $this->getMock(CommandFactory::class);
         $this->infoCommand = $this->getMock(InfoCommand::class);
         $this->commandFactory->expects($this->any())
@@ -136,5 +131,3 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         }
     }
 }
-
-?>

@@ -60,10 +60,7 @@ class LiCommand
         for ($i = 0; $i < $tl; $i++) {
             $tf = ($s != $this->ta[$i]);
             if ($this->st == 'menulevel' || $this->st == 'sitemaplevel') {
-                for ($k = (isset($this->ta[$i - 1]) ? $l[$this->ta[$i - 1]] : $b);
-                     $k < $l[$this->ta[$i]];
-                     $k++
-                ) {
+                for ($k = (isset($this->ta[$i - 1]) ? $l[$this->ta[$i - 1]] : $b); $k < $l[$this->ta[$i]]; $k++) {
                     $t .= "\n" . '<ul class="' . $this->st . ($k + 1) . '">'
                         . "\n";
                 }
@@ -118,10 +115,7 @@ class LiCommand
                     $t .= '</li>' . "\n";
                     $lf[$l[$this->ta[$i]]] = false;
                 }
-                for ($k = $l[$this->ta[$i]];
-                    $k > (isset($this->ta[$i + 1]) ? $l[$this->ta[$i + 1]] : $b);
-                    $k--
-                ) {
+                for ($k = $l[$this->ta[$i]]; $k > (isset($this->ta[$i + 1]) ? $l[$this->ta[$i + 1]] : $b); $k--) {
                     $t .= '</ul>' . "\n";
                     if (isset($lf[$k - 1])) {
                         if ($lf[$k - 1]) {
@@ -165,5 +159,3 @@ class LiCommand
         }
     }
 }
-
-?>

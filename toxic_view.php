@@ -20,5 +20,3 @@ function Toxic_view(array $pageData): string
     $tabCommand = new TabCommand($pageData);
     return $tabCommand->render();
 }
-
-?>
