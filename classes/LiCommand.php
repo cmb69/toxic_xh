@@ -22,6 +22,7 @@
 namespace Toxic;
 
 use Plib\Request;
+use XH\PageDataRouter;
 use XH\Pages;
 use XH\Publisher;
 
@@ -33,6 +34,9 @@ class LiCommand
     /** @var Publisher */
     private $publisher;
 
+    /** @var PageDataRouter */
+    private $pageData;
+
     /** @var list<int> */
     private $ta;
 
@@ -43,17 +47,23 @@ class LiCommand
      * @param list<int> $ta
      * @param int|string $st
      */
-    public function __construct(Pages $pages, Publisher $publisher, array $ta, $st)
-    {
+    public function __construct(
+        Pages $pages,
+        Publisher $publisher,
+        PageDataRouter $pageData,
+        array $ta,
+        $st
+    ) {
         $this->pages = $pages;
         $this->publisher = $publisher;
+        $this->pageData = $pageData;
         $this->ta = $ta;
         $this->st = $st;
     }
 
     public function render(Request $request): string
     {
-        global $s, $l, $h, $cl, $cf, $u, $pd_router;
+        global $s, $l, $h, $cl, $cf, $u;
 
         $tl = count($this->ta);
         if ($tl < 1) {
@@ -105,7 +115,7 @@ class LiCommand
             $t .= $this->renderClass($i);
             $t .= '">';
             if ($tf) {
-                $pageData = $pd_router->find_page($this->ta[$i]);
+                $pageData = $this->pageData->find_page($this->ta[$i]);
                 $x = !($request->admin() && $request->edit())
                     && $pageData['use_header_location'] === '2'
                         ? '" target="_blank' : '';
@@ -163,10 +173,8 @@ class LiCommand
 
     private function renderCategoryItem(int $index): string
     {
-        global $pd_router;
-
         $html = '';
-        $pageData = $pd_router->find_page($this->ta[$index]);
+        $pageData = $this->pageData->find_page($this->ta[$index]);
         if ($pageData['toxic_category']) {
             $html .= '<li class="toxic_category">' . $pageData['toxic_category']
                 . '</li>';
@@ -176,9 +184,7 @@ class LiCommand
 
     private function renderClass(int $index): string
     {
-        global $pd_router;
-
-        $pageData = $pd_router->find_page($this->ta[$index]);
+        $pageData = $this->pageData->find_page($this->ta[$index]);
         if ($pageData['toxic_class']) {
             return ' ' . $pageData['toxic_class'];
         } else {

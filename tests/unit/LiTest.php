@@ -3,6 +3,7 @@
 namespace Toxic;
 
 use ApprovalTests\Approvals;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Plib\FakeRequest;
@@ -18,11 +19,13 @@ class LiTest extends TestCase
     /** @var Publisher&Stub */
     private $publisher;
 
+    /** @var PageDataRouter&MockObject */
+    private $pageData;
+
     public function setUp(): void
     {
-        global $pth, $s;
+        global $s;
 
-        $pth = array('folder' => array('classes' => './cmsimple/classes/'));
         $s = 0;
         $this->pages = $this->createStub(Pages::class);
         $this->publisher = $this->createStub(Publisher::class);
@@ -101,11 +104,9 @@ class LiTest extends TestCase
 
     private function setUpPageDataRouterMock(): void
     {
-        global $pd_router;
-
-        $pd_router = $this->getMockBuilder(PageDataRouter::class)
+        $this->pageData = $this->getMockBuilder(PageDataRouter::class)
             ->disableOriginalConstructor()->getMock();
-        $pd_router->expects($this->any())->method('find_page')->will(
+        $this->pageData->expects($this->any())->method('find_page')->will(
             $this->returnCallback(
                 function ($pageIndex) {
                     return array(
@@ -129,7 +130,7 @@ class LiTest extends TestCase
 
     public function testNoMenuItemsDisplayNothing(): void
     {
-        $this->assertEmpty((new LiCommand($this->pages, $this->publisher, array(), 1))->render(new FakeRequest()));
+        $this->assertEmpty((new LiCommand($this->pages, $this->publisher, $this->pageData, array(), 1))->render(new FakeRequest()));
     }
 
     /** @dataProvider dataForUnorderedListlHasListItemChild */
@@ -281,14 +282,14 @@ class LiTest extends TestCase
     public function testPageDoesntOpenInNewWindowInEditMode(): void
     {
         $request = new FakeRequest(["admin" => true, "edit" => true]);
-        $response = (new LiCommand($this->pages, $this->publisher, range(0, 10), 1))->render($request);
+        $response = (new LiCommand($this->pages, $this->publisher, $this->pageData, range(0, 10), 1))->render($request);
         Approvals::verifyHtml($response);
     }
 
     /** @param mixed $forOrFrom */
     private function renderAllPages($forOrFrom = 1): string
     {
-        return (new LiCommand($this->pages, $this->publisher, range(0, 10), $forOrFrom))->render(new FakeRequest());
+        return (new LiCommand($this->pages, $this->publisher, $this->pageData, range(0, 10), $forOrFrom))->render(new FakeRequest());
     }
 
     public function testBlogSubmenuHasExactlyThreeItems(): void
@@ -296,11 +297,11 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        Approvals::verifyHtml((new LiCommand($this->pages, $this->publisher, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
+        Approvals::verifyHtml((new LiCommand($this->pages, $this->publisher, $this->pageData, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
     }
 
     public function testBlogSubmenuHasProperStructure(): void
     {
-        Approvals::verifyHtml((new LiCommand($this->pages, $this->publisher, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
+        Approvals::verifyHtml((new LiCommand($this->pages, $this->publisher, $this->pageData, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
     }
 }
