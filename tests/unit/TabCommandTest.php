@@ -17,8 +17,6 @@ class TabCommandTest extends TestCase
 
     public function setUp(): void
     {
-        global $plugin_tx;
-
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["toxic"];
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $this->view = new View("./views/", $plugin_tx["toxic"]);
