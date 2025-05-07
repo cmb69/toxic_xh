@@ -13,7 +13,9 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
-/**
+namespace Toxic;
+
+ /**
  * The controllers.
  *
  * @category CMSimple_XH
@@ -22,23 +24,23 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
-class Toxic_Controller
+class Controller
 {
     /**
      * The command factory.
      *
-     * @var Toxic_CommandFactory
+     * @var CommandFactory
      */
     protected $commandFactory;
 
     /**
      * Initializes a new instance.
      *
-     * @param Toxic_CommandFactory $commandFactory A command factory.
+     * @param CommandFactory $commandFactory A command factory.
      *
      * @return void
      */
-    public function __construct(Toxic_CommandFactory $commandFactory)
+    public function __construct(CommandFactory $commandFactory)
     {
         $this->commandFactory = $commandFactory;
     }

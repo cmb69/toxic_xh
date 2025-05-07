@@ -13,6 +13,8 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
+namespace Toxic;
+
 /**
  * The command factories.
  *
@@ -22,28 +24,28 @@
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
-class Toxic_CommandFactory
+class CommandFactory
 {
     /**
      * Makes a tab command.
      *
      * @param array $pageData A page data array.
      *
-     * @return Toxic_TabCommand
+     * @return TabCommand
      */
     public function makeTabCommand($pageData)
     {
-        return new Toxic_TabCommand($pageData);
+        return new TabCommand($pageData);
     }
 
     /**
      * Makes an info command.
      *
-     * @return Toxic_InfoCommand
+     * @return InfoCommand
      */
     public function makeInfoCommand()
     {
-        return new Toxic_InfoCommand();
+        return new InfoCommand();
     }
 }
 

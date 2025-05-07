@@ -1,5 +1,7 @@
 <?php
 
+namespace Toxic;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,7 +31,7 @@ class InfoCommandTest extends TestCase
     /**
      * The subject under test.
      *
-     * @var Toxic_InfoCommand
+     * @var InfoCommand
      */
     protected $subject;
 
@@ -58,7 +60,7 @@ class InfoCommandTest extends TestCase
             )
         );
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
-        $this->subject = new Toxic_InfoCommand();
+        $this->subject = new InfoCommand();
     }
 
     /**

@@ -13,6 +13,10 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
+use Toxic\CommandFactory;
+use Toxic\Controller;
+use Toxic\LiCommand;
+
 /*
  * Prevent direct access and usage from unsupported CMSimple_XH versions.
  */
@@ -57,15 +61,15 @@ function toxic($start = null, $end = null)
  */
 function Toxic_li($ta, $st)
 {
-    $liCommand = new Toxic_LiCommand($ta, $st);
+    $liCommand = new LiCommand($ta, $st);
     return $liCommand->render();
 }
 
 /**
  * The controller.
  */
-$_Toxic_controller = new Toxic_Controller(
-    new Toxic_CommandFactory()
+$_Toxic_controller = new Controller(
+    new CommandFactory()
 );
 $_Toxic_controller->dispatch();
 

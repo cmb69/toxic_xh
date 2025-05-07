@@ -32,21 +32,21 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     /**
      * The subject under test.
      *
-     * @var Toxic_Controller
+     * @var Controller
      */
     protected $subject;
 
     /**
      * The command factory mock.
      *
-     * @var Toxic_CommandFactory
+     * @var CommandFactory
      */
     protected $commandFactory;
 
     /**
      * The info command mock.
      *
-     * @var Toxic_InfoCommand
+     * @var InfoCommand
      */
     protected $infoCommand;
 
@@ -102,12 +102,12 @@ class ControllerTest extends PHPUnit_Framework_TestCase
             = new PHPUnit_Extensions_MockFunction(
                 'XH_registerStandardPluginMenuItems', $this->subject
             );
-        $this->commandFactory = $this->getMock('Toxic_CommandFactory');
-        $this->infoCommand = $this->getMock('Toxic_InfoCommand');
+        $this->commandFactory = $this->getMock(CommandFactory::class);
+        $this->infoCommand = $this->getMock(InfoCommand::class);
         $this->commandFactory->expects($this->any())
             ->method('makeInfoCommand')
             ->will($this->returnValue($this->infoCommand));
-        $this->subject = new Toxic_Controller($this->commandFactory);
+        $this->subject = new Controller($this->commandFactory);
     }
 
     /**

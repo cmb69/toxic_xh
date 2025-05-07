@@ -1,5 +1,7 @@
 <?php
 
+namespace Toxic;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -29,7 +31,7 @@ class CommandFactoryTest extends TestCase
     /**
      * The subject under test.
      *
-     * @var Toxic_CommandFactory
+     * @var CommandFactory
      */
     protected $subject;
 
@@ -40,7 +42,7 @@ class CommandFactoryTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->subject = new Toxic_CommandFactory();
+        $this->subject = new CommandFactory();
     }
 
     /**
@@ -51,7 +53,7 @@ class CommandFactoryTest extends TestCase
     public function testMakeTabCommand()
     {
         $this->assertInstanceOf(
-            'Toxic_TabCommand', $this->subject->makeTabCommand(array())
+            TabCommand::class, $this->subject->makeTabCommand(array())
         );
     }
 
@@ -63,7 +65,7 @@ class CommandFactoryTest extends TestCase
     public function testMakeInfoCommand()
     {
         $this->assertInstanceOf(
-            'Toxic_InfoCommand', $this->subject->makeInfoCommand()
+            InfoCommand::class, $this->subject->makeInfoCommand()
         );
     }
 }

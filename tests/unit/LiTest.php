@@ -1,5 +1,7 @@
 <?php
 
+namespace Toxic;
+
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
 use XH\PageDataRouter;
@@ -216,7 +218,7 @@ class LiTest extends TestCase
      */
     public function testNoMenuItemsDisplayNothing()
     {
-        $this->assertEmpty((new Toxic_LiCommand(array(), 1))->render());
+        $this->assertEmpty((new LiCommand(array(), 1))->render());
     }
 
     /**
@@ -513,7 +515,7 @@ class LiTest extends TestCase
      */
     protected function renderAllPages($forOrFrom = 1)
     {
-        return (new Toxic_LiCommand(range(0, 10), $forOrFrom))->render();
+        return (new LiCommand(range(0, 10), $forOrFrom))->render();
     }
 
     /**
@@ -528,7 +530,7 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        Approvals::verifyHtml((new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render());
+        Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render());
     }
 
     /**
@@ -538,7 +540,7 @@ class LiTest extends TestCase
      */
     public function testBlogSubmenuHasProperStructure()
     {
-        Approvals::verifyHtml((new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render());
+        Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render());
     }
 }
 

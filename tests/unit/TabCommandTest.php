@@ -1,5 +1,7 @@
 <?php
 
+namespace Toxic;
+
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
 
@@ -30,7 +32,7 @@ class TabCommandTest extends TestCase
     /**
      * The subject under test.
      *
-     * @var Toxic_TabCommand
+     * @var TabCommand
      */
     protected $subject;
 
@@ -58,7 +60,7 @@ class TabCommandTest extends TestCase
         $plugin_cf = XH_includeVar("./config/config.php", "plugin_cf");
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $pageData = array('toxic_class' => 'test', "toxic_category" => "");
-        $this->subject = new Toxic_TabCommand($pageData);
+        $this->subject = new TabCommand($pageData);
     }
 
     /**
