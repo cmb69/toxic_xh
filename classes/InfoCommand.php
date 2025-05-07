@@ -26,26 +26,14 @@ namespace Toxic;
  */
 class InfoCommand
 {
-    /**
-     * Renders the info view.
-     *
-     * @return string (X)HTML.
-     */
-    public function render()
+    public function render(): string
     {
         return $this->renderHeading()
             . $this->renderLogo() . $this->renderVersion()
             . $this->renderCopyright() . $this->renderLicense();
     }
 
-    /**
-     * Renders the heading.
-     *
-     * @return string (X)HTML.
-     *
-     * @global array The localization of the plugins.
-     */
-    protected function renderHeading()
+    protected function renderHeading(): string
     {
         global $plugin_tx;
 
@@ -53,15 +41,7 @@ class InfoCommand
             . '</h1>';
     }
 
-    /**
-     * Renders the logo.
-     *
-     * @return string (X)HTML.
-     *
-     * @global array The paths of system files and folders.
-     * @global array The localization of the plugins.
-     */
-    protected function renderLogo()
+    protected function renderLogo(): string
     {
         global $pth, $plugin_tx;
 
@@ -71,33 +51,18 @@ class InfoCommand
         );
     }
 
-    /**
-     * Renders the version information.
-     *
-     * @return string (X)HTML.
-     */
-    protected function renderVersion()
+    protected function renderVersion(): string
     {
         return '<p>Version: ' . TOXIC_VERSION . '</p>';
     }
 
-    /**
-     * Renders the copyright information.
-     *
-     * @return string (X)HTML.
-     */
-    protected function renderCopyright()
+    protected function renderCopyright(): string
     {
         return '<p>Copyright &copy; 2014-2015'
             . ' <a href="http://3-magi.net/">Christoph M. Becker</a>';
     }
 
-    /**
-     * Renders the license information.
-     *
-     * @return string (X)HTML.
-     */
-    protected function renderLicense()
+    protected function renderLicense(): string
     {
         return <<<EOT
 <p class="toxic_license">This program is free software: you can

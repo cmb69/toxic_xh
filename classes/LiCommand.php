@@ -26,49 +26,20 @@ namespace Toxic;
  */
 class LiCommand
 {
-    /**
-     * The indexes of the pages.
-     *
-     * @var array
-     */
+    /** @var array */
     protected $ta;
 
-    /**
-     * The menu level to start with or the type of menu.
-     *
-     * @var mixed
-     */
+    /** @var mixed */
     protected $st;
 
-    /**
-     * Initializes a new instance.
-     *
-     * @param array $ta The indexes of the pages.
-     * @param mixed $st The menu level to start with or the type of menu.
-     *
-     * @return void
-     */
-    public function __construct($ta, $st)
+    /** @param mixed $st */
+    public function __construct(array $ta, $st)
     {
         $this->ta = $ta;
         $this->st = $st;
     }
 
-    /**
-     * Renders the li view.
-     *
-     * @return string (X)HTML.
-     *
-     * @global int    The index of the current page.
-     * @global array  The menu levels of the pages.
-     * @global array  The headings of the pages.
-     * @global int    The number of pages.
-     * @global array  The configuration of the core.
-     * @global array  The URLs of the pages.
-     * @global array  Whether we are in edit mode.
-     * @global object The page data router.
-     */
-    public function render()
+    public function render(): string
     {
         global $s, $l, $h, $cl, $cf, $u, $edit, $pd_router;
 
@@ -169,16 +140,7 @@ class LiCommand
         return $t;
     }
 
-    /**
-     * Renders a category item.
-     *
-     * @param int $index A page index.
-     *
-     * @return string (X)HTML.
-     *
-     * @global XH_PageDataRouter The page data router.
-     */
-    protected function renderCategoryItem($index)
+    protected function renderCategoryItem(int $index): string
     {
         global $pd_router;
 
@@ -191,16 +153,7 @@ class LiCommand
         return $html;
     }
 
-    /**
-     * Renders the item's class attribute.
-     *
-     * @param int $index A page index.
-     *
-     * @return string (X)HTML.
-     *
-     * @global XH_PageDataRouter The page data router.
-     */
-    protected function renderClass($index)
+    protected function renderClass(int $index): string
     {
         global $pd_router;
 

@@ -29,53 +29,24 @@ require_once './classes/Controller.php';
  */
 class ControllerTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * The subject under test.
-     *
-     * @var Controller
-     */
+    /** @var Controller */
     protected $subject;
 
-    /**
-     * The command factory mock.
-     *
-     * @var CommandFactory
-     */
+    /** @var CommandFactory */
     protected $commandFactory;
 
-    /**
-     * The info command mock.
-     *
-     * @var InfoCommand
-     */
+    /** @var InfoCommand */
     protected $infoCommand;
 
-    /**
-     * The pring_plugin_admin() mock.
-     *
-     * @var PHPUnit_Extensions_MockFunction
-     */
+    /** @var PHPUnit_Extensions_MockFunction */
     protected $printPluginAdmin;
 
-    /**
-     * The plugin_admin_common() mock.
-     *
-     * @var PHPUnit_Extensions_MockFunction
-     */
+    /** @var PHPUnit_Extensions_MockFunction */
     protected $pluginAdminCommon;
 
     protected $registerStandardPluginMenuItems;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global array             The paths of system files and folders.
-     * @global XH_PageDataRouter The page data router.
-     * @global array             The localization of the plugins.
-     */
-    public function setUp()
+    public function setUp(): void
     {
         global $pth, $pd_router, $plugin_tx;
 
@@ -110,14 +81,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->subject = new Controller($this->commandFactory);
     }
 
-    /**
-     * Tests that the fields are registered.
-     *
-     * @return void
-     *
-     * @global XH_PageDataRouter The page data router.
-     */
-    public function testRegistersFields()
+    public function testRegistersFields(): void
     {
         global $pd_router;
 
@@ -126,14 +90,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->subject->dispatch();
     }
 
-    /**
-     * Tests that the tab is registered.
-     *
-     * @return void
-     *
-     * @global XH_PageDataRouter The page data router.
-     */
-    public function testRegistersTab()
+    public function testRegistersTab(): void
     {
         global $pd_router;
 
@@ -143,16 +100,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->subject->dispatch();
     }
 
-    /**
-     * Tests that the common administration is handled.
-     *
-     * @return void
-     *
-     * @global string Whether the toxic administation is requested.
-     * @global string The value of the <var>admin</var> GP parameter.
-     * @global string The value of the <var>action</var> GP parameter.
-     */
-    public function testHandlesCommonAdministration()
+    public function testHandlesCommonAdministration(): void
     {
         global $toxic, $admin, $action;
 
@@ -166,15 +114,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->subject->dispatch();
     }
 
-    /**
-     * Tests that the info command is rendered.
-     *
-     * @return void
-     *
-     * @global string Whether the toxic administation is requested.
-     * @global string The value of the <var>admin</var> GP parameter.
-     */
-    public function testRendersInfoCommand()
+    public function testRendersInfoCommand(): void
     {
         global $toxic, $admin;
 
@@ -186,22 +126,14 @@ class ControllerTest extends PHPUnit_Framework_TestCase
         $this->subject->dispatch();
     }
 
-    /**
-     * Defines resp. redefines a constant.
-     *
-     * @param string $name  A name.
-     * @param mixed  $value A value.
-     *
-     * @return void
-     */
-    protected function defineConstant($name, $value)
+    /** @param mixed $value */
+    protected function defineConstant(string $name, $value): void
     {
         if (!defined($name)) {
             define($name, $value);
         } else {
             runkit_constant_redefine($name, $value);
         }
-
     }
 }
 

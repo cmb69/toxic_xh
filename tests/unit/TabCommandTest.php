@@ -29,58 +29,27 @@ use PHPUnit\Framework\TestCase;
  */
 class TabCommandTest extends TestCase
 {
-    /**
-     * The subject under test.
-     *
-     * @var TabCommand
-     */
+    /** @var TabCommand */
     protected $subject;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global string The script name.
-     * @global string The selected URL.
-     * @global array  The localization of the plugins.
-     */
     public function setUp(): void
     {
         global $sn, $su, $plugin_cf, $plugin_tx;
 
         $sn = '/xh/';
         $su = 'Welcome';
-        // $plugin_tx = array(
-        //     'toxic' => array(
-        //         'label_class' => 'Class',
-        //         'label_save' => 'Save'
-        //     )
-        // );
         $plugin_cf = XH_includeVar("./config/config.php", "plugin_cf");
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $pageData = array('toxic_class' => 'test', "toxic_category" => "");
         $this->subject = new TabCommand($pageData);
     }
 
-    /**
-     * Tests that a form element is rendered.
-     *
-     * @return void
-     */
-    public function testRendersForm()
+    public function testRendersForm(): void
     {
         Approvals::verifyHtml($this->subject->render());
     }
 
-    /**
-     * Tests that the class input is rendered.
-     *
-     * @return void
-     *
-     * @global array The configuration of the plugins.
-     */
-    public function testRendersClassInput()
+    public function testRendersClassInput(): void
     {
         global $plugin_cf;
 
@@ -88,14 +57,7 @@ class TabCommandTest extends TestCase
         Approvals::verifyHtml($this->subject->render());
     }
 
-    /**
-     * Tests that the class select element is rendered.
-     *
-     * @return void
-     *
-     * @global array The configuration of the plugins.
-     */
-    public function testRendersClassSelect()
+    public function testRendersClassSelect(): void
     {
         global $plugin_cf;
 
@@ -103,26 +65,9 @@ class TabCommandTest extends TestCase
         Approvals::verifyHtml($this->subject->render());
     }
 
-    /**
-     * Tests that a submit button is rendered.
-     *
-     * @return void
-     */
-    public function testRendersSubmitButton()
+    public function testRendersSubmitButton(): void
     {
         Approvals::verifyHtml($this->subject->render());
-    }
-
-    /**
-     * Asserts that $matcher is rendered.
-     *
-     * @param array $matcher A matcher.
-     *
-     * @return void
-     */
-    protected function assertRenders($matcher)
-    {
-        @$this->assertTag($matcher, $this->subject->render());
     }
 }
 

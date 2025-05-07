@@ -28,20 +28,9 @@ use PHPUnit\Framework\TestCase;
  */
 class InfoCommandTest extends TestCase
 {
-    /**
-     * The subject under test.
-     *
-     * @var InfoCommand
-     */
+    /** @var InfoCommand */
     protected $subject;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     *
-     * @global array The localization of the plugins.
-     */
     public function setUp(): void
     {
         global $pth, $plugin_tx;
@@ -63,59 +52,27 @@ class InfoCommandTest extends TestCase
         $this->subject = new InfoCommand();
     }
 
-    /**
-     * Tests that a heading is rendered.
-     *
-     * @return void
-     */
-    public function testRendersHeading()
+    public function testRendersHeading(): void
     {
         $this->assertStringContainsString("<h1>Toxic &ndash; Info</h1>", $this->subject->render());
     }
 
-    /**
-     * Tests that the version information is rendered.
-     *
-     * @return void
-     */
-    public function testRendersVersion()
+    public function testRendersVersion(): void
     {
         $this->assertStringContainsString("<p>Version: 1.0</p>", $this->subject->render());
     }
 
-    /**
-     * Tests that the copyright information is rendered.
-     *
-     * @return void
-     */
-    public function testRendersCopyright()
+    public function testRendersCopyright(): void
     {
         $this->assertStringContainsString("<p>Copyright", $this->subject->render());
     }
 
-    /**
-     * Tests that the license is rendered.
-     *
-     * @return void
-     */
-    public function testRendersLicense()
+    public function testRendersLicense(): void
     {
         $this->assertStringContainsString(
             "<p class=\"toxic_license\">This program is free software:",
             $this->subject->render()
         );
-    }
-
-    /**
-     * Asserts that $matcher is rendered.
-     *
-     * @param array $matcher A matcher.
-     *
-     * @return void
-     */
-    protected function assertRenders($matcher)
-    {
-        @$this->assertTag($matcher, $this->subject->render());
     }
 }
 

@@ -15,14 +15,7 @@
 
 use Toxic\TabCommand;
 
-/**
- * Renders the page data tab view.
- *
- * @param array $pageData A page data array.
- *
- * @return string (X)HTML.
- */
-function Toxic_view($pageData)
+function Toxic_view(array $pageData): string
 {
     $tabCommand = new TabCommand($pageData);
     return $tabCommand->render();

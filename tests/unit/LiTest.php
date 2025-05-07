@@ -30,27 +30,12 @@ use XH\PageDataRouter;
  */
 class LiTest extends TestCase
 {
-    /**
-     * The li() stub.
-     *
-     * @var object
-     */
+    /** @var object */
     protected $liStub;
 
-    /**
-     * The hide() stub.
-     *
-     * @var object
-     */
+    /** @var object */
     protected $hideStub;
 
-    /**
-     * Sets up the default fixture.
-     *
-     * @return void
-     *
-     * @global int The index of the selected page.
-     */
     public function setUp(): void
     {
         global $pth, $s;
@@ -64,17 +49,7 @@ class LiTest extends TestCase
         $this->setUpFunctionStubs();
     }
 
-    /**
-     * Sets up the default page structure.
-     *
-     * @return void
-     *
-     * @global int   The number of pages.
-     * @global array The headings of the pages.
-     * @global array The URLs of the pages.
-     * @global array The levels of the pages.
-     */
-    protected function setUpPageStructure()
+    protected function setUpPageStructure(): void
     {
         global $cl, $h, $u, $l;
 
@@ -108,14 +83,7 @@ class LiTest extends TestCase
         $cl = count($u);
     }
 
-    /**
-     * Sets up the default configuration options.
-     *
-     * @return void
-     *
-     * @global array The configuration of the core.
-     */
-    protected function setUpConfiguration()
+    protected function setUpConfiguration(): void
     {
         global $cf;
 
@@ -135,16 +103,7 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Sets up edit resp. normal mode.
-     *
-     * @param bool $flag Whether to enable edit mode.
-     *
-     * @return void
-     *
-     * @global bool Whether edit mode is enabled.
-     */
-    protected function setUpEditMode($flag)
+    protected function setUpEditMode(bool $flag): void
     {
         global $edit;
 
@@ -156,14 +115,7 @@ class LiTest extends TestCase
         $edit = $flag;
     }
 
-    /**
-     * Sets up the default page data router mock.
-     *
-     * @return void
-     *
-     * @global XH_PageDataRouter The page data router.
-     */
-    protected function setUpPageDataRouterMock()
+    protected function setUpPageDataRouterMock(): void
     {
         global $pd_router;
 
@@ -183,12 +135,7 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Sets up the default function stubs.
-     *
-     * @return void
-     */
-    protected function setUpFunctionStubs()
+    protected function setUpFunctionStubs(): void
     {
         uopz_set_return("a", function ($pageIndex, $suffix) {
             global $u;
@@ -200,47 +147,24 @@ class LiTest extends TestCase
         }, true);
     }
 
-    /**
-     * Tears down the test fixture.
-     *
-     * @return void
-     */
     public function tearDown(): void
     {
         uopz_unset_return("a");
         uopz_unset_return("hide");
     }
 
-    /**
-     * Tests that no menu items display nothing.
-     *
-     * @return void
-     */
-    public function testNoMenuItemsDisplayNothing()
+    public function testNoMenuItemsDisplayNothing(): void
     {
         $this->assertEmpty((new LiCommand(array(), 1))->render());
     }
 
-    /**
-     * Tests that a UL has a LI as child.
-     *
-     * @param string $class A CSS class.
-     *
-     * @return void
-     *
-     * @dataProvider dataForUnorderedListlHasListItemChild
-     */
-    public function testUnorderedListHasListItemChild($class)
+    /** @dataProvider dataForUnorderedListlHasListItemChild */
+    public function testUnorderedListHasListItemChild(string $class): void
     {
         $this->assertStringContainsString("<ul class=\"$class\">\n<li ", $this->renderAllPages());
     }
 
-    /**
-     * Provides data for dataForUnorderedListlHasListItemChild().
-     *
-     * @return array
-     */
-    public function dataForUnorderedListlHasListItemChild()
+    public function dataForUnorderedListlHasListItemChild(): array
     {
         return array(
             array('menulevel1'),
@@ -249,26 +173,13 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a LI has a UL child.
-     *
-     * @param string $class A CSS class.
-     *
-     * @return void
-     *
-     * @dataProvider dataForListItemHasUnorderedListChild
-     */
-    public function testListItemHasUnorderedListChild($class)
+    /** @dataProvider dataForListItemHasUnorderedListChild */
+    public function testListItemHasUnorderedListChild(string $class): void
     {
         $this->assertStringMatchesFormat("%A<li%s\n<ul class=\"$class\">%A", $this->renderAllPages());
     }
 
-    /**
-     * Provides data for testListItemHasUnorderedListChild().
-     *
-     * @return array
-     */
-    public function dataForListItemHasUnorderedListChild()
+    public function dataForListItemHasUnorderedListChild(): array
     {
         return array(
             array('menulevel2'),
@@ -276,44 +187,17 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Tests that the selected page is marked up as SPAN.
-     *
-     * @return void
-     */
-    public function testSelectedPageHasSpan()
+    public function testSelectedPageHasSpan(): void
     {
         $this->assertStringContainsString("<span>Welcome</span>", $this->renderAllPages());
     }
 
-    /**
-     * Tests that a not selected page is marked up as ANCHOR.
-     *
-     * @return void
-     */
-    public function testNotSelectedPageHasAnchor()
+    public function testNotSelectedPageHasAnchor(): void
     {
         Approvals::verifyHtml($this->renderAllPages());
     }
 
-    /**
-     * Asserts that the rendering of all pages matches a matcher.
-     *
-     * @param array $matcher A matcher.
-     *
-     * @return void
-     */
-    protected function assertMatches($matcher)
-    {
-        @$this->assertTag($matcher, $this->renderAllPages());
-    }
-
-    /**
-     * Tests that a LI without visible children has the class "doc".
-     *
-     * @return void
-     */
-    public function testLiWithoutVisibleChilrenHasClassDoc()
+    public function testLiWithoutVisibleChilrenHasClassDoc(): void
     {
         $this->assertStringContainsString(
             "<li class=\"doc blog\"><a href=\"?Blog:Hidden\">Hidden</a>",
@@ -322,26 +206,15 @@ class LiTest extends TestCase
     }
 
     /**
-     * Tests that UL has the proper class attribute.
-     *
-     * @param mixed  $forOrFrom A li() view kind or the start level.
-     * @param string $class     A CSS class.
-     *
-     * @return void
-     *
+     * @param mixed $forOrFrom
      * @dataProvider dataForHasUlWithProperClass
      */
-    public function testHasUlWithProperClass($forOrFrom, $class)
+    public function testHasUlWithProperClass($forOrFrom, string $class): void
     {
         $this->assertStringContainsString("<ul class=\"$class\">", $this->renderAllPages($forOrFrom));
     }
 
-    /**
-     * Provides data for testHasUlWithProperClass().
-     *
-     * @return array
-     */
-    public function dataForHasUlWithProperClass()
+    public function dataForHasUlWithProperClass(): array
     {
         return array(
             array('menulevel', 'menulevel1'),
@@ -356,14 +229,7 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a selected page with children has the class "docs".
-     *
-     * @return void
-     *
-     * @global int The index of the selected page.
-     */
-    public function testSelectedPageHasClassSdocs()
+    public function testSelectedPageHasClassSdocs(): void
     {
         global $s;
 
@@ -371,22 +237,12 @@ class LiTest extends TestCase
         $this->assertStringContainsString("<li class=\"sdocs blog\"><span>Blog</span>", $this->renderAllPages());
     }
 
-    /**
-     * Tests that a selected childless page has the class "doc".
-     *
-     * @return void.
-     */
-    public function testSelectedChildlessPageHasClassSdoc()
+    public function testSelectedChildlessPageHasClassSdoc(): void
     {
         Approvals::verifyHtml($this->renderAllPages());
     }
 
-    /**
-     * Tests that a not selected page with children has the class "docs".
-     *
-     * @return void.
-     */
-    public function testNotSelectedPageHasClassDocs()
+    public function testNotSelectedPageHasClassDocs(): void
     {
         $this->assertStringContainsString(
             "<li class=\"docs blog\"><a href=\"?Blog\">Blog</a>",
@@ -394,14 +250,7 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a not selected childless page has the class "doc".
-     *
-     * @return void
-     *
-     * @global int The index of the selected page.
-     */
-    public function testNotSelectedChildlessPageHasClassDoc()
+    public function testNotSelectedChildlessPageHasClassDoc(): void
     {
         global $s;
 
@@ -409,21 +258,8 @@ class LiTest extends TestCase
         Approvals::verifyHtml($this->renderAllPages());
     }
 
-    /**
-     * Tests that the parent of the a selected page has a class depending on
-     * menu_sdoc.
-     *
-     * @param string $sdoc  A menu_sdoc setting ('' or 'parent').
-     * @param string $class A CSS class.
-     *
-     * @return void
-     *
-     * @global int   The index of the selected page.
-     * @global array The configuration of the core.
-     *
-     * @dataProvider dataForParentOfSelectedPageHasClassDependingOnSdoc
-     */
-    public function testParentOfSelectedPageHasClassDependingOnSdoc($sdoc, $class)
+    /** @dataProvider dataForParentOfSelectedPageHasClassDependingOnSdoc */
+    public function testParentOfSelectedPageHasClassDependingOnSdoc(string $sdoc, string $class): void
     {
         global $s, $cf;
 
@@ -435,12 +271,7 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Provides data for testParentOfSelectedPageHasClassDependingOnSdoc().
-     *
-     * @return array
-     */
-    public function dataForParentOfSelectedPageHasClassDependingOnSdoc()
+    public function dataForParentOfSelectedPageHasClassDependingOnSdoc(): array
     {
         return array(
             array('parent', 'sdocs'),
@@ -448,20 +279,8 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a first level page with a third level child has a class
-     * depending on menu_levelcatch.
-     *
-     * @param string $levelcatch A menu_levelcatch setting.
-     * @param string $class      A CSS class.
-     *
-     * @return void
-     *
-     * @global array The configuration of the core.
-     *
-     * @dataProvider dataForH1WithH3HasClassDependingOnLevelcatch
-     */
-    public function testH1WithH3HasClassDependingOnLevelcatch($levelcatch, $class)
+    /** @dataProvider dataForH1WithH3HasClassDependingOnLevelcatch */
+    public function testH1WithH3HasClassDependingOnLevelcatch(string $levelcatch, string $class): void
     {
         global $cf;
 
@@ -472,12 +291,7 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Provides data for testH1WithH3HasClassDependingOnLevelcatch().
-     *
-     * @return array
-     */
-    public function dataForH1WithH3HasClassDependingOnLevelcatch()
+    public function dataForH1WithH3HasClassDependingOnLevelcatch(): array
     {
         return array(
             array('10', 'docs'),
@@ -485,47 +299,24 @@ class LiTest extends TestCase
         );
     }
 
-    /**
-     * Tests that a page opens in a new window when in normal mode.
-     *
-     * @return void
-     */
-    public function testPageOpensInNewWindowInNormalMode()
+    public function testPageOpensInNewWindowInNormalMode(): void
     {
         Approvals::verifyHtml($this->renderAllPages());
     }
 
-    /**
-     * Tests that a page doesn't open in a new window when in edit mode.
-     *
-     * @return void
-     */
-    public function testPageDoesntOpenInNewWindowInEditMode()
+    public function testPageDoesntOpenInNewWindowInEditMode(): void
     {
         $this->setUpEditMode(true);
         Approvals::verifyHtml($this->renderAllPages());
     }
 
-    /**
-     * Returns the rendering of all pages.
-     *
-     * @param mixed $forOrFrom A li() view kind or the start level.
-     *
-     * @return string (X)HTML.
-     */
-    protected function renderAllPages($forOrFrom = 1)
+    /** @param mixed $forOrFrom */
+    protected function renderAllPages($forOrFrom = 1): string
     {
         return (new LiCommand(range(0, 10), $forOrFrom))->render();
     }
 
-    /**
-     * Tests that the "Blog" submenu has exactly three items.
-     *
-     * @return void
-     *
-     * @global int The index of the selected page.
-     */
-    public function testBlogSubmenuHasExactlyThreeItems()
+    public function testBlogSubmenuHasExactlyThreeItems(): void
     {
         global $s;
 
@@ -533,12 +324,7 @@ class LiTest extends TestCase
         Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render());
     }
 
-    /**
-     * Tests that the "Blog" submenu has the proper structure.
-     *
-     * @return void
-     */
-    public function testBlogSubmenuHasProperStructure()
+    public function testBlogSubmenuHasProperStructure(): void
     {
         Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render());
     }

@@ -26,31 +26,15 @@ namespace Toxic;
  */
 class Controller
 {
-    /**
-     * The command factory.
-     *
-     * @var CommandFactory
-     */
+    /** @var CommandFactory */
     protected $commandFactory;
 
-    /**
-     * Initializes a new instance.
-     *
-     * @param CommandFactory $commandFactory A command factory.
-     *
-     * @return void
-     */
     public function __construct(CommandFactory $commandFactory)
     {
         $this->commandFactory = $commandFactory;
     }
 
-    /**
-     * Dispatch according to the request.
-     *
-     * @return void
-     */
-    public function dispatch()
+    public function dispatch(): void
     {
         $this->registerFields();
         if (XH_ADM) { // @phpstan-ignore-line
@@ -64,14 +48,7 @@ class Controller
         }
     }
 
-    /**
-     * Registers the page data fields.
-     *
-     * @return void
-     *
-     * @global XH_PageDataRouter The page data router.
-     */
-    protected function registerFields()
+    protected function registerFields(): void
     {
         global $pd_router;
 
@@ -79,16 +56,7 @@ class Controller
         $pd_router->add_interest('toxic_class');
     }
 
-    /**
-     * Adds the page data tab.
-     *
-     * @return void
-     *
-     * @global array             The paths of system files and folders.
-     * @global XH_PageDataRouter The page data router.
-     * @global array             The localization of the plugins.
-     */
-    protected function addPageDataTab()
+    protected function addPageDataTab(): void
     {
         global $pth, $pd_router, $plugin_tx;
 
@@ -98,14 +66,7 @@ class Controller
         );
     }
 
-    /**
-     * Returns whether the administration is requested.
-     *
-     * @return bool
-     *
-     * @global string Whether the toxic administration is requested.
-     */
-    protected function isAdministrationRequested()
+    protected function isAdministrationRequested(): bool
     {
         global $toxic;
 
@@ -114,16 +75,7 @@ class Controller
             || isset($toxic) && $toxic == 'true';
     }
 
-    /**
-     * Handles the administration.
-     *
-     * @return void
-     *
-     * @global string The value of the <var>admin</var> GP parameter.
-     * @global string The value of the <var>action</var> GP parameter.
-     * @global string The HTML for the contents area.
-     */
-    protected function handleAdministration()
+    protected function handleAdministration(): void
     {
         global $admin, $action, $o;
 

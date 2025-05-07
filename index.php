@@ -33,41 +33,19 @@ EOT
     );
 }
 
-/**
- * The plugin version.
- */
 define('TOXIC_VERSION', '1alpha1');
 
-/**
- * Returns a table of contents.
- *
- * @param int $start The menu level to start with.
- * @param int $end   The menu level to end with.
- *
- * @return string (X)HTML.
- */
-function toxic($start = null, $end = null)
+function toxic(?int $start = null, ?int$end = null): string
 {
     return toc($start, $end, 'Toxic_li');
 }
 
-/**
- * Returns a menu structure of the pages.
- *
- * @param array $ta The indexes of the pages.
- * @param mixed $st The menu level to start with or the type of menu.
- *
- * @return string The (X)HTML.
- */
-function Toxic_li($ta, $st)
+function Toxic_li(array $ta, $st): string
 {
     $liCommand = new LiCommand($ta, $st);
     return $liCommand->render();
 }
 
-/**
- * The controller.
- */
 $_Toxic_controller = new Controller(
     new CommandFactory()
 );

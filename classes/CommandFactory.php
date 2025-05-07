@@ -26,24 +26,12 @@ namespace Toxic;
  */
 class CommandFactory
 {
-    /**
-     * Makes a tab command.
-     *
-     * @param array $pageData A page data array.
-     *
-     * @return TabCommand
-     */
-    public function makeTabCommand($pageData)
+    public function makeTabCommand(array $pageData): TabCommand
     {
         return new TabCommand($pageData);
     }
 
-    /**
-     * Makes an info command.
-     *
-     * @return InfoCommand
-     */
-    public function makeInfoCommand()
+    public function makeInfoCommand(): InfoCommand
     {
         return new InfoCommand();
     }

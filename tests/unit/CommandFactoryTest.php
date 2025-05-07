@@ -28,41 +28,22 @@ use PHPUnit\Framework\TestCase;
  */
 class CommandFactoryTest extends TestCase
 {
-    /**
-     * The subject under test.
-     *
-     * @var CommandFactory
-     */
+    /** @var CommandFactory  */
     protected $subject;
 
-    /**
-     * Sets up the test fixture.
-     *
-     * @return void
-     */
     public function setUp(): void
     {
         $this->subject = new CommandFactory();
     }
 
-    /**
-     * Tests makeTabCommand
-     *
-     * @return void
-     */
-    public function testMakeTabCommand()
+    public function testMakeTabCommand(): void
     {
         $this->assertInstanceOf(
             TabCommand::class, $this->subject->makeTabCommand(array())
         );
     }
 
-    /**
-     * Tests makeInfoCommand
-     *
-     * @return void
-     */
-    public function testMakeInfoCommand()
+    public function testMakeInfoCommand(): void
     {
         $this->assertInstanceOf(
             InfoCommand::class, $this->subject->makeInfoCommand()
