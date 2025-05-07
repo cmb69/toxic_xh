@@ -37,34 +37,19 @@ class LiTest extends TestCase
 
     private function setUpPageStructure(): void
     {
-        global $cl, $h, $u, $l;
-
-        $h = [
-            'Welcome',
-            'Blog',
-            'July',
-            'Hot',
-            'Hidden',
-            'AlsoHidden',
-            'January',
-            'Cold',
-            'About',
-            'Contact',
-            'News'
-        ];
-        $u = [
-            'Welcome',
-            'Blog',
-            'Blog:July',
-            'Blog:July:Hot',
-            'Blog:Hidden',
-            'Blog:Hidden:AlsoHidden',
-            'Blog:January',
-            'Blog:January:Cold',
-            'About',
-            'About:Contact',
-            'News'
-        ];
+        $this->pages->method("heading")->willReturnMap([
+            [0, 'Welcome'],
+            [1, 'Blog'],
+            [2, 'July'],
+            [3, 'Hot'],
+            [4, 'Hidden'],
+            [5, 'AlsoHidden'],
+            [6, 'January'],
+            [7, 'Cold'],
+            [8, 'About'],
+            [9, 'Contact'],
+            [10, 'News'],
+        ]);
         $this->pages->method("url")->willReturnMap([
             [0, 'Welcome'],
             [1, 'Blog'],
@@ -78,8 +63,20 @@ class LiTest extends TestCase
             [9, 'About:Contact'],
             [10, 'News'],
         ]);
-        $l = [1, 1, 2, 3, 2, 3, 2, 3, 1, 3, 1];
-        $cl = count($u);
+        $this->pages->method("level")->willReturnMap([
+            [0, 1],
+            [1, 1],
+            [2, 2],
+            [3, 3],
+            [4, 2],
+            [5, 3],
+            [6, 2],
+            [7, 3],
+            [8, 1],
+            [9, 3],
+            [10, 1],
+        ]);
+        $this->pages->method("getCount")->willReturn(11);
     }
 
     private function setUpConfiguration(): void

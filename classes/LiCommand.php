@@ -54,7 +54,7 @@ class LiCommand
      */
     public function __invoke(Request $request, array $ta, $st): Response
     {
-        global $s, $l, $h, $cl, $cf;
+        global $s, $cf;
 
         $tl = count($ta);
         if ($tl < 1) {
@@ -73,7 +73,7 @@ class LiCommand
         for ($i = 0; $i < $tl; $i++) {
             $tf = ($s != $ta[$i]);
             if ($st == 'menulevel' || $st == 'sitemaplevel') {
-                for ($k = (isset($ta[$i - 1]) ? $l[$ta[$i - 1]] : $b); $k < $l[$ta[$i]]; $k++) {
+                for ($k = (isset($ta[$i - 1]) ? $this->pages->level($ta[$i - 1]) : $b); $k < $this->pages->level($ta[$i]); $k++) {
                     $t .= "\n" . '<ul class="' . $st . ($k + 1) . '">'
                         . "\n";
                 }
@@ -83,7 +83,7 @@ class LiCommand
             if (!$tf) {
                 $t .= 's';
             } elseif ($cf['menu']['sdoc'] == "parent" && $s > -1) {
-                if ($l[$ta[$i]] < $l[$s]) {
+                if ($this->pages->level($ta[$i]) < $this->pages->level($s)) {
                     $hasChildren = substr($this->pages->url($s), 0, 1 + strlen($this->pages->url($ta[$i])))
                         == $this->pages->url($ta[$i]) . $cf['uri']['seperator'];
                     if ($hasChildren) {
@@ -92,12 +92,12 @@ class LiCommand
                 }
             }
             $t .= 'doc';
-            for ($j = $ta[$i] + 1; $j < $cl; $j++) {
+            for ($j = $ta[$i] + 1; $j < $this->pages->getCount(); $j++) {
                 if (
                     !$this->pages->isHidden($j)
-                    && $l[$j] - $l[$ta[$i]] < 2 + $cf['menu']['levelcatch']
+                    && $this->pages->level($j) - $this->pages->level($ta[$i]) < 2 + $cf['menu']['levelcatch']
                 ) {
-                    if ($l[$j] > $l[$ta[$i]]) {
+                    if ($this->pages->level($j) > $this->pages->level($ta[$i])) {
                         $t .= 's';
                     }
                     break;
@@ -114,22 +114,21 @@ class LiCommand
             } else {
                 $t .= '<span>';
             }
-            $t .= $h[$ta[$i]];
+            $t .= $this->pages->heading($ta[$i]);
             if ($tf) {
                 $t .= '</a>';
             } else {
                 $t .= '</span>';
             }
             if ($st == 'menulevel' || $st == 'sitemaplevel') {
-                $cond = (isset($ta[$i + 1]) ? $l[$ta[$i + 1]] : $b)
-                    > $l[$ta[$i]];
+                $cond = (isset($ta[$i + 1]) ? $this->pages->level($ta[$i + 1]) : $b) > $this->pages->level($ta[$i]);
                 if ($cond) {
-                    $lf[$l[$ta[$i]]] = true;
+                    $lf[$this->pages->level($ta[$i])] = true;
                 } else {
                     $t .= '</li>' . "\n";
-                    $lf[$l[$ta[$i]]] = false;
+                    $lf[$this->pages->level($ta[$i])] = false;
                 }
-                for ($k = $l[$ta[$i]]; $k > (isset($ta[$i + 1]) ? $l[$ta[$i + 1]] : $b); $k--) {
+                for ($k = $this->pages->level($ta[$i]); $k > (isset($ta[$i + 1]) ? $this->pages->level($ta[$i + 1]) : $b); $k--) {
                     $t .= '</ul>' . "\n";
                     if (isset($lf[$k - 1])) {
                         if ($lf[$k - 1]) {
