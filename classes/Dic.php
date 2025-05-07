@@ -21,9 +21,21 @@
 
 namespace Toxic;
 
+use XH\Pages;
+
 class Dic
 {
     public const VERSION = "1alpha1";
+
+    /**
+     * @param list<int> $ta
+     * @param int|string $st
+     */
+    public static function liCommand(array $ta, $st): LiCommand
+    {
+        global $xh_publisher, $pd_router;
+        return new LiCommand(new Pages(), $xh_publisher, $pd_router, $ta, $st);
+    }
 
     /** @param array<string,string> $pageData */
     public static function makeTabCommand(array $pageData): TabCommand

@@ -20,9 +20,8 @@
  */
 
 use Plib\Request;
-use Toxic\LiCommand;
+use Toxic\Dic;
 use XH\PageDataRouter;
-use XH\Pages;
 
 if (!defined("CMSIMPLE_XH_VERSION")) {
     http_response_code(403);
@@ -40,9 +39,7 @@ function toxic(?int $start = null, ?int $end = null): string
  */
 function Toxic_li(array $ta, $st): string
 {
-    global $xh_publisher, $pd_router;
-    $liCommand = new LiCommand(new Pages(), $xh_publisher, $pd_router, $ta, $st);
-    return $liCommand->render(Request::current());
+    return Dic::liCommand($ta, $st)->render(Request::current());
 }
 
 /**
