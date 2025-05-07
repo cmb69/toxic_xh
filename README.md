@@ -17,7 +17,7 @@ li() of CMSimple_XH, similar to those offered by the old AdvancedTOC and xtoc ad
 ## Requirements
 
 Toxic_XH is a plugin for [CMSimple_XH](https://cmsimple-xh.org/).
-It requires CMSimple_XH ≥ 1.6 and PHP ≥ 5.1.2.
+It requires CMSimple_XH ≥ 1.7.0 and PHP ≥ 5.1.2.
 
 ## Download
 
