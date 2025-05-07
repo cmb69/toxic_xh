@@ -139,7 +139,8 @@ class LiTest extends TestCase
     /** @dataProvider dataForUnorderedListlHasListItemChild */
     public function testUnorderedListHasListItemChild(string $class): void
     {
-        $this->assertStringContainsString("<ul class=\"$class\">\n<li ", $this->renderAllPages());
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        $this->assertStringContainsString("<ul class=\"$class\">\n<li ", $response->output());
     }
 
     public function dataForUnorderedListlHasListItemChild(): array
@@ -154,7 +155,8 @@ class LiTest extends TestCase
     /** @dataProvider dataForListItemHasUnorderedListChild */
     public function testListItemHasUnorderedListChild(string $class): void
     {
-        $this->assertStringMatchesFormat("%A<li%s\n<ul class=\"$class\">%A", $this->renderAllPages());
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        $this->assertStringMatchesFormat("%A<li%s\n<ul class=\"$class\">%A", $response->output());
     }
 
     public function dataForListItemHasUnorderedListChild(): array
@@ -167,19 +169,22 @@ class LiTest extends TestCase
 
     public function testSelectedPageHasSpan(): void
     {
-        $this->assertStringContainsString("<span>Welcome</span>", $this->renderAllPages());
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        $this->assertStringContainsString("<span>Welcome</span>", $response->output());
     }
 
     public function testNotSelectedPageHasAnchor(): void
     {
-        Approvals::verifyHtml($this->renderAllPages());
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testLiWithoutVisibleChilrenHasClassDoc(): void
     {
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
             "<li class=\"doc blog\"><a href=\"/?Blog:Hidden\">Hidden</a>",
-            $this->renderAllPages()
+            $response->output()
         );
     }
 
@@ -189,7 +194,8 @@ class LiTest extends TestCase
      */
     public function testHasUlWithProperClass($forOrFrom, string $class): void
     {
-        $this->assertStringContainsString("<ul class=\"$class\">", $this->renderAllPages($forOrFrom));
+        $response = $this->sut()(new FakeRequest(), range(0, 10), $forOrFrom);
+        $this->assertStringContainsString("<ul class=\"$class\">", $response->output());
     }
 
     public function dataForHasUlWithProperClass(): array
@@ -212,19 +218,22 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        $this->assertStringContainsString("<li class=\"sdocs blog\"><span>Blog</span>", $this->renderAllPages());
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        $this->assertStringContainsString("<li class=\"sdocs blog\"><span>Blog</span>", $response->output());
     }
 
     public function testSelectedChildlessPageHasClassSdoc(): void
     {
-        Approvals::verifyHtml($this->renderAllPages());
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testNotSelectedPageHasClassDocs(): void
     {
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
             "<li class=\"docs blog\"><a href=\"/?Blog\">Blog</a>",
-            $this->renderAllPages()
+            $response->output()
         );
     }
 
@@ -233,7 +242,8 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        Approvals::verifyHtml($this->renderAllPages());
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        Approvals::verifyHtml($response->output());
     }
 
     /** @dataProvider dataForParentOfSelectedPageHasClassDependingOnSdoc */
@@ -243,9 +253,10 @@ class LiTest extends TestCase
 
         $s = 2;
         $cf['menu']['sdoc'] = $sdoc;
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
             "<li class=\"$class blog\"><a href=\"/?Blog\">Blog</a>",
-            $this->renderAllPages()
+            $response->output()
         );
     }
 
@@ -263,9 +274,10 @@ class LiTest extends TestCase
         global $cf;
 
         $cf['menu']['levelcatch'] = $levelcatch;
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
             "<li class=\"$class\"><a href=\"/?About\">About</a>",
-            $this->renderAllPages()
+            $response->output()
         );
     }
 
@@ -279,7 +291,8 @@ class LiTest extends TestCase
 
     public function testPageOpensInNewWindowInNormalMode(): void
     {
-        Approvals::verifyHtml($this->renderAllPages());
+        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        Approvals::verifyHtml($response->output());
     }
 
     public function testPageDoesntOpenInNewWindowInEditMode(): void
@@ -287,13 +300,6 @@ class LiTest extends TestCase
         $request = new FakeRequest(["admin" => true, "edit" => true]);
         $response = $this->sut()($request, range(0, 10), 1);
         Approvals::verifyHtml($response->output());
-    }
-
-    /** @param mixed $forOrFrom */
-    private function renderAllPages($forOrFrom = 1): string
-    {
-        $response = $this->sut()(new FakeRequest(), range(0, 10), $forOrFrom);
-        return $response->output();
     }
 
     public function testBlogSubmenuHasExactlyThreeItems(): void
