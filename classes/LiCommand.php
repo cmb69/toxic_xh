@@ -54,7 +54,7 @@ class LiCommand
      */
     public function __invoke(Request $request, array $ta, $st): Response
     {
-        global $s, $cf;
+        global $cf;
 
         $tl = count($ta);
         if ($tl < 1) {
@@ -71,7 +71,7 @@ class LiCommand
         }
         $lf = [];
         for ($i = 0; $i < $tl; $i++) {
-            $tf = ($s != $ta[$i]);
+            $tf = ($request->s() != $ta[$i]);
             if ($st == 'menulevel' || $st == 'sitemaplevel') {
                 for ($k = (isset($ta[$i - 1]) ? $this->pages->level($ta[$i - 1]) : $b); $k < $this->pages->level($ta[$i]); $k++) {
                     $t .= "\n" . '<ul class="' . $st . ($k + 1) . '">'
@@ -82,9 +82,9 @@ class LiCommand
             $t .= '<li class="';
             if (!$tf) {
                 $t .= 's';
-            } elseif ($cf['menu']['sdoc'] == "parent" && $s > -1) {
-                if ($this->pages->level($ta[$i]) < $this->pages->level($s)) {
-                    $hasChildren = substr($this->pages->url($s), 0, 1 + strlen($this->pages->url($ta[$i])))
+            } elseif ($cf['menu']['sdoc'] == "parent" && $request->s() > -1) {
+                if ($this->pages->level($ta[$i]) < $this->pages->level($request->s())) {
+                    $hasChildren = substr($this->pages->url($request->s()), 0, 1 + strlen($this->pages->url($ta[$i])))
                         == $this->pages->url($ta[$i]) . $cf['uri']['seperator'];
                     if ($hasChildren) {
                         $t .= 's';

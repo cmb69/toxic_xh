@@ -24,9 +24,6 @@ class LiTest extends TestCase
 
     public function setUp(): void
     {
-        global $s;
-
-        $s = 0;
         $this->pages = $this->createStub(Pages::class);
         $this->publisher = $this->createStub(Publisher::class);
         $this->setUpPageStructure();
@@ -215,10 +212,8 @@ class LiTest extends TestCase
 
     public function testSelectedPageHasClassSdocs(): void
     {
-        global $s;
-
-        $s = 1;
-        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        $request = new FakeRequest(["s" => 1]);
+        $response = $this->sut()($request, range(0, 10), 1);
         $this->assertStringContainsString("<li class=\"sdocs blog\"><span>Blog</span>", $response->output());
     }
 
@@ -239,21 +234,19 @@ class LiTest extends TestCase
 
     public function testNotSelectedChildlessPageHasClassDoc(): void
     {
-        global $s;
-
-        $s = 1;
-        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        $request = new FakeRequest(["s" => 1]);
+        $response = $this->sut()($request, range(0, 10), 1);
         Approvals::verifyHtml($response->output());
     }
 
     /** @dataProvider dataForParentOfSelectedPageHasClassDependingOnSdoc */
     public function testParentOfSelectedPageHasClassDependingOnSdoc(string $sdoc, string $class): void
     {
-        global $s, $cf;
+        global $cf;
 
-        $s = 2;
         $cf['menu']['sdoc'] = $sdoc;
-        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
+        $request = new FakeRequest(["s" => 2]);
+        $response = $this->sut()($request, range(0, 10), 1);
         $this->assertStringContainsString(
             "<li class=\"$class blog\"><a href=\"/?Blog\">Blog</a>",
             $response->output()
@@ -304,10 +297,8 @@ class LiTest extends TestCase
 
     public function testBlogSubmenuHasExactlyThreeItems(): void
     {
-        global $s;
-
-        $s = 1;
-        $response = $this->sut()(new FakeRequest(), [2, 4, 6], 'submenu');
+        $request = new FakeRequest(["s" => 1]);
+        $response = $this->sut()($request, [2, 4, 6], 'submenu');
         Approvals::verifyHtml($response->output());
     }
 
