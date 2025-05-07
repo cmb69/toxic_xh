@@ -2,14 +2,6 @@
 
 <project name="Toxic" default="help">
 
-  <property name="styledir" value="C:\xampp\php\data\phing\etc"/>
-
-  <fileset id="php-sources" dir=".">
-    <include name="classes/*.php"/>
-    <include name="index.php"/>
-    <include name="toxic_view.php"/>
-  </fileset>
-
   <fileset id="unit-tests" dir="tests/unit">
     <include name="*Test.php"/>
   </fileset>
@@ -42,18 +34,6 @@
 
   <target name="coverage" description="generates coverage report">
     <exec command="phpunit --configuration coverage.xml" logoutput="true"/>
-  </target>
-
-  <target name="doc" description="generates the developer documentation">
-    <phpdoc title="Toxic_XH Developer Documentation" destdir="doc/php"
-        output="HTML:Smarty:HandS" defaultpackagename="Toxic"
-        defaultcategoryname="CMSimple_XH">
-      <fileset refid="php-sources"/>
-      <projdocfileset dir=".">
-         <include name="README"/>
-         <include name="CHANGELOG"/>
-      </projdocfileset>
-    </phpdoc>
   </target>
 
   <target name="build" description="builds distributable ZIP archive">
