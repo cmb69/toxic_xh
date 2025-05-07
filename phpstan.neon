@@ -10,6 +10,7 @@ parameters:
   scanFiles:
     - ../../cmsimple/classes/CSRFProtection.php
     - ../../cmsimple/classes/PageDataRouter.php
+    - ../../cmsimple/classes/Pages.php
     - ../../cmsimple/adminfuncs.php
     - ../../cmsimple/functions.php
     - ../../cmsimple/tplfuncs.php

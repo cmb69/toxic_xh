@@ -22,9 +22,13 @@
 namespace Toxic;
 
 use Plib\Request;
+use XH\Pages;
 
 class LiCommand
 {
+    /** @var Pages */
+    private $pages;
+
     /** @var list<int> */
     private $ta;
 
@@ -35,8 +39,9 @@ class LiCommand
      * @param list<int> $ta
      * @param int|string $st
      */
-    public function __construct(array $ta, $st)
+    public function __construct(Pages $pages, array $ta, $st)
     {
+        $this->pages = $pages;
         $this->ta = $ta;
         $this->st = $st;
     }
@@ -83,7 +88,7 @@ class LiCommand
             $t .= 'doc';
             for ($j = $this->ta[$i] + 1; $j < $cl; $j++) {
                 if (
-                    !hide($j)
+                    !$this->pages->isHidden($j)
                     && $l[$j] - $l[$this->ta[$i]] < 2 + $cf['menu']['levelcatch']
                 ) {
                     if ($l[$j] > $l[$this->ta[$i]]) {

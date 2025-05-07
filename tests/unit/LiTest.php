@@ -3,17 +3,16 @@
 namespace Toxic;
 
 use ApprovalTests\Approvals;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Plib\FakeRequest;
 use XH\PageDataRouter;
+use XH\Pages;
 
 class LiTest extends TestCase
 {
-    /** @var object */
-    private $liStub;
-
-    /** @var object */
-    private $hideStub;
+    /** @var Pages&Stub */
+    private $pages;
 
     public function setUp(): void
     {
@@ -24,6 +23,7 @@ class LiTest extends TestCase
         $this->setUpPageStructure();
         $this->setUpConfiguration();
         $this->setUpPageDataRouterMock();
+        $this->pages = $this->createStub(Pages::class);
         $this->setUpFunctionStubs();
     }
 
@@ -108,20 +108,19 @@ class LiTest extends TestCase
 
             return '<a href="?' . $u[$pageIndex] . $suffix . '">';
         }, true);
-        uopz_set_return("hide", function ($pageIndex) {
+        $this->pages->method("isHidden")->willReturnCallback(function ($pageIndex) {
             return in_array($pageIndex, array(4, 5));
-        }, true);
+        });
     }
 
     public function tearDown(): void
     {
         uopz_unset_return("a");
-        uopz_unset_return("hide");
     }
 
     public function testNoMenuItemsDisplayNothing(): void
     {
-        $this->assertEmpty((new LiCommand(array(), 1))->render(new FakeRequest()));
+        $this->assertEmpty((new LiCommand($this->pages, array(), 1))->render(new FakeRequest()));
     }
 
     /** @dataProvider dataForUnorderedListlHasListItemChild */
@@ -273,14 +272,14 @@ class LiTest extends TestCase
     public function testPageDoesntOpenInNewWindowInEditMode(): void
     {
         $request = new FakeRequest(["admin" => true, "edit" => true]);
-        $response = (new LiCommand(range(0, 10), 1))->render($request);
+        $response = (new LiCommand($this->pages, range(0, 10), 1))->render($request);
         Approvals::verifyHtml($response);
     }
 
     /** @param mixed $forOrFrom */
     private function renderAllPages($forOrFrom = 1): string
     {
-        return (new LiCommand(range(0, 10), $forOrFrom))->render(new FakeRequest());
+        return (new LiCommand($this->pages, range(0, 10), $forOrFrom))->render(new FakeRequest());
     }
 
     public function testBlogSubmenuHasExactlyThreeItems(): void
@@ -288,11 +287,11 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
+        Approvals::verifyHtml((new LiCommand($this->pages, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
     }
 
     public function testBlogSubmenuHasProperStructure(): void
     {
-        Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
+        Approvals::verifyHtml((new LiCommand($this->pages, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
     }
 }
