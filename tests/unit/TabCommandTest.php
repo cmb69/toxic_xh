@@ -31,26 +31,26 @@ class TabCommandTest extends TestCase
     public function testRendersForm(): void
     {
         $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
-        Approvals::verifyHtml($this->sut()->render($request));
+        Approvals::verifyHtml($this->sut()($request));
     }
 
     public function testRendersClassInput(): void
     {
         $this->conf['classes_available'] = '';
         $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
-        Approvals::verifyHtml($this->sut()->render($request));
+        Approvals::verifyHtml($this->sut()($request));
     }
 
     public function testRendersClassSelect(): void
     {
         $this->conf['classes_available'] = 'one,two,three,test';
         $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
-        Approvals::verifyHtml($this->sut()->render($request));
+        Approvals::verifyHtml($this->sut()($request));
     }
 
     public function testRendersSubmitButton(): void
     {
         $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
-        Approvals::verifyHtml($this->sut()->render($request));
+        Approvals::verifyHtml($this->sut()($request));
     }
 }

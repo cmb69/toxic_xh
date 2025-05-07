@@ -42,7 +42,7 @@ class InfoCommand
         $this->view = $view;
     }
 
-    public function render(): string
+    public function __invoke(): string
     {
         return "<h1>Toxic " . Dic::VERSION . "</h1>\n"
             . "<h2>" . $this->view->text("syscheck_heading") . "</h2>\n"

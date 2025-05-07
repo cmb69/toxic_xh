@@ -61,7 +61,7 @@ class LiCommand
         $this->st = $st;
     }
 
-    public function render(Request $request): string
+    public function __invoke(Request $request): string
     {
         global $s, $l, $h, $cl, $cf;
 

@@ -46,7 +46,7 @@ class TabCommand
         $this->view = $view;
     }
 
-    public function render(Request $request): string
+    public function __invoke(Request $request): string
     {
         $url = $request->url()->relative();
         return '<form id="toxic_tab" action="' . $url

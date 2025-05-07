@@ -32,7 +32,7 @@ class InfoCommandTest extends TestCase
 
     public function testRendersPluginInfo(): void
     {
-        $response = $this->sut()->render();
+        $response = $this->sut()();
         Approvals::verifyHtml($response);
     }
 }
