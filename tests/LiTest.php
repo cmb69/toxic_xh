@@ -135,7 +135,8 @@ class LiTest extends TestCase
 
     public function testNoMenuItemsDisplayNothing(): void
     {
-        $this->assertEmpty($this->sut(array(), 1)(new FakeRequest()));
+        $response = $this->sut(array(), 1)(new FakeRequest());
+        $this->assertEmpty($response->output());
     }
 
     /** @dataProvider dataForUnorderedListlHasListItemChild */
@@ -288,13 +289,14 @@ class LiTest extends TestCase
     {
         $request = new FakeRequest(["admin" => true, "edit" => true]);
         $response = $this->sut(range(0, 10), 1)($request);
-        Approvals::verifyHtml($response);
+        Approvals::verifyHtml($response->output());
     }
 
     /** @param mixed $forOrFrom */
     private function renderAllPages($forOrFrom = 1): string
     {
-        return $this->sut(range(0, 10), $forOrFrom)(new FakeRequest());
+        $response = $this->sut(range(0, 10), $forOrFrom)(new FakeRequest());
+        return $response->output();
     }
 
     public function testBlogSubmenuHasExactlyThreeItems(): void
@@ -302,11 +304,13 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        Approvals::verifyHtml($this->sut(array(2, 4, 6), 'submenu')(new FakeRequest()));
+        $response = $this->sut(array(2, 4, 6), 'submenu')(new FakeRequest());
+        Approvals::verifyHtml($response->output());
     }
 
     public function testBlogSubmenuHasProperStructure(): void
     {
-        Approvals::verifyHtml($this->sut(array(2, 4, 6), 'submenu')(new FakeRequest()));
+        $response = $this->sut(array(2, 4, 6), 'submenu')(new FakeRequest());
+        Approvals::verifyHtml($response->output());
     }
 }

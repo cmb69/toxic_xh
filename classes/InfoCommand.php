@@ -21,6 +21,7 @@
 
 namespace Toxic;
 
+use Plib\Response;
 use Plib\SystemChecker;
 use Plib\View;
 
@@ -42,11 +43,11 @@ class InfoCommand
         $this->view = $view;
     }
 
-    public function __invoke(): string
+    public function __invoke(): Response
     {
-        return "<h1>Toxic " . Dic::VERSION . "</h1>\n"
+        return Response::create("<h1>Toxic " . Dic::VERSION . "</h1>\n"
             . "<h2>" . $this->view->text("syscheck_heading") . "</h2>\n"
-            . $this->systemChecks();
+            . $this->systemChecks());
     }
 
     private function systemChecks(): string

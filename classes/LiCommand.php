@@ -22,6 +22,7 @@
 namespace Toxic;
 
 use Plib\Request;
+use Plib\Response;
 use XH\PageDataRouter;
 use XH\Pages;
 use XH\Publisher;
@@ -61,13 +62,13 @@ class LiCommand
         $this->st = $st;
     }
 
-    public function __invoke(Request $request): string
+    public function __invoke(Request $request): Response
     {
         global $s, $l, $h, $cl, $cf;
 
         $tl = count($this->ta);
         if ($tl < 1) {
-            return "";
+            return Response::create();
         }
         $t = '';
         if ($this->st == 'submenu' || $this->st == 'search') {
@@ -154,7 +155,7 @@ class LiCommand
         if ($this->st == 'submenu' || $this->st == 'search') {
             $t .= '</ul>' . "\n";
         }
-        return $t;
+        return Response::create($t);
     }
 
     private function a(Request $request, int $i, string $x): string

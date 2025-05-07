@@ -39,7 +39,7 @@ if (XH_wantsPluginAdministration("toxic")) {
     $o .= print_plugin_admin("off");
     switch ($admin) {
         case "":
-            $o .= Dic::makeInfoCommand()();
+            $o .= Dic::makeInfoCommand()()();
             break;
         default:
             $o .= plugin_admin_common();

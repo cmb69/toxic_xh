@@ -22,6 +22,7 @@
 namespace Toxic;
 
 use Plib\Request;
+use Plib\Response;
 use Plib\View;
 
 class TabCommand
@@ -46,16 +47,15 @@ class TabCommand
         $this->view = $view;
     }
 
-    public function __invoke(Request $request): string
+    public function __invoke(Request $request): Response
     {
-        $url = $request->url()->relative();
-        return $this->view->render("pdtab", [
-            "url" => $url,
+        return Response::create($this->view->render("pdtab", [
+            "url" => $request->url()->relative(),
             "category" => $this->pageData['toxic_category'],
             "has_classes" => trim($this->conf["classes_available"]) !== "",
             "available_classes" => $this->availableClasses(),
             "toxic_class" => $this->pageData['toxic_class'],
-        ]);
+        ]));
     }
 
     /** @return list<object{value:string,label:string,selected:string}> */
