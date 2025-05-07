@@ -40,7 +40,8 @@ function toxic(?int $start = null, ?int $end = null): string
  */
 function Toxic_li(array $ta, $st): string
 {
-    $liCommand = new LiCommand(new Pages(), $ta, $st);
+    global $xh_publisher;
+    $liCommand = new LiCommand(new Pages(), $xh_publisher, $ta, $st);
     return $liCommand->render(Request::current());
 }
 

@@ -8,11 +8,15 @@ use PHPUnit\Framework\TestCase;
 use Plib\FakeRequest;
 use XH\PageDataRouter;
 use XH\Pages;
+use XH\Publisher;
 
 class LiTest extends TestCase
 {
     /** @var Pages&Stub */
     private $pages;
+
+    /** @var Publisher&Stub */
+    private $publisher;
 
     public function setUp(): void
     {
@@ -20,10 +24,11 @@ class LiTest extends TestCase
 
         $pth = array('folder' => array('classes' => './cmsimple/classes/'));
         $s = 0;
+        $this->pages = $this->createStub(Pages::class);
+        $this->publisher = $this->createStub(Publisher::class);
         $this->setUpPageStructure();
         $this->setUpConfiguration();
         $this->setUpPageDataRouterMock();
-        $this->pages = $this->createStub(Pages::class);
         $this->setUpFunctionStubs();
     }
 
@@ -57,6 +62,19 @@ class LiTest extends TestCase
             'About:Contact',
             'News'
         );
+        $this->pages->method("url")->willReturnMap([
+            [0, 'Welcome'],
+            [1, 'Blog'],
+            [2, 'Blog:July'],
+            [3, 'Blog:July:Hot'],
+            [4, 'Blog:Hidden'],
+            [5, 'Blog:Hidden:AlsoHidden'],
+            [6, 'Blog:January'],
+            [7, 'Blog:January:Cold'],
+            [8, 'About'],
+            [9, 'About:Contact'],
+            [10, 'News'],
+        ]);
         $l = array(1, 1, 2, 3, 2, 3, 2, 3, 1, 3, 1);
         $cl = count($u);
     }
@@ -103,24 +121,15 @@ class LiTest extends TestCase
 
     private function setUpFunctionStubs(): void
     {
-        uopz_set_return("a", function ($pageIndex, $suffix) {
-            global $u;
-
-            return '<a href="?' . $u[$pageIndex] . $suffix . '">';
-        }, true);
+        $this->publisher->method("getFirstPublishedPage")->willReturn(1000);
         $this->pages->method("isHidden")->willReturnCallback(function ($pageIndex) {
             return in_array($pageIndex, array(4, 5));
         });
     }
 
-    public function tearDown(): void
-    {
-        uopz_unset_return("a");
-    }
-
     public function testNoMenuItemsDisplayNothing(): void
     {
-        $this->assertEmpty((new LiCommand($this->pages, array(), 1))->render(new FakeRequest()));
+        $this->assertEmpty((new LiCommand($this->pages, $this->publisher, array(), 1))->render(new FakeRequest()));
     }
 
     /** @dataProvider dataForUnorderedListlHasListItemChild */
@@ -165,7 +174,7 @@ class LiTest extends TestCase
     public function testLiWithoutVisibleChilrenHasClassDoc(): void
     {
         $this->assertStringContainsString(
-            "<li class=\"doc blog\"><a href=\"?Blog:Hidden\">Hidden</a>",
+            "<li class=\"doc blog\"><a href=\"/?Blog:Hidden\">Hidden</a>",
             $this->renderAllPages()
         );
     }
@@ -210,7 +219,7 @@ class LiTest extends TestCase
     public function testNotSelectedPageHasClassDocs(): void
     {
         $this->assertStringContainsString(
-            "<li class=\"docs blog\"><a href=\"?Blog\">Blog</a>",
+            "<li class=\"docs blog\"><a href=\"/?Blog\">Blog</a>",
             $this->renderAllPages()
         );
     }
@@ -231,7 +240,7 @@ class LiTest extends TestCase
         $s = 2;
         $cf['menu']['sdoc'] = $sdoc;
         $this->assertStringContainsString(
-            "<li class=\"$class blog\"><a href=\"?Blog\">Blog</a>",
+            "<li class=\"$class blog\"><a href=\"/?Blog\">Blog</a>",
             $this->renderAllPages()
         );
     }
@@ -251,7 +260,7 @@ class LiTest extends TestCase
 
         $cf['menu']['levelcatch'] = $levelcatch;
         $this->assertStringContainsString(
-            "<li class=\"$class\"><a href=\"?About\">About</a>",
+            "<li class=\"$class\"><a href=\"/?About\">About</a>",
             $this->renderAllPages()
         );
     }
@@ -272,14 +281,14 @@ class LiTest extends TestCase
     public function testPageDoesntOpenInNewWindowInEditMode(): void
     {
         $request = new FakeRequest(["admin" => true, "edit" => true]);
-        $response = (new LiCommand($this->pages, range(0, 10), 1))->render($request);
+        $response = (new LiCommand($this->pages, $this->publisher, range(0, 10), 1))->render($request);
         Approvals::verifyHtml($response);
     }
 
     /** @param mixed $forOrFrom */
     private function renderAllPages($forOrFrom = 1): string
     {
-        return (new LiCommand($this->pages, range(0, 10), $forOrFrom))->render(new FakeRequest());
+        return (new LiCommand($this->pages, $this->publisher, range(0, 10), $forOrFrom))->render(new FakeRequest());
     }
 
     public function testBlogSubmenuHasExactlyThreeItems(): void
@@ -287,11 +296,11 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        Approvals::verifyHtml((new LiCommand($this->pages, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
+        Approvals::verifyHtml((new LiCommand($this->pages, $this->publisher, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
     }
 
     public function testBlogSubmenuHasProperStructure(): void
     {
-        Approvals::verifyHtml((new LiCommand($this->pages, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
+        Approvals::verifyHtml((new LiCommand($this->pages, $this->publisher, array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
     }
 }

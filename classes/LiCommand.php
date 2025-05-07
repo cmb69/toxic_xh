@@ -23,11 +23,15 @@ namespace Toxic;
 
 use Plib\Request;
 use XH\Pages;
+use XH\Publisher;
 
 class LiCommand
 {
     /** @var Pages */
     private $pages;
+
+    /** @var Publisher */
+    private $publisher;
 
     /** @var list<int> */
     private $ta;
@@ -39,9 +43,10 @@ class LiCommand
      * @param list<int> $ta
      * @param int|string $st
      */
-    public function __construct(Pages $pages, array $ta, $st)
+    public function __construct(Pages $pages, Publisher $publisher, array $ta, $st)
     {
         $this->pages = $pages;
+        $this->publisher = $publisher;
         $this->ta = $ta;
         $this->st = $st;
     }
@@ -104,7 +109,7 @@ class LiCommand
                 $x = !($request->admin() && $request->edit())
                     && $pageData['use_header_location'] === '2'
                         ? '" target="_blank' : '';
-                $t .= a($this->ta[$i], $x);
+                $t .= $this->a($request, $this->ta[$i], $x);
             } else {
                 $t .= '<span>';
             }
@@ -140,6 +145,20 @@ class LiCommand
             $t .= '</ul>' . "\n";
         }
         return $t;
+    }
+
+    private function a(Request $request, int $i, string $x): string
+    {
+        $sn = $request->url()->page("")->relative();
+        if ($i === $this->publisher->getFirstPublishedPage() && !($request->admin())) {
+            $a_href = $sn;
+        } else {
+            $a_href = $sn . '?' . $this->pages->url($i);
+        }
+        if (stripos($a_href, '?') === false) {
+            ($x ? $x = '?' . $x : '');
+        }
+        return '<a href="' . $a_href . $x . '">';
     }
 
     private function renderCategoryItem(int $index): string
