@@ -1,5 +1,8 @@
 <?php
 
+use ApprovalTests\Approvals;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Testing the tab command.
  *
@@ -13,9 +16,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
-require_once '../../cmsimple/functions.php';
-require_once './classes/TabCommand.php';
-
 /**
  * Testing the tab command.
  *
@@ -25,7 +25,7 @@ require_once './classes/TabCommand.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
-class TabCommandTest extends PHPUnit_Framework_TestCase
+class TabCommandTest extends TestCase
 {
     /**
      * The subject under test.
@@ -43,19 +43,21 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
      * @global string The selected URL.
      * @global array  The localization of the plugins.
      */
-    public function setUp()
+    public function setUp(): void
     {
-        global $sn, $su, $plugin_tx;
+        global $sn, $su, $plugin_cf, $plugin_tx;
 
         $sn = '/xh/';
         $su = 'Welcome';
-        $plugin_tx = array(
-            'toxic' => array(
-                'label_class' => 'Class',
-                'label_save' => 'Save'
-            )
-        );
-        $pageData = array('toxic_class' => 'test');
+        // $plugin_tx = array(
+        //     'toxic' => array(
+        //         'label_class' => 'Class',
+        //         'label_save' => 'Save'
+        //     )
+        // );
+        $plugin_cf = XH_includeVar("./config/config.php", "plugin_cf");
+        $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
+        $pageData = array('toxic_class' => 'test', "toxic_category" => "");
         $this->subject = new Toxic_TabCommand($pageData);
     }
 
@@ -66,16 +68,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersForm()
     {
-        $this->assertRenders(
-            array(
-                'tag' => 'form',
-                'id' => 'toxic_tab',
-                'attributes' => array(
-                    'action' => '/xh/?Welcome',
-                    'method' => 'post'
-                )
-            )
-        );
+        Approvals::verifyHtml($this->subject->render());
     }
 
     /**
@@ -90,21 +83,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
         global $plugin_cf;
 
         $plugin_cf['toxic']['classes_available'] = '';
-        $this->assertRenders(
-            array(
-                'tag' => 'input',
-                'attributes' => array(
-                    'type' => 'text',
-                    'name' => 'toxic_class',
-                    'value' => 'test'
-                ),
-                'parent' => array(
-                    'tag' => 'label',
-                    'content' => 'Class'
-                ),
-                'ancestor' => array('tag' => 'form')
-            )
-        );
+        Approvals::verifyHtml($this->subject->render());
     }
 
     /**
@@ -119,28 +98,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
         global $plugin_cf;
 
         $plugin_cf['toxic']['classes_available'] = 'one,two,three,test';
-        $this->assertRenders(
-            array(
-                'tag' => 'select',
-                'attributes' => array(
-                    'name' => 'toxic_class'
-                ),
-                'children' => array(
-                    'count' => 5,
-                    'only' => array('tag' => 'option')
-                ),
-                'child' => array(
-                    'tag' => 'option',
-                    'content' => 'test',
-                    'attributes' => array('selected' => 'selected')
-                ),
-                'parent' => array(
-                    'tag' => 'label',
-                    'content' => 'Class'
-                ),
-                'ancestor' => array('tag' => 'form')
-            )
-        );
+        Approvals::verifyHtml($this->subject->render());
     }
 
     /**
@@ -150,18 +108,7 @@ class TabCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersSubmitButton()
     {
-        $this->assertRenders(
-            array(
-                'tag' => 'button',
-                'attributes' => array('name' => 'save_page_data'),
-                'content' => 'Save',
-                'parent' => array(
-                    'tag' => 'p',
-                    'attributes' => array('class' => 'toxic_tab_buttons')
-                ),
-                'ancestor' => array('tag' => 'form')
-            )
-        );
+        Approvals::verifyHtml($this->subject->render());
     }
 
     /**

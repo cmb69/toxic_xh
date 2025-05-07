@@ -1,5 +1,9 @@
 <?php
 
+use ApprovalTests\Approvals;
+use PHPUnit\Framework\TestCase;
+use XH\PageDataRouter;
+
 /**
  * Testing li().
  *
@@ -13,11 +17,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
-require_once './vendor/autoload.php';
-require_once '../../cmsimple/functions.php';
-require_once '../../cmsimple/classes/PageDataRouter.php';
-require_once './classes/LiCommand.php';
-
 /**
  * Testing li().
  *
@@ -27,7 +26,7 @@ require_once './classes/LiCommand.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
-class LiTest extends PHPUnit_Framework_TestCase
+class LiTest extends TestCase
 {
     /**
      * The li() stub.
@@ -50,7 +49,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      *
      * @global int The index of the selected page.
      */
-    public function setUp()
+    public function setUp(): void
     {
         global $pth, $s;
 
@@ -148,7 +147,7 @@ class LiTest extends PHPUnit_Framework_TestCase
         global $edit;
 
         if (defined('XH_ADM')) {
-            runkit_constant_redefine('XH_ADM', $flag);
+            uopz_redefine('XH_ADM', $flag);
         } else {
             define('XH_ADM', $flag);
         }
@@ -166,7 +165,7 @@ class LiTest extends PHPUnit_Framework_TestCase
     {
         global $pd_router;
 
-        $pd_router = $this->getMockBuilder('XH_PageDataRouter')
+        $pd_router = $this->getMockBuilder(PageDataRouter::class)
             ->disableOriginalConstructor()->getMock();
         $pd_router->expects($this->any())->method('find_page')->will(
             $this->returnCallback(
@@ -174,6 +173,7 @@ class LiTest extends PHPUnit_Framework_TestCase
                     return array(
                         'toxic_class' => ($pageIndex >= 1 && $pageIndex <= 7)
                             ? 'blog' : '',
+                        'toxic_category' => '',
                         'use_header_location' => ($pageIndex == 7) ? '2' : '0'
                     );
                 }
@@ -188,24 +188,14 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     protected function setUpFunctionStubs()
     {
-        $this->liStub = new PHPUnit_Extensions_MockFunction('a', $this);
-        $this->liStub->expects($this->any())->will(
-            $this->returnCallback(
-                function ($pageIndex, $suffix) {
-                    global $u;
+        uopz_set_return("a", function ($pageIndex, $suffix) {
+            global $u;
 
-                    return '<a href="?' . $u[$pageIndex] . $suffix . '">';
-                }
-            )
-        );
-        $this->hideStub = new PHPUnit_Extensions_MockFunction('hide', $this);
-        $this->hideStub->expects($this->any())->will(
-            $this->returnCallback(
-                function ($pageIndex) {
-                    return in_array($pageIndex, array(4, 5));
-                }
-            )
-        );
+            return '<a href="?' . $u[$pageIndex] . $suffix . '">';
+        }, true);
+        uopz_set_return("hide", function ($pageIndex) {
+            return in_array($pageIndex, array(4, 5));
+        }, true);
     }
 
     /**
@@ -213,10 +203,10 @@ class LiTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->liStub->restore();
-        $this->hideStub->restore();
+        uopz_unset_return("a");
+        uopz_unset_return("hide");
     }
 
     /**
@@ -240,14 +230,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testUnorderedListHasListItemChild($class)
     {
-        $matcher = array(
-            'tag' => 'ul',
-            'attributes' => array('class' => $class),
-            'child' => array(
-                'tag' => 'li'
-            )
-        );
-        $this->assertMatches($matcher);
+        $this->assertStringContainsString("<ul class=\"$class\">\n<li ", $this->renderAllPages());
     }
 
     /**
@@ -275,14 +258,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testListItemHasUnorderedListChild($class)
     {
-        $matcher = array(
-            'tag' => 'li',
-            'child' => array(
-                'tag' => 'ul',
-                'attributes' => array('class' => $class)
-            )
-        );
-        $this->assertMatches($matcher);
+        $this->assertStringMatchesFormat("%A<li%s\n<ul class=\"$class\">%A", $this->renderAllPages());
     }
 
     /**
@@ -305,11 +281,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testSelectedPageHasSpan()
     {
-        $matcher = array(
-            'tag' => 'span',
-            'content' => 'Welcome'
-        );
-        $this->assertMatches($matcher);
+        $this->assertStringContainsString("<span>Welcome</span>", $this->renderAllPages());
     }
 
     /**
@@ -319,11 +291,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testNotSelectedPageHasAnchor()
     {
-        $matcher = array(
-            'tag' => 'a',
-            'content' => 'Blog'
-        );
-        $this->assertMatches($matcher);
+        Approvals::verifyHtml($this->renderAllPages());
     }
 
     /**
@@ -345,15 +313,10 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testLiWithoutVisibleChilrenHasClassDoc()
     {
-        $matcher = array(
-            'tag' => 'li',
-            'attributes' => array('class' => 'doc'),
-            'child' => array(
-                'tag' => 'a',
-                'content' => 'Hidden'
-            )
+        $this->assertStringContainsString(
+            "<li class=\"doc blog\"><a href=\"?Blog:Hidden\">Hidden</a>",
+            $this->renderAllPages()
         );
-        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -368,11 +331,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testHasUlWithProperClass($forOrFrom, $class)
     {
-        $matcher = array(
-            'tag' => 'ul',
-            'attributes' => array('class' => $class)
-        );
-        @$this->assertTag($matcher, $this->renderAllPages($forOrFrom));
+        $this->assertStringContainsString("<ul class=\"$class\">", $this->renderAllPages($forOrFrom));
     }
 
     /**
@@ -407,15 +366,7 @@ class LiTest extends PHPUnit_Framework_TestCase
         global $s;
 
         $s = 1;
-        $matcher = array(
-            'tag' => 'li',
-            'attributes' => array('class' => 'sdocs'),
-            'child' => array(
-                'tag' => 'span',
-                'content' => 'Blog'
-            )
-        );
-        @$this->assertTag($matcher, $this->renderAllPages());
+        $this->assertStringContainsString("<li class=\"sdocs blog\"><span>Blog</span>", $this->renderAllPages());
     }
 
     /**
@@ -425,15 +376,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testSelectedChildlessPageHasClassSdoc()
     {
-        $matcher = array(
-            'tag' => 'li',
-            'attributes' => array('class' => 'sdoc'),
-            'child' => array(
-                'tag' => 'span',
-                'content' => 'Welcome'
-            )
-        );
-        @$this->assertTag($matcher, $this->renderAllPages());
+        Approvals::verifyHtml($this->renderAllPages());
     }
 
     /**
@@ -443,15 +386,10 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testNotSelectedPageHasClassDocs()
     {
-        $matcher = array(
-            'tag' => 'li',
-            'attributes' => array('class' => 'docs'),
-            'child' => array(
-                'tag' => 'a',
-                'content' => 'Blog'
-            )
+        $this->assertStringContainsString(
+            "<li class=\"docs blog\"><a href=\"?Blog\">Blog</a>",
+            $this->renderAllPages()
         );
-        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -466,15 +404,7 @@ class LiTest extends PHPUnit_Framework_TestCase
         global $s;
 
         $s = 1;
-        $matcher = array(
-            'tag' => 'li',
-            'attributes' => array('class' => 'doc'),
-            'child' => array(
-                'tag' => 'a',
-                'content' => 'Welcome'
-            )
-        );
-        @$this->assertTag($matcher, $this->renderAllPages());
+        Approvals::verifyHtml($this->renderAllPages());
     }
 
     /**
@@ -497,15 +427,10 @@ class LiTest extends PHPUnit_Framework_TestCase
 
         $s = 2;
         $cf['menu']['sdoc'] = $sdoc;
-        $matcher = array(
-            'tag' => 'li',
-            'attributes' => array('class' => $class),
-            'child' => array(
-                'tag' => 'a',
-                'content' => 'Blog'
-            )
+        $this->assertStringContainsString(
+            "<li class=\"$class blog\"><a href=\"?Blog\">Blog</a>",
+            $this->renderAllPages()
         );
-        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -539,15 +464,10 @@ class LiTest extends PHPUnit_Framework_TestCase
         global $cf;
 
         $cf['menu']['levelcatch'] = $levelcatch;
-        $matcher = array(
-            'tag' => 'li',
-            'attributes' => array('class' => $class),
-            'child' => array(
-                'tag' => 'a',
-                'content' => 'About'
-            )
+        $this->assertStringContainsString(
+            "<li class=\"$class\"><a href=\"?About\">About</a>",
+            $this->renderAllPages()
         );
-        @$this->assertTag($matcher, $this->renderAllPages());
     }
 
     /**
@@ -570,12 +490,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testPageOpensInNewWindowInNormalMode()
     {
-        $matcher = array(
-            'tag' => 'a',
-            'content' => 'Cold',
-            'attributes' => array('target' => '_blank')
-        );
-        @$this->assertTag($matcher, $this->renderAllPages());
+        Approvals::verifyHtml($this->renderAllPages());
     }
 
     /**
@@ -586,12 +501,7 @@ class LiTest extends PHPUnit_Framework_TestCase
     public function testPageDoesntOpenInNewWindowInEditMode()
     {
         $this->setUpEditMode(true);
-        $matcher = array(
-            'tag' => 'a',
-            'content' => 'Cold',
-            'attributes' => array('target' => '_blank')
-        );
-        @$this->assertNotTag($matcher, $this->renderAllPages());
+        Approvals::verifyHtml($this->renderAllPages());
     }
 
     /**
@@ -618,19 +528,7 @@ class LiTest extends PHPUnit_Framework_TestCase
         global $s;
 
         $s = 1;
-        $matcher = array(
-            'tag' => 'ul',
-            'children' => array(
-                'count' => 3,
-                'only' => array(
-                    'tag' => 'li'
-                )
-            )
-        );
-        @$this->assertTag(
-            $matcher,
-            (new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render()
-        );
+        Approvals::verifyHtml((new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render());
     }
 
     /**
@@ -640,23 +538,7 @@ class LiTest extends PHPUnit_Framework_TestCase
      */
     public function testBlogSubmenuHasProperStructure()
     {
-        $matcher = array(
-            'tag' => 'li',
-            'attributes' => array('class' => 'docs'),
-            'child' => array(
-                'tag' => 'a',
-                'attributes' => array('href' => '?Blog:July'),
-                'content' => 'July'
-            ),
-            'parent' => array(
-                'tag' => 'ul',
-                'class' => 'submenu'
-            )
-        );
-        @$this->assertTag(
-            $matcher,
-            (new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render()
-        );
+        Approvals::verifyHtml((new Toxic_LiCommand(array(2, 4, 6), 'submenu'))->render());
     }
 }
 

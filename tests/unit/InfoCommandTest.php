@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Testing the info command.
  *
@@ -13,8 +15,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
-require_once './classes/InfoCommand.php';
-
 /**
  * Testing the info command.
  *
@@ -24,7 +24,7 @@ require_once './classes/InfoCommand.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
-class InfoCommandTest extends PHPUnit_Framework_TestCase
+class InfoCommandTest extends TestCase
 {
     /**
      * The subject under test.
@@ -40,20 +40,24 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      *
      * @global array The localization of the plugins.
      */
-    public function setUp()
+    public function setUp(): void
     {
-        global $plugin_tx;
+        global $pth, $plugin_tx;
 
         if (!defined('TOXIC_VERSION')) {
             define('TOXIC_VERSION', '1.0');
         } else {
-            runkit_constant_redefine('TOXIC_VERSION', '1.0');
+            uopz_redefine('TOXIC_VERSION', '1.0');
         }
+        $pth = [
+            "folder" => ["plugins" => ""],
+        ];
         $plugin_tx = array(
             'toxic' => array(
                 'caption_info' => 'Info'
             )
         );
+        $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
         $this->subject = new Toxic_InfoCommand();
     }
 
@@ -64,12 +68,7 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersHeading()
     {
-        $this->assertRenders(
-            array(
-                'tag' => 'h1',
-                'content' => "Toxic \xE2\x80\x93 Info"
-            )
-        );
+        $this->assertStringContainsString("<h1>Toxic &ndash; Info</h1>", $this->subject->render());
     }
 
     /**
@@ -79,12 +78,7 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersVersion()
     {
-        $this->assertRenders(
-            array(
-                'tag' => 'p',
-                'content' => 'Version: 1.0'
-            )
-        );
+        $this->assertStringContainsString("<p>Version: 1.0</p>", $this->subject->render());
     }
 
     /**
@@ -94,12 +88,7 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersCopyright()
     {
-        $this->assertRenders(
-            array(
-                'tag' => 'p',
-                'content' => 'Copyright'
-            )
-        );
+        $this->assertStringContainsString("<p>Copyright", $this->subject->render());
     }
 
     /**
@@ -109,12 +98,9 @@ class InfoCommandTest extends PHPUnit_Framework_TestCase
      */
     public function testRendersLicense()
     {
-        $this->assertRenders(
-            array(
-                'tag' => 'p',
-                'attributes' => array('class' => 'toxic_license'),
-                'content' => 'This program is free software:'
-            )
+        $this->assertStringContainsString(
+            "<p class=\"toxic_license\">This program is free software:",
+            $this->subject->render()
         );
     }
 

@@ -1,7 +1,5 @@
-*.komodoproject
-.komodotools
-doc
-tests/coverage
-vendor
+/coverage
+/vendor
 /tools
 /composer.lock
+/.phpunit.result.cache

@@ -1,5 +1,7 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Testing the command factory.
  *
@@ -13,8 +15,6 @@
  * @link      http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
 
-require_once './classes/CommandFactory.php';
-
 /**
  * Testing the command factory.
  *
@@ -24,7 +24,7 @@ require_once './classes/CommandFactory.php';
  * @license  http://www.gnu.org/licenses/gpl-3.0.en.html GNU GPLv3
  * @link     http://3-magi.net/?CMSimple_XH/Toxic_XH
  */
-class CommandFactoryTest extends PHPUnit_Framework_TestCase
+class CommandFactoryTest extends TestCase
 {
     /**
      * The subject under test.
@@ -38,7 +38,7 @@ class CommandFactoryTest extends PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->subject = new Toxic_CommandFactory();
     }
