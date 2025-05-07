@@ -28,8 +28,6 @@ if (!defined("CMSIMPLE_XH_VERSION")) {
     exit;
 }
 
-define('TOXIC_VERSION', '1alpha1');
-
 function toxic(?int $start = null, ?int $end = null): string
 {
     return toc($start, $end, 'Toxic_li');

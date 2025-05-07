@@ -48,7 +48,7 @@ class InfoCommand
 
     private function renderVersion(): string
     {
-        return '<p>Version: ' . TOXIC_VERSION . '</p>';
+        return '<p>Version: ' . Dic::VERSION . '</p>';
     }
 
     private function renderCopyright(): string

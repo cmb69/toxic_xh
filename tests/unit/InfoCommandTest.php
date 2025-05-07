@@ -13,11 +13,6 @@ class InfoCommandTest extends TestCase
     {
         global $pth, $plugin_tx;
 
-        if (!defined('TOXIC_VERSION')) {
-            define('TOXIC_VERSION', '1.0');
-        } else {
-            uopz_redefine('TOXIC_VERSION', '1.0');
-        }
         $pth = [
             "folder" => ["plugins" => ""],
         ];
@@ -37,7 +32,7 @@ class InfoCommandTest extends TestCase
 
     public function testRendersVersion(): void
     {
-        $this->assertStringContainsString("<p>Version: 1.0</p>", $this->subject->render());
+        $this->assertStringContainsString("<p>Version: 1alpha1</p>", $this->subject->render());
     }
 
     public function testRendersCopyright(): void

@@ -23,6 +23,8 @@ namespace Toxic;
 
 class Dic
 {
+    public const VERSION = "1alpha1";
+
     /** @param array<string,string> $pageData */
     public static function makeTabCommand(array $pageData): TabCommand
     {
