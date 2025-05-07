@@ -21,6 +21,8 @@
 
 namespace Toxic;
 
+use Plib\Request;
+
 class LiCommand
 {
     /** @var list<int> */
@@ -39,9 +41,9 @@ class LiCommand
         $this->st = $st;
     }
 
-    public function render(): string
+    public function render(Request $request): string
     {
-        global $s, $l, $h, $cl, $cf, $u, $edit, $pd_router;
+        global $s, $l, $h, $cl, $cf, $u, $pd_router;
 
         $tl = count($this->ta);
         if ($tl < 1) {
@@ -94,7 +96,7 @@ class LiCommand
             $t .= '">';
             if ($tf) {
                 $pageData = $pd_router->find_page($this->ta[$i]);
-                $x = !(XH_ADM && $edit) // @phpstan-ignore-line
+                $x = !($request->admin() && $request->edit())
                     && $pageData['use_header_location'] === '2'
                         ? '" target="_blank' : '';
                 $t .= a($this->ta[$i], $x);

@@ -19,8 +19,7 @@
  * along with Toxic_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Toxic\CommandFactory;
-use Toxic\Controller;
+use Plib\Request;
 use Toxic\LiCommand;
 use XH\PageDataRouter;
 
@@ -43,7 +42,7 @@ function toxic(?int $start = null, ?int $end = null): string
 function Toxic_li(array $ta, $st): string
 {
     $liCommand = new LiCommand($ta, $st);
-    return $liCommand->render();
+    return $liCommand->render(Request::current());
 }
 
 /**

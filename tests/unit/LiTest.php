@@ -4,6 +4,7 @@ namespace Toxic;
 
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
+use Plib\FakeRequest;
 use XH\PageDataRouter;
 
 class LiTest extends TestCase
@@ -22,7 +23,6 @@ class LiTest extends TestCase
         $s = 0;
         $this->setUpPageStructure();
         $this->setUpConfiguration();
-        $this->setUpEditMode(false);
         $this->setUpPageDataRouterMock();
         $this->setUpFunctionStubs();
     }
@@ -81,18 +81,6 @@ class LiTest extends TestCase
         );
     }
 
-    private function setUpEditMode(bool $flag): void
-    {
-        global $edit;
-
-        if (defined('XH_ADM')) {
-            uopz_redefine('XH_ADM', $flag);
-        } else {
-            define('XH_ADM', $flag);
-        }
-        $edit = $flag;
-    }
-
     private function setUpPageDataRouterMock(): void
     {
         global $pd_router;
@@ -133,7 +121,7 @@ class LiTest extends TestCase
 
     public function testNoMenuItemsDisplayNothing(): void
     {
-        $this->assertEmpty((new LiCommand(array(), 1))->render());
+        $this->assertEmpty((new LiCommand(array(), 1))->render(new FakeRequest()));
     }
 
     /** @dataProvider dataForUnorderedListlHasListItemChild */
@@ -284,14 +272,15 @@ class LiTest extends TestCase
 
     public function testPageDoesntOpenInNewWindowInEditMode(): void
     {
-        $this->setUpEditMode(true);
-        Approvals::verifyHtml($this->renderAllPages());
+        $request = new FakeRequest(["admin" => true, "edit" => true]);
+        $response = (new LiCommand(range(0, 10), 1))->render($request);
+        Approvals::verifyHtml($response);
     }
 
     /** @param mixed $forOrFrom */
     private function renderAllPages($forOrFrom = 1): string
     {
-        return (new LiCommand(range(0, 10), $forOrFrom))->render();
+        return (new LiCommand(range(0, 10), $forOrFrom))->render(new FakeRequest());
     }
 
     public function testBlogSubmenuHasExactlyThreeItems(): void
@@ -299,11 +288,11 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render());
+        Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
     }
 
     public function testBlogSubmenuHasProperStructure(): void
     {
-        Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render());
+        Approvals::verifyHtml((new LiCommand(array(2, 4, 6), 'submenu'))->render(new FakeRequest()));
     }
 }
