@@ -9,6 +9,7 @@ parameters:
     - phpstan.php
   scanFiles:
     - ../../cmsimple/classes/CSRFProtection.php
+    - ../../cmsimple/classes/PageDataRouter.php
     - ../../cmsimple/adminfuncs.php
     - ../../cmsimple/functions.php
     - ../../cmsimple/tplfuncs.php

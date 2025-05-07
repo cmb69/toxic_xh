@@ -7,7 +7,6 @@ require_once "../../cmsimple/functions.php";
 require_once "../../cmsimple/compat.php";
 
 require_once "./classes/CommandFactory.php";
-require_once "./classes/Controller.php";
 require_once "./classes/InfoCommand.php";
 require_once "./classes/LiCommand.php";
 require_once "./classes/TabCommand.php";

@@ -22,6 +22,7 @@
 use Toxic\CommandFactory;
 use Toxic\Controller;
 use Toxic\LiCommand;
+use XH\PageDataRouter;
 
 if (!defined("CMSIMPLE_XH_VERSION")) {
     http_response_code(403);
@@ -45,7 +46,9 @@ function Toxic_li(array $ta, $st): string
     return $liCommand->render();
 }
 
-$_Toxic_controller = new Controller(
-    new CommandFactory()
-);
-$_Toxic_controller->dispatch();
+/**
+ * @var PageDataRouter $pd_router
+ */
+
+$pd_router->add_interest("toxic_category");
+$pd_router->add_interest("toxic_class");
