@@ -51,6 +51,7 @@ class LiCommand
     /**
      * @param list<int> $ta
      * @param int|string $st
+     * @phpstan-param positive-int|'submenu'|'search'|'menulevel'|'sitemaplevel' $st
      */
     public function __invoke(Request $request, array $ta, $st): Response
     {

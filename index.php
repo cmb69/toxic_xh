@@ -36,6 +36,7 @@ function toxic(?int $start = null, ?int $end = null): string
 /**
  * @param list<int> $ta
  * @param int|string $st
+ * @phpstan-param positive-int|'submenu'|'search'|'menulevel'|'sitemaplevel' $st
  */
 function Toxic_li(array $ta, $st): string
 {
