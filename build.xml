@@ -40,18 +40,6 @@
     </phpunit>
   </target>
 
-  <!--<target name="attack-tests" description="runs all attack tests">
-    <fail unless="env.CMSIMPLEDIR" message="CMSIMPLEDIR undefined!"/>
-    <phpunit haltonerror="true" haltonfailure="true">
-      <formatter type="plain" usefile="false"/>
-      <batchtest>
-        <fileset dir="tests/attack">
-          <include name="*Test.php"/>
-        </fileset>
-      </batchtest>
-    </phpunit>
-  </target>-->
-
   <target name="coverage" description="generates coverage report">
     <exec command="phpunit --configuration coverage.xml" logoutput="true"/>
   </target>
