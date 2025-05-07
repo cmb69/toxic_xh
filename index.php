@@ -39,7 +39,7 @@ function toxic(?int $start = null, ?int $end = null): string
  */
 function Toxic_li(array $ta, $st): string
 {
-    return Dic::liCommand($ta, $st)(Request::current())();
+    return Dic::liCommand()(Request::current(), $ta, $st)();
 }
 
 /**

@@ -30,36 +30,33 @@ class TabCommand
     /** @var array<string,string> */
     private $conf;
 
-    /** @var array<string,string> */
-    private $pageData;
-
     /** @var View */
     private $view;
 
-    /**
-     * @param array<string,string> $conf
-     * @param array<string,string> $pageData
-     */
-    public function __construct(array $conf, array $pageData, View $view)
+    /** @param array<string,string> $conf */
+    public function __construct(array $conf, View $view)
     {
         $this->conf = $conf;
-        $this->pageData = $pageData;
         $this->view = $view;
     }
 
-    public function __invoke(Request $request): Response
+    /** @param array<string,string> $pageData */
+    public function __invoke(Request $request, array $pageData): Response
     {
         return Response::create($this->view->render("pdtab", [
             "url" => $request->url()->relative(),
-            "category" => $this->pageData['toxic_category'],
+            "category" => $pageData['toxic_category'],
             "has_classes" => trim($this->conf["classes_available"]) !== "",
-            "available_classes" => $this->availableClasses(),
-            "toxic_class" => $this->pageData['toxic_class'],
+            "available_classes" => $this->availableClasses($pageData),
+            "toxic_class" => $pageData['toxic_class'],
         ]));
     }
 
-    /** @return list<object{value:string,label:string,selected:string}> */
-    private function availableClasses(): array
+    /**
+     * @param array<string,string> $pageData
+     * @return list<object{value:string,label:string,selected:string}>
+     */
+    private function availableClasses(array $pageData): array
     {
         $classes = $this->conf["classes_available"];
         $classes = array_map("trim", explode(",", $classes));
@@ -69,7 +66,7 @@ class TabCommand
             $res[] = (object) [
                 "value" => $class,
                 "label" => $class === "" ? $this->view->plain("label_none") : $class,
-                "selected" => $class === $this->pageData["toxic_class"] ? "selected" : "",
+                "selected" => $class === $pageData["toxic_class"] ? "selected" : "",
             ];
         }
         return $res;

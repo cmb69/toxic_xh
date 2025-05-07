@@ -29,21 +29,16 @@ class Dic
 {
     public const VERSION = "1alpha1";
 
-    /**
-     * @param list<int> $ta
-     * @param int|string $st
-     */
-    public static function liCommand(array $ta, $st): LiCommand
+    public static function liCommand(): LiCommand
     {
         global $xh_publisher, $pd_router;
-        return new LiCommand(new Pages(), $xh_publisher, $pd_router, $ta, $st);
+        return new LiCommand(new Pages(), $xh_publisher, $pd_router);
     }
 
-    /** @param array<string,string> $pageData */
-    public static function makeTabCommand(array $pageData): TabCommand
+    public static function makeTabCommand(): TabCommand
     {
         global $plugin_cf;
-        return new TabCommand($plugin_cf["toxic"], $pageData, self::view());
+        return new TabCommand($plugin_cf["toxic"], self::view());
     }
 
     public static function makeInfoCommand(): InfoCommand

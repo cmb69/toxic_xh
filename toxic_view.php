@@ -25,5 +25,5 @@ use Toxic\Dic;
 /** @param array<string,string> $pageData */
 function Toxic_view(array $pageData): string
 {
-    return Dic::makeTabCommand($pageData)(Request::current())();
+    return Dic::makeTabCommand()(Request::current(), $pageData)();
 }

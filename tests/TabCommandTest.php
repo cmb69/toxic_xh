@@ -24,15 +24,14 @@ class TabCommandTest extends TestCase
 
     private function sut(): TabCommand
     {
-        $pageData = array('toxic_class' => 'test', "toxic_category" => "");
-        return new TabCommand($this->conf, $pageData, $this->view);
+        return new TabCommand($this->conf, $this->view);
     }
 
     public function testRendersClassInput(): void
     {
         $this->conf['classes_available'] = '';
         $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
-        $response = $this->sut()($request);
+        $response = $this->sut()($request, ["toxic_class" => "test", "toxic_category" => ""]);
         Approvals::verifyHtml($response->output());
     }
 
@@ -40,7 +39,7 @@ class TabCommandTest extends TestCase
     {
         $this->conf['classes_available'] = 'one,two,three,test';
         $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
-        $response = $this->sut()($request);
+        $response = $this->sut()($request, ["toxic_class" => "test", "toxic_category" => ""]);
         Approvals::verifyHtml($response->output());
     }
 }

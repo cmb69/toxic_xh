@@ -128,14 +128,14 @@ class LiTest extends TestCase
         });
     }
 
-    private function sut(array $ta, $st): LiCommand
+    private function sut(): LiCommand
     {
-        return new LiCommand($this->pages, $this->publisher, $this->pageData, $ta, $st);
+        return new LiCommand($this->pages, $this->publisher, $this->pageData);
     }
 
     public function testNoMenuItemsDisplayNothing(): void
     {
-        $response = $this->sut(array(), 1)(new FakeRequest());
+        $response = $this->sut()(new FakeRequest(), array(), 1);
         $this->assertEmpty($response->output());
     }
 
@@ -288,14 +288,14 @@ class LiTest extends TestCase
     public function testPageDoesntOpenInNewWindowInEditMode(): void
     {
         $request = new FakeRequest(["admin" => true, "edit" => true]);
-        $response = $this->sut(range(0, 10), 1)($request);
+        $response = $this->sut()($request, range(0, 10), 1);
         Approvals::verifyHtml($response->output());
     }
 
     /** @param mixed $forOrFrom */
     private function renderAllPages($forOrFrom = 1): string
     {
-        $response = $this->sut(range(0, 10), $forOrFrom)(new FakeRequest());
+        $response = $this->sut()(new FakeRequest(), range(0, 10), $forOrFrom);
         return $response->output();
     }
 
@@ -304,13 +304,13 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        $response = $this->sut(array(2, 4, 6), 'submenu')(new FakeRequest());
+        $response = $this->sut()(new FakeRequest(), array(2, 4, 6), 'submenu');
         Approvals::verifyHtml($response->output());
     }
 
     public function testBlogSubmenuHasProperStructure(): void
     {
-        $response = $this->sut(array(2, 4, 6), 'submenu')(new FakeRequest());
+        $response = $this->sut()(new FakeRequest(), array(2, 4, 6), 'submenu');
         Approvals::verifyHtml($response->output());
     }
 }
