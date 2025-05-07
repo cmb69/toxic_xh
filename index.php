@@ -20,7 +20,8 @@ use Toxic\LiCommand;
 /*
  * Prevent direct access and usage from unsupported CMSimple_XH versions.
  */
-if (!defined('CMSIMPLE_XH_VERSION')
+if (
+    !defined('CMSIMPLE_XH_VERSION')
     || strpos(CMSIMPLE_XH_VERSION, 'CMSimple_XH') !== 0
     || version_compare(CMSIMPLE_XH_VERSION, 'CMSimple_XH 1.7.0', 'lt') // @phpstan-ignore-line
 ) {
@@ -35,7 +36,7 @@ EOT
 
 define('TOXIC_VERSION', '1alpha1');
 
-function toxic(?int $start = null, ?int$end = null): string
+function toxic(?int $start = null, ?int $end = null): string
 {
     return toc($start, $end, 'Toxic_li');
 }

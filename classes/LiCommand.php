@@ -80,7 +80,8 @@ class LiCommand
             }
             $t .= 'doc';
             for ($j = $this->ta[$i] + 1; $j < $cl; $j++) {
-                if (!hide($j)
+                if (
+                    !hide($j)
                     && $l[$j] - $l[$this->ta[$i]] < 2 + $cf['menu']['levelcatch']
                 ) {
                     if ($l[$j] > $l[$this->ta[$i]]) {
@@ -98,13 +99,13 @@ class LiCommand
                         ? '" target="_blank' : '';
                 $t .= a($this->ta[$i], $x);
             } else {
-                $t .='<span>';
+                $t .= '<span>';
             }
             $t .= $h[$this->ta[$i]];
             if ($tf) {
                 $t .= '</a>';
             } else {
-                $t .='</span>';
+                $t .= '</span>';
             }
             if ($this->st == 'menulevel' || $this->st == 'sitemaplevel') {
                 $cond = (isset($this->ta[$i + 1]) ? $l[$this->ta[$i + 1]] : $b)
