@@ -19,11 +19,13 @@
  * along with Toxic_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+use Plib\Request;
 use Toxic\TabCommand;
 
 /** @param array<string,string> $pageData */
 function Toxic_view(array $pageData): string
 {
-    $tabCommand = new TabCommand($pageData);
-    return $tabCommand->render();
+    global $plugin_cf;
+    $tabCommand = new TabCommand($plugin_cf["toxic"], $pageData);
+    return $tabCommand->render(Request::current());
 }

@@ -21,22 +21,30 @@
 
 namespace Toxic;
 
+use Plib\Request;
+
 class TabCommand
 {
     /** @var array<string,string> */
+    private $conf;
+
+    /** @var array<string,string> */
     private $pageData;
 
-    /** @param array<string,string> $pageData */
-    public function __construct(array $pageData)
+    /**
+     * @param array<string,string> $conf
+     * @param array<string,string> $pageData
+     */
+    public function __construct(array $conf, array $pageData)
     {
+        $this->conf = $conf;
         $this->pageData = $pageData;
     }
 
-    public function render(): string
+    public function render(Request $request): string
     {
-        global $sn, $su;
-
-        return '<form id="toxic_tab" action="' . $sn . '?' . $su
+        $url = $request->url()->relative();
+        return '<form id="toxic_tab" action="' . $url
             . '" method="post">'
             . $this->renderCategory()
             . $this->renderClassField() . $this->renderButtons()
@@ -55,10 +63,10 @@ class TabCommand
 
     private function renderClassField(): string
     {
-        global $plugin_tx, $plugin_cf;
+        global $plugin_tx;
 
         $result = '<p><label>' . $plugin_tx['toxic']['label_class'] . ' ';
-        if ($plugin_cf['toxic']['classes_available'] == '') {
+        if ($this->conf['classes_available'] == '') {
             $result .= $this->renderClassInput();
         } else {
             $result .= $this->renderClassSelect();
@@ -100,9 +108,7 @@ class TabCommand
     /** @return list<string> */
     private function getAvailableClasses(): array
     {
-        global $plugin_cf;
-
-        $classes = $plugin_cf['toxic']['classes_available'];
+        $classes = $this->conf['classes_available'];
         $classes = explode(',', $classes);
         array_unshift($classes, '');
         return array_map('trim', $classes);

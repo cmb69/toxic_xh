@@ -28,7 +28,8 @@ class Dic
     /** @param array<string,string> $pageData */
     public static function makeTabCommand(array $pageData): TabCommand
     {
-        return new TabCommand($pageData);
+        global $plugin_cf;
+        return new TabCommand($plugin_cf["toxic"], $pageData);
     }
 
     public static function makeInfoCommand(): InfoCommand

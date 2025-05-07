@@ -4,47 +4,50 @@ namespace Toxic;
 
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
+use Plib\FakeRequest;
 
 class TabCommandTest extends TestCase
 {
-    /** @var TabCommand */
-    private $subject;
+    /** @var array<string,string> */
+    private $conf;
 
     public function setUp(): void
     {
-        global $sn, $su, $plugin_cf, $plugin_tx;
+        global $plugin_tx;
 
-        $sn = '/xh/';
-        $su = 'Welcome';
-        $plugin_cf = XH_includeVar("./config/config.php", "plugin_cf");
+        $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["toxic"];
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
+    }
+
+    private function sut(): TabCommand
+    {
         $pageData = array('toxic_class' => 'test', "toxic_category" => "");
-        $this->subject = new TabCommand($pageData);
+        return new TabCommand($this->conf, $pageData);
     }
 
     public function testRendersForm(): void
     {
-        Approvals::verifyHtml($this->subject->render());
+        $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
+        Approvals::verifyHtml($this->sut()->render($request));
     }
 
     public function testRendersClassInput(): void
     {
-        global $plugin_cf;
-
-        $plugin_cf['toxic']['classes_available'] = '';
-        Approvals::verifyHtml($this->subject->render());
+        $this->conf['classes_available'] = '';
+        $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
+        Approvals::verifyHtml($this->sut()->render($request));
     }
 
     public function testRendersClassSelect(): void
     {
-        global $plugin_cf;
-
-        $plugin_cf['toxic']['classes_available'] = 'one,two,three,test';
-        Approvals::verifyHtml($this->subject->render());
+        $this->conf['classes_available'] = 'one,two,three,test';
+        $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
+        Approvals::verifyHtml($this->sut()->render($request));
     }
 
     public function testRendersSubmitButton(): void
     {
-        Approvals::verifyHtml($this->subject->render());
+        $request = new FakeRequest(["url" => "http://example.com/xh/?Welcome"]);
+        Approvals::verifyHtml($this->sut()->render($request));
     }
 }

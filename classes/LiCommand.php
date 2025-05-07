@@ -63,7 +63,7 @@ class LiCommand
 
     public function render(Request $request): string
     {
-        global $s, $l, $h, $cl, $cf, $u;
+        global $s, $l, $h, $cl, $cf;
 
         $tl = count($this->ta);
         if ($tl < 1) {
@@ -93,8 +93,8 @@ class LiCommand
                 $t .= 's';
             } elseif ($cf['menu']['sdoc'] == "parent" && $s > -1) {
                 if ($l[$this->ta[$i]] < $l[$s]) {
-                    $hasChildren = substr($u[$s], 0, 1 + strlen($u[$this->ta[$i]]))
-                        == $u[$this->ta[$i]] . $cf['uri']['seperator'];
+                    $hasChildren = substr($this->pages->url($s), 0, 1 + strlen($this->pages->url($this->ta[$i])))
+                        == $this->pages->url($this->ta[$i]) . $cf['uri']['seperator'];
                     if ($hasChildren) {
                         $t .= 's';
                     }
