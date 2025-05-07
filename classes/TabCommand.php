@@ -49,79 +49,29 @@ class TabCommand
     public function __invoke(Request $request): string
     {
         $url = $request->url()->relative();
-        return '<form id="toxic_tab" action="' . $url
-            . '" method="post">'
-            . $this->renderCategory()
-            . $this->renderClassField() . $this->renderButtons()
-            . '</form>';
+        return $this->view->render("pdtab", [
+            "url" => $url,
+            "category" => $this->pageData['toxic_category'],
+            "has_classes" => trim($this->conf["classes_available"]) !== "",
+            "available_classes" => $this->availableClasses(),
+            "toxic_class" => $this->pageData['toxic_class'],
+        ]);
     }
 
-    private function renderCategory(): string
+    /** @return list<object{value:string,label:string,selected:string}> */
+    private function availableClasses(): array
     {
-        return '<p><label>' . $this->view->text("label_category") . ' '
-            . '<input type="text" name="toxic_category" value="'
-                . XH_hsc($this->pageData['toxic_category']) . '">'
-            . '</label></p>';
-    }
-
-    private function renderClassField(): string
-    {
-        $result = '<p><label>' . $this->view->text("label_class") . ' ';
-        if ($this->conf['classes_available'] == '') {
-            $result .= $this->renderClassInput();
-        } else {
-            $result .= $this->renderClassSelect();
+        $classes = $this->conf["classes_available"];
+        $classes = array_map("trim", explode(",", $classes));
+        array_unshift($classes, "");
+        $res = [];
+        foreach ($classes as $class) {
+            $res[] = (object) [
+                "value" => $class,
+                "label" => $class === "" ? $this->view->plain("label_none") : $class,
+                "selected" => $class === $this->pageData["toxic_class"] ? "selected" : "",
+            ];
         }
-        $result .= '</label></p>';
-        return $result;
-    }
-
-    private function renderClassInput(): string
-    {
-        return '<input type="text" name="toxic_class" value="'
-            . $this->pageData['toxic_class'] . '">';
-    }
-
-    private function renderClassSelect(): string
-    {
-        return '<select name="toxic_class">' . $this->renderOptions()
-            . '</select>';
-    }
-
-    private function renderOptions(): string
-    {
-        $result = '';
-        foreach ($this->getAvailableClasses() as $class) {
-            $result .= '<option';
-            if ($class == '') {
-                 $result .= ' label="' . $this->view->plain("label_none") . '"';
-            }
-            if ($class == $this->pageData['toxic_class']) {
-                $result .= ' selected="selected"';
-            }
-            $result .= '>' . $class . '</option>';
-        }
-        return $result;
-    }
-
-    /** @return list<string> */
-    private function getAvailableClasses(): array
-    {
-        $classes = $this->conf['classes_available'];
-        $classes = explode(',', $classes);
-        array_unshift($classes, '');
-        return array_map('trim', $classes);
-    }
-
-    private function renderButtons(): string
-    {
-        return '<p class="toxic_tab_buttons">'
-            . $this->renderSubmitButton() . '</p>';
-    }
-
-    private function renderSubmitButton(): string
-    {
-        return '<button name="save_page_data">'
-            . $this->view->text("label_save") . '</button>';
+        return $res;
     }
 }
