@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 class InfoCommandTest extends TestCase
 {
     /** @var InfoCommand */
-    protected $subject;
+    private $subject;
 
     public function setUp(): void
     {

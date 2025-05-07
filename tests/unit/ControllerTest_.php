@@ -29,21 +29,21 @@ use PHPUnit\Framework\TestCase;
 class ControllerTest extends TestCase
 {
     /** @var Controller */
-    protected $subject;
+    private $subject;
 
     /** @var CommandFactory */
-    protected $commandFactory;
+    private $commandFactory;
 
     /** @var InfoCommand */
-    protected $infoCommand;
+    private $infoCommand;
 
     /** @var PHPUnit_Extensions_MockFunction */
-    protected $printPluginAdmin;
+    private $printPluginAdmin;
 
     /** @var PHPUnit_Extensions_MockFunction */
-    protected $pluginAdminCommon;
+    private $pluginAdminCommon;
 
-    protected $registerStandardPluginMenuItems;
+    private $registerStandardPluginMenuItems;
 
     public function setUp(): void
     {
@@ -122,7 +122,7 @@ class ControllerTest extends TestCase
     }
 
     /** @param mixed $value */
-    protected function defineConstant(string $name, $value): void
+    private function defineConstant(string $name, $value): void
     {
         if (!defined($name)) {
             define($name, $value);

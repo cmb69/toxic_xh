@@ -33,7 +33,7 @@ class InfoCommand
             . $this->renderCopyright() . $this->renderLicense();
     }
 
-    protected function renderHeading(): string
+    private function renderHeading(): string
     {
         global $plugin_tx;
 
@@ -41,7 +41,7 @@ class InfoCommand
             . '</h1>';
     }
 
-    protected function renderLogo(): string
+    private function renderLogo(): string
     {
         global $pth, $plugin_tx;
 
@@ -51,18 +51,18 @@ class InfoCommand
         );
     }
 
-    protected function renderVersion(): string
+    private function renderVersion(): string
     {
         return '<p>Version: ' . TOXIC_VERSION . '</p>';
     }
 
-    protected function renderCopyright(): string
+    private function renderCopyright(): string
     {
         return '<p>Copyright &copy; 2014-2015'
             . ' <a href="http://3-magi.net/">Christoph M. Becker</a>';
     }
 
-    protected function renderLicense(): string
+    private function renderLicense(): string
     {
         return <<<EOT
 <p class="toxic_license">This program is free software: you can

@@ -29,7 +29,7 @@ use PHPUnit\Framework\TestCase;
 class CommandFactoryTest extends TestCase
 {
     /** @var CommandFactory  */
-    protected $subject;
+    private $subject;
 
     public function setUp(): void
     {

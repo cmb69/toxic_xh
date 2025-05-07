@@ -27,10 +27,10 @@ namespace Toxic;
 class LiCommand
 {
     /** @var array */
-    protected $ta;
+    private $ta;
 
     /** @var mixed */
-    protected $st;
+    private $st;
 
     /** @param mixed $st */
     public function __construct(array $ta, $st)
@@ -135,7 +135,7 @@ class LiCommand
         return $t;
     }
 
-    protected function renderCategoryItem(int $index): string
+    private function renderCategoryItem(int $index): string
     {
         global $pd_router;
 
@@ -148,7 +148,7 @@ class LiCommand
         return $html;
     }
 
-    protected function renderClass(int $index): string
+    private function renderClass(int $index): string
     {
         global $pd_router;
 

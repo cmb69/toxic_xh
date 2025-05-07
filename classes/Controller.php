@@ -27,7 +27,7 @@ namespace Toxic;
 class Controller
 {
     /** @var CommandFactory */
-    protected $commandFactory;
+    private $commandFactory;
 
     public function __construct(CommandFactory $commandFactory)
     {
@@ -48,7 +48,7 @@ class Controller
         }
     }
 
-    protected function registerFields(): void
+    private function registerFields(): void
     {
         global $pd_router;
 
@@ -56,7 +56,7 @@ class Controller
         $pd_router->add_interest('toxic_class');
     }
 
-    protected function addPageDataTab(): void
+    private function addPageDataTab(): void
     {
         global $pth, $pd_router, $plugin_tx;
 
@@ -66,7 +66,7 @@ class Controller
         );
     }
 
-    protected function isAdministrationRequested(): bool
+    private function isAdministrationRequested(): bool
     {
         global $toxic;
 
@@ -75,7 +75,7 @@ class Controller
             || isset($toxic) && $toxic == 'true';
     }
 
-    protected function handleAdministration(): void
+    private function handleAdministration(): void
     {
         global $admin, $action, $o;
 

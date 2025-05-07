@@ -31,10 +31,10 @@ use XH\PageDataRouter;
 class LiTest extends TestCase
 {
     /** @var object */
-    protected $liStub;
+    private $liStub;
 
     /** @var object */
-    protected $hideStub;
+    private $hideStub;
 
     public function setUp(): void
     {
@@ -49,7 +49,7 @@ class LiTest extends TestCase
         $this->setUpFunctionStubs();
     }
 
-    protected function setUpPageStructure(): void
+    private function setUpPageStructure(): void
     {
         global $cl, $h, $u, $l;
 
@@ -83,7 +83,7 @@ class LiTest extends TestCase
         $cl = count($u);
     }
 
-    protected function setUpConfiguration(): void
+    private function setUpConfiguration(): void
     {
         global $cf;
 
@@ -103,7 +103,7 @@ class LiTest extends TestCase
         );
     }
 
-    protected function setUpEditMode(bool $flag): void
+    private function setUpEditMode(bool $flag): void
     {
         global $edit;
 
@@ -115,7 +115,7 @@ class LiTest extends TestCase
         $edit = $flag;
     }
 
-    protected function setUpPageDataRouterMock(): void
+    private function setUpPageDataRouterMock(): void
     {
         global $pd_router;
 
@@ -135,7 +135,7 @@ class LiTest extends TestCase
         );
     }
 
-    protected function setUpFunctionStubs(): void
+    private function setUpFunctionStubs(): void
     {
         uopz_set_return("a", function ($pageIndex, $suffix) {
             global $u;
@@ -311,7 +311,7 @@ class LiTest extends TestCase
     }
 
     /** @param mixed $forOrFrom */
-    protected function renderAllPages($forOrFrom = 1): string
+    private function renderAllPages($forOrFrom = 1): string
     {
         return (new LiCommand(range(0, 10), $forOrFrom))->render();
     }

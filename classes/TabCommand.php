@@ -27,7 +27,7 @@ namespace Toxic;
 class TabCommand
 {
     /** @var array */
-    protected $pageData;
+    private $pageData;
 
     public function __construct(array $pageData)
     {
@@ -45,7 +45,7 @@ class TabCommand
             . '</form>';
     }
 
-    protected function renderCategory(): string
+    private function renderCategory(): string
     {
         global $plugin_tx;
 
@@ -57,7 +57,7 @@ class TabCommand
             . '</label></p>';
     }
 
-    protected function renderClassField(): string
+    private function renderClassField(): string
     {
         global $plugin_tx, $plugin_cf;
 
@@ -71,7 +71,7 @@ class TabCommand
         return $result;
     }
 
-    protected function renderClassInput(): string
+    private function renderClassInput(): string
     {
         return tag(
             'input type="text" name="toxic_class" value="'
@@ -79,13 +79,13 @@ class TabCommand
         );
     }
 
-    protected function renderClassSelect(): string
+    private function renderClassSelect(): string
     {
         return '<select name="toxic_class">' . $this->renderOptions()
             . '</select>';
     }
 
-    protected function renderOptions(): string
+    private function renderOptions(): string
     {
         global $plugin_tx;
 
@@ -103,7 +103,7 @@ class TabCommand
         return $result;
     }
 
-    protected function getAvailableClasses(): array
+    private function getAvailableClasses(): array
     {
         global $plugin_cf;
 
@@ -113,13 +113,13 @@ class TabCommand
         return array_map('trim', $classes);
     }
 
-    protected function renderButtons(): string
+    private function renderButtons(): string
     {
         return '<p class="toxic_tab_buttons">'
             . $this->renderSubmitButton() . '</p>';
     }
 
-    protected function renderSubmitButton(): string
+    private function renderSubmitButton(): string
     {
         global $plugin_tx;
 

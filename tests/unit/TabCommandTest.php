@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
 class TabCommandTest extends TestCase
 {
     /** @var TabCommand */
-    protected $subject;
+    private $subject;
 
     public function setUp(): void
     {
