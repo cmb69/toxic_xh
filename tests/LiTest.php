@@ -39,7 +39,7 @@ class LiTest extends TestCase
     {
         global $cl, $h, $u, $l;
 
-        $h = array(
+        $h = [
             'Welcome',
             'Blog',
             'July',
@@ -51,8 +51,8 @@ class LiTest extends TestCase
             'About',
             'Contact',
             'News'
-        );
-        $u = array(
+        ];
+        $u = [
             'Welcome',
             'Blog',
             'Blog:July',
@@ -64,7 +64,7 @@ class LiTest extends TestCase
             'About',
             'About:Contact',
             'News'
-        );
+        ];
         $this->pages->method("url")->willReturnMap([
             [0, 'Welcome'],
             [1, 'Blog'],
@@ -78,7 +78,7 @@ class LiTest extends TestCase
             [9, 'About:Contact'],
             [10, 'News'],
         ]);
-        $l = array(1, 1, 2, 3, 2, 3, 2, 3, 1, 3, 1);
+        $l = [1, 1, 2, 3, 2, 3, 2, 3, 1, 3, 1];
         $cl = count($u);
     }
 
@@ -86,20 +86,20 @@ class LiTest extends TestCase
     {
         global $cf;
 
-        $cf = array(
-            'locator' => array('show_homepage' => 'true'),
-            'menu' => array(
+        $cf = [
+            'locator' => ['show_homepage' => 'true'],
+            'menu' => [
                 'levelcatch' => '10',
                 'levels' => '3',
                 'sdoc' => 'parent'
-            ),
-            'show_hidden' => array(
+            ],
+            'show_hidden' => [
                 'pages_toc' => 'true'
-            ),
-            'uri' => array(
+            ],
+            'uri' => [
                 'seperator' => ':'
-            )
-        );
+            ],
+        ];
     }
 
     private function setUpPageDataRouterMock(): void
@@ -109,12 +109,12 @@ class LiTest extends TestCase
         $this->pageData->expects($this->any())->method('find_page')->will(
             $this->returnCallback(
                 function ($pageIndex) {
-                    return array(
+                    return [
                         'toxic_class' => ($pageIndex >= 1 && $pageIndex <= 7)
                             ? 'blog' : '',
                         'toxic_category' => '',
                         'use_header_location' => ($pageIndex == 7) ? '2' : '0'
-                    );
+                    ];
                 }
             )
         );
@@ -124,7 +124,7 @@ class LiTest extends TestCase
     {
         $this->publisher->method("getFirstPublishedPage")->willReturn(1000);
         $this->pages->method("isHidden")->willReturnCallback(function ($pageIndex) {
-            return in_array($pageIndex, array(4, 5));
+            return in_array($pageIndex, [4, 5]);
         });
     }
 
@@ -135,7 +135,7 @@ class LiTest extends TestCase
 
     public function testNoMenuItemsDisplayNothing(): void
     {
-        $response = $this->sut()(new FakeRequest(), array(), 1);
+        $response = $this->sut()(new FakeRequest(), [], 1);
         $this->assertEmpty($response->output());
     }
 
@@ -147,11 +147,11 @@ class LiTest extends TestCase
 
     public function dataForUnorderedListlHasListItemChild(): array
     {
-        return array(
-            array('menulevel1'),
-            array('menulevel2'),
-            array('menulevel3')
-        );
+        return [
+            ['menulevel1'],
+            ['menulevel2'],
+            ['menulevel3'],
+        ];
     }
 
     /** @dataProvider dataForListItemHasUnorderedListChild */
@@ -162,10 +162,10 @@ class LiTest extends TestCase
 
     public function dataForListItemHasUnorderedListChild(): array
     {
-        return array(
-            array('menulevel2'),
-            array('menulevel3')
-        );
+        return [
+            ['menulevel2'],
+            ['menulevel3'],
+        ];
     }
 
     public function testSelectedPageHasSpan(): void
@@ -197,17 +197,17 @@ class LiTest extends TestCase
 
     public function dataForHasUlWithProperClass(): array
     {
-        return array(
-            array('menulevel', 'menulevel1'),
-            array(1, 'menulevel1'),
-            array(1, 'menulevel2'),
-            array(1, 'menulevel3'),
-            array('sitemaplevel', 'sitemaplevel1'),
-            array('sitemaplevel', 'sitemaplevel2'),
-            array('sitemaplevel', 'sitemaplevel3'),
-            array('submenu', 'submenu'),
-            array('search', 'search')
-        );
+        return [
+            ['menulevel', 'menulevel1'],
+            [1, 'menulevel1'],
+            [1, 'menulevel2'],
+            [1, 'menulevel3'],
+            ['sitemaplevel', 'sitemaplevel1'],
+            ['sitemaplevel', 'sitemaplevel2'],
+            ['sitemaplevel', 'sitemaplevel3'],
+            ['submenu', 'submenu'],
+            ['search', 'search'],
+        ];
     }
 
     public function testSelectedPageHasClassSdocs(): void
@@ -254,10 +254,10 @@ class LiTest extends TestCase
 
     public function dataForParentOfSelectedPageHasClassDependingOnSdoc(): array
     {
-        return array(
-            array('parent', 'sdocs'),
-            array('', 'docs')
-        );
+        return [
+            ['parent', 'sdocs'],
+            ['', 'docs'],
+        ];
     }
 
     /** @dataProvider dataForH1WithH3HasClassDependingOnLevelcatch */
@@ -274,10 +274,10 @@ class LiTest extends TestCase
 
     public function dataForH1WithH3HasClassDependingOnLevelcatch(): array
     {
-        return array(
-            array('10', 'docs'),
-            array('0', 'doc')
-        );
+        return [
+            ['10', 'docs'],
+            ['0', 'doc'],
+        ];
     }
 
     public function testPageOpensInNewWindowInNormalMode(): void
@@ -304,13 +304,13 @@ class LiTest extends TestCase
         global $s;
 
         $s = 1;
-        $response = $this->sut()(new FakeRequest(), array(2, 4, 6), 'submenu');
+        $response = $this->sut()(new FakeRequest(), [2, 4, 6], 'submenu');
         Approvals::verifyHtml($response->output());
     }
 
     public function testBlogSubmenuHasProperStructure(): void
     {
-        $response = $this->sut()(new FakeRequest(), array(2, 4, 6), 'submenu');
+        $response = $this->sut()(new FakeRequest(), [2, 4, 6], 'submenu');
         Approvals::verifyHtml($response->output());
     }
 }

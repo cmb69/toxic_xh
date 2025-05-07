@@ -69,7 +69,7 @@ class LiCommand
             $b = (int) $st - 1;
             $st = 'menulevel';
         }
-        $lf = array();
+        $lf = [];
         for ($i = 0; $i < $tl; $i++) {
             $tf = ($s != $ta[$i]);
             if ($st == 'menulevel' || $st == 'sitemaplevel') {

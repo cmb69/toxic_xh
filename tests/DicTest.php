@@ -26,7 +26,7 @@ class DicTest extends TestCase
 
     public function testMakeTabCommand(): void
     {
-        $this->assertInstanceOf(TabCommand::class, Dic::makeTabCommand(array()));
+        $this->assertInstanceOf(TabCommand::class, Dic::makeTabCommand([]));
     }
 
     public function testMakeInfoCommand(): void
