@@ -21,6 +21,7 @@
 
 use Toxic\TabCommand;
 
+/** @param array<string,string> $pageData */
 function Toxic_view(array $pageData): string
 {
     $tabCommand = new TabCommand($pageData);

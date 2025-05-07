@@ -23,9 +23,10 @@ namespace Toxic;
 
 class TabCommand
 {
-    /** @var array */
+    /** @var array<string,string> */
     private $pageData;
 
+    /** @param array<string,string> $pageData */
     public function __construct(array $pageData)
     {
         $this->pageData = $pageData;
@@ -96,6 +97,7 @@ class TabCommand
         return $result;
     }
 
+    /** @return list<string> */
     private function getAvailableClasses(): array
     {
         global $plugin_cf;

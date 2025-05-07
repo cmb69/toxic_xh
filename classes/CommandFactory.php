@@ -23,6 +23,7 @@ namespace Toxic;
 
 class CommandFactory
 {
+    /** @param array<string,string> $pageData */
     public function makeTabCommand(array $pageData): TabCommand
     {
         return new TabCommand($pageData);

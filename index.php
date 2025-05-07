@@ -47,6 +47,10 @@ function toxic(?int $start = null, ?int $end = null): string
     return toc($start, $end, 'Toxic_li');
 }
 
+/**
+ * @param list<int> $ta
+ * @param int|string $st
+ */
 function Toxic_li(array $ta, $st): string
 {
     $liCommand = new LiCommand($ta, $st);

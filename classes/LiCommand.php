@@ -23,13 +23,16 @@ namespace Toxic;
 
 class LiCommand
 {
-    /** @var array */
+    /** @var list<int> */
     private $ta;
 
-    /** @var mixed */
+    /** @var int|string */
     private $st;
 
-    /** @param mixed $st */
+    /**
+     * @param list<int> $ta
+     * @param int|string $st
+     */
     public function __construct(array $ta, $st)
     {
         $this->ta = $ta;
@@ -50,7 +53,7 @@ class LiCommand
         }
         $b = 0;
         if ($this->st > 0) {
-            $b = $this->st - 1;
+            $b = (int) $this->st - 1;
             $this->st = 'menulevel';
         }
         $lf = array();
