@@ -19,7 +19,7 @@
  * along with Toxic_XH.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-use Toxic\CommandFactory;
+use Toxic\Dic;
 use XH\PageDataRouter;
 
 /**
@@ -39,7 +39,7 @@ if (XH_wantsPluginAdministration("toxic")) {
     $o .= print_plugin_admin("off");
     switch ($admin) {
         case "":
-            $o .= (new CommandFactory())->makeInfoCommand()->render();
+            $o .= Dic::makeInfoCommand()->render();
             break;
         default:
             $o .= plugin_admin_common();

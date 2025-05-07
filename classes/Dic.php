@@ -21,15 +21,15 @@
 
 namespace Toxic;
 
-class CommandFactory
+class Dic
 {
     /** @param array<string,string> $pageData */
-    public function makeTabCommand(array $pageData): TabCommand
+    public static function makeTabCommand(array $pageData): TabCommand
     {
         return new TabCommand($pageData);
     }
 
-    public function makeInfoCommand(): InfoCommand
+    public static function makeInfoCommand(): InfoCommand
     {
         return new InfoCommand();
     }
