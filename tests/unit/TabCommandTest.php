@@ -5,11 +5,15 @@ namespace Toxic;
 use ApprovalTests\Approvals;
 use PHPUnit\Framework\TestCase;
 use Plib\FakeRequest;
+use Plib\View;
 
 class TabCommandTest extends TestCase
 {
     /** @var array<string,string> */
     private $conf;
+
+    /** @var View */
+    private $view;
 
     public function setUp(): void
     {
@@ -17,12 +21,13 @@ class TabCommandTest extends TestCase
 
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["toxic"];
         $plugin_tx = XH_includeVar("./languages/en.php", "plugin_tx");
+        $this->view = new View("./views/", $plugin_tx["toxic"]);
     }
 
     private function sut(): TabCommand
     {
         $pageData = array('toxic_class' => 'test', "toxic_category" => "");
-        return new TabCommand($this->conf, $pageData);
+        return new TabCommand($this->conf, $pageData, $this->view);
     }
 
     public function testRendersForm(): void

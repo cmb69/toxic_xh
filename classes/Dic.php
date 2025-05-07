@@ -21,6 +21,7 @@
 
 namespace Toxic;
 
+use Plib\View;
 use XH\Pages;
 
 class Dic
@@ -41,11 +42,17 @@ class Dic
     public static function makeTabCommand(array $pageData): TabCommand
     {
         global $plugin_cf;
-        return new TabCommand($plugin_cf["toxic"], $pageData);
+        return new TabCommand($plugin_cf["toxic"], $pageData, self::view());
     }
 
     public static function makeInfoCommand(): InfoCommand
     {
         return new InfoCommand();
+    }
+
+    private static function view(): View
+    {
+        global $pth, $plugin_tx;
+        return new View($pth["folder"]["plugins"] . "toxic/views/", $plugin_tx["toxic"]);
     }
 }

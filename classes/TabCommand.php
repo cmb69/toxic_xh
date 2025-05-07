@@ -22,6 +22,7 @@
 namespace Toxic;
 
 use Plib\Request;
+use Plib\View;
 
 class TabCommand
 {
@@ -31,14 +32,18 @@ class TabCommand
     /** @var array<string,string> */
     private $pageData;
 
+    /** @var View */
+    private $view;
+
     /**
      * @param array<string,string> $conf
      * @param array<string,string> $pageData
      */
-    public function __construct(array $conf, array $pageData)
+    public function __construct(array $conf, array $pageData, View $view)
     {
         $this->conf = $conf;
         $this->pageData = $pageData;
+        $this->view = $view;
     }
 
     public function render(Request $request): string
@@ -53,9 +58,7 @@ class TabCommand
 
     private function renderCategory(): string
     {
-        global $plugin_tx;
-
-        return '<p><label>' . $plugin_tx['toxic']['label_category'] . ' '
+        return '<p><label>' . $this->view->text("label_category") . ' '
             . '<input type="text" name="toxic_category" value="'
                 . XH_hsc($this->pageData['toxic_category']) . '">'
             . '</label></p>';
@@ -63,9 +66,7 @@ class TabCommand
 
     private function renderClassField(): string
     {
-        global $plugin_tx;
-
-        $result = '<p><label>' . $plugin_tx['toxic']['label_class'] . ' ';
+        $result = '<p><label>' . $this->view->text("label_class") . ' ';
         if ($this->conf['classes_available'] == '') {
             $result .= $this->renderClassInput();
         } else {
@@ -89,13 +90,11 @@ class TabCommand
 
     private function renderOptions(): string
     {
-        global $plugin_tx;
-
         $result = '';
         foreach ($this->getAvailableClasses() as $class) {
             $result .= '<option';
             if ($class == '') {
-                 $result .= ' label="' . $plugin_tx['toxic']['label_none'] . '"';
+                 $result .= ' label="' . $this->view->plain("label_none") . '"';
             }
             if ($class == $this->pageData['toxic_class']) {
                 $result .= ' selected="selected"';
@@ -122,9 +121,7 @@ class TabCommand
 
     private function renderSubmitButton(): string
     {
-        global $plugin_tx;
-
         return '<button name="save_page_data">'
-            . $plugin_tx['toxic']['label_save'] . '</button>';
+            . $this->view->text("label_save") . '</button>';
     }
 }
