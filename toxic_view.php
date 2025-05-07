@@ -20,12 +20,10 @@
  */
 
 use Plib\Request;
-use Toxic\TabCommand;
+use Toxic\Dic;
 
 /** @param array<string,string> $pageData */
 function Toxic_view(array $pageData): string
 {
-    global $plugin_cf;
-    $tabCommand = new TabCommand($plugin_cf["toxic"], $pageData);
-    return $tabCommand->render(Request::current());
+    return Dic::makeTabCommand($pageData)->render(Request::current());
 }
