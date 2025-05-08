@@ -7,6 +7,7 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Plib\FakeRequest;
 use Plib\View;
+use Toxic\Model\Pages as ModelPages;
 use XH\PageDataRouter;
 use XH\Pages;
 use XH\Publisher;
@@ -43,6 +44,7 @@ class SubmenuCommandTest extends TestCase
         $lang["submenu_heading"] = "Submenu";
         $this->view = new View("./views/", $lang);
         $this->publisher = $this->createStub(Publisher::class);
+        $this->publisher->method("getFirstPublishedPage")->willReturn(1000);
         $this->pageData = $this->createStub(PageDataRouter::class);
         $this->pageData->method("find_page")->willReturnCallback(function ($pageIndex) {
             return [
@@ -51,7 +53,7 @@ class SubmenuCommandTest extends TestCase
                 "use_header_location" => ($pageIndex == 7) ? "2" : "0"
             ];
         });
-        $this->liCommand = new LiCommand($this->conf, $this->pages, $this->publisher, $this->pageData);
+        $this->liCommand = new LiCommand($this->conf, new ModelPages($this->pages, $this->publisher, $this->pageData));
     }
 
     private function setUpPageStructure(): void
@@ -95,6 +97,9 @@ class SubmenuCommandTest extends TestCase
             [9, 3],
             [10, 1],
         ]);
+        $this->pages->method("isHidden")->willReturnCallback(function ($pageIndex) {
+            return in_array($pageIndex, [4, 5]);
+        });
         $this->pages->method("getCount")->willReturn(11);
     }
 

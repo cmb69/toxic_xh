@@ -6,6 +6,7 @@ use ApprovalTests\Approvals;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Plib\FakeRequest;
+use Toxic\Model\Pages as ModelPages;
 use XH\PageDataRouter;
 use XH\Pages;
 use XH\Publisher;
@@ -94,7 +95,7 @@ class LiTest extends TestCase
 
     private function sut(): LiCommand
     {
-        return new LiCommand($this->conf, $this->pages, $this->publisher, $this->pageData);
+        return new LiCommand($this->conf, new ModelPages($this->pages, $this->publisher, $this->pageData));
     }
 
     public function testNoMenuItemsDisplayNothing(): void

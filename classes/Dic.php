@@ -23,6 +23,7 @@ namespace Toxic;
 
 use Plib\SystemChecker;
 use Plib\View;
+use Toxic\Model\Pages as ModelPages;
 use XH\Pages;
 
 class Dic
@@ -31,8 +32,7 @@ class Dic
 
     public static function liCommand(): LiCommand
     {
-        global $xh_publisher, $pd_router;
-        return new LiCommand(self::conf(), new Pages(), $xh_publisher, $pd_router);
+        return new LiCommand(self::conf(), self::pages());
     }
 
     public static function submenuCommand(): SubmenuCommand
@@ -50,6 +50,12 @@ class Dic
     {
         global $pth;
         return new InfoCommand($pth["folder"]["plugins"] . "toxic/", new SystemChecker(), self::view());
+    }
+
+    private static function pages(): ModelPages
+    {
+        global $xh_publisher, $pd_router;
+        return new ModelPages(new Pages(), $xh_publisher, $pd_router);
     }
 
     /** @return array<string,string> */
