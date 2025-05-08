@@ -110,6 +110,8 @@ See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Toxic_XH. If not, see https://www.gnu.org/licenses/.
 
+Copyright 1999-2009 Peter Harteg<br>
+Copyright 2014 [The CMSimple_XH developers](https://cmsimple-xh.org/?The_Team)<br>
 Copyright © Christoph M. Becker
 
 ## Credits

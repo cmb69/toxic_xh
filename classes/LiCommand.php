@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * Copyright 1999-2009 Peter Harteg
+ * Copyright 2014 The CMSimple_XH developers <https://cmsimple-xh.org/?The_Team>
  * Copyright (c) Christoph M. Becker
  *
  * This file is part of Toxic_XH.
