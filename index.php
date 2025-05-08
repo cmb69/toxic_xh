@@ -38,7 +38,7 @@ function toxic(?int $start = null, ?int $end = null): string
  * @param int|string $st
  * @phpstan-param positive-int|'submenu'|'search'|'menulevel'|'sitemaplevel' $st
  */
-function Toxic_li(array $ta, $st): string
+function toxic_li(array $ta, $st): string
 {
     return Dic::liCommand()(Request::current(), $ta, $st)();
 }

@@ -23,7 +23,7 @@ use Plib\Request;
 use Toxic\Dic;
 
 /** @param array<string,string> $pageData */
-function Toxic_view(array $pageData): string
+function toxic_view(array $pageData): string
 {
     return Dic::makeTabCommand()(Request::current(), $pageData)();
 }
