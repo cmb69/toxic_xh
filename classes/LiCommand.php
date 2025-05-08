@@ -25,11 +25,12 @@ namespace Toxic;
 
 use Plib\Request;
 use Plib\Response;
-use Toxic\Model\Page;
 use Toxic\Model\Pages;
 
 class LiCommand
 {
+    use ListRendering;
+
     /** @var array<string,string> */
     private $conf;
 
@@ -106,67 +107,5 @@ class LiCommand
     private function pageLevelOrDefault(array $ta, int $i, int $default): int
     {
         return isset($ta[$i]) ? $this->pages->level($ta[$i]) : $default;
-    }
-
-    private function renderCategoryItem(int $index): string
-    {
-        $html = '';
-        $pageData = $this->pages->data($index);
-        if ($pageData['toxic_category']) {
-            $html .= "<li class=\"toxic_category\">" . $pageData["toxic_category"] . "</li>\n";
-        }
-        return $html;
-    }
-
-    private function renderClasses(Request $request, int $page): string
-    {
-        $class = "";
-        if (
-            $page === $request->s()
-            || ($this->conf["menu_sdoc"] === "parent" && $this->pages->isPageAncestorOf($page, $request->s()))
-        ) {
-            $class .= 's';
-        }
-        $class .= 'doc';
-        if ($this->pages->children($page, (int) $this->conf["menu_levelcatch"])) {
-            $class .= 's';
-        }
-        $pageData = $this->pages->data($page);
-        if ($pageData['toxic_class']) {
-            return $class . ' ' . $pageData['toxic_class'];
-        } else {
-            return $class;
-        }
-    }
-
-    private function renderMenuItem(Request $request, int $page): string
-    {
-        $res = "";
-        if ($page !== $request->s()) {
-            $pageData = $this->pages->data($page);
-            $res .= '<a href="' . $this->href($request, $page) . '"';
-            if (!($request->admin() && $request->edit()) && $pageData["use_header_location"] === "2") {
-                $res .= ' target="_blank"';
-            }
-            $res .= '>';
-        } else {
-            $res .= "<span>";
-        }
-        $res .= $this->pages->heading($page);
-        if ($page !== $request->s()) {
-            $res .= "</a>";
-        } else {
-            $res .= "</span>";
-        }
-        return $res;
-    }
-
-    private function href(Request $request, int $page): string
-    {
-        if ($page === $this->pages->firstPublished() && !($request->admin())) {
-            return $request->url()->page("")->relative();
-        } else {
-            return $request->url()->page($this->pages->url($page))->relative();
-        }
     }
 }
