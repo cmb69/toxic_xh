@@ -37,7 +37,7 @@ class Dic
 
     public static function submenuCommand(): SubmenuCommand
     {
-        return new SubmenuCommand(self::conf(), self::pages(), self::view(), self::liCommand());
+        return new SubmenuCommand(self::conf(), self::pages(), self::view());
     }
 
     public static function makeTabCommand(): TabCommand

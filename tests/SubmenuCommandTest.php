@@ -29,9 +29,6 @@ class SubmenuCommandTest extends TestCase
     /** @var PageDataRouter&Stub */
     private $pageData;
 
-    /** @var LiCommand */
-    private $liCommand;
-
     public function setUp(): void
     {
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["toxic"];
@@ -56,7 +53,6 @@ class SubmenuCommandTest extends TestCase
                 "use_header_location" => ($pageIndex == 7) ? "2" : "0"
             ];
         });
-        $this->liCommand = new LiCommand($this->conf, new Pages($this->pages, $this->publisher, $this->pageData));
     }
 
     private function setUpPageStructure(): void
@@ -121,8 +117,7 @@ class SubmenuCommandTest extends TestCase
         return new SubmenuCommand(
             $this->conf,
             new Pages($this->pages, $this->publisher, $this->pageData),
-            $this->view,
-            $this->liCommand
+            $this->view
         );
     }
 

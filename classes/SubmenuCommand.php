@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Copyright 1999-2009 Peter Harteg
- * Copyright 2009-2023 The CMSimple_XH developers <https://cmsimple-xh.org/?The_Team>
  * Copyright (c) Christoph M. Becker
  *
  * This file is part of Toxic_XH.
@@ -26,29 +24,27 @@ namespace Toxic;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
-use Toxic\Model\Pages as ModelPages;
+use Toxic\Model\Pages;
 
 class SubmenuCommand
 {
+    use ListRendering;
+
     /** @var array<string,string> */
     private $conf;
 
-    /** @var ModelPages */
+    /** @var Pages */
     private $pages;
 
     /** @var View */
     private $view;
 
-    /** @var LiCommand */
-    private $liCommand;
-
     /** @param array<string,string> $conf */
-    public function __construct(array $conf, ModelPages $pages, View $view, LiCommand $liCommand)
+    public function __construct(array $conf, Pages $pages, View $view)
     {
         $this->conf = $conf;
         $this->pages = $pages;
         $this->view = $view;
-        $this->liCommand = $liCommand;
     }
 
     public function __invoke(Request $request, string $html): Response
@@ -60,9 +56,26 @@ class SubmenuCommand
         if ($html === "") {
             $level = min(6, (int) $this->conf["menu_levels"] + 1);
             return Response::create("<h$level>" . $this->view->plain("submenu_heading") . "</h$level>\n"
-                . ($this->liCommand)($request, $tocArray, 'submenu')());
+                . $this->render($request, $tocArray));
         }
         return Response::create(sprintf($html, $this->view->plain("submenu_heading")) . "\n"
-            . ($this->liCommand)($request, $tocArray, "submenu")());
+            . $this->render($request, $tocArray));
+    }
+
+    /** @param list<int> $ta */
+    private function render(Request $request, array $ta): string
+    {
+        if (count($ta) === 0) {
+            return "";
+        }
+        $o = "<ul class=\"submenu\">\n";
+        foreach ($ta as $page) {
+            $o .= $this->renderCategoryItem($page)
+                . "<li class=\"{$this->renderClasses($request, $page)}\">"
+                . $this->renderMenuItem($request, $page)
+                . "</li>\n";
+        }
+        $o .= "</ul>\n";
+        return $o;
     }
 }
