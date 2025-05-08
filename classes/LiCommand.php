@@ -25,6 +25,7 @@ namespace Toxic;
 
 use Plib\Request;
 use Plib\Response;
+use Toxic\Model\Page;
 use Toxic\Model\Pages;
 
 class LiCommand
