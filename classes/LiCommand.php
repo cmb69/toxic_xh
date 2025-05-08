@@ -47,7 +47,7 @@ class LiCommand
     /**
      * @param list<int> $ta
      * @param int|string $st
-     * @phpstan-param positive-int|'submenu'|'search'|'menulevel'|'sitemaplevel' $st
+     * @phpstan-param positive-int|"submenu"|"search"|"menulevel"|"sitemaplevel" $st
      */
     public function __invoke(Request $request, array $ta, $st): Response
     {
@@ -56,66 +56,25 @@ class LiCommand
             return Response::create();
         }
         $t = '';
-        if ($st == 'submenu' || $st == 'search') {
+        if ($st === "submenu" || $st === "search") {
             $t .= '<ul class="' . $st . '">' . "\n";
         }
         $b = 0;
         if ((int) $st > 0) {
             $b = (int) $st - 1;
-            $st = 'menulevel';
+            $st = "menulevel";
         }
         $lf = [];
         for ($i = 0; $i < $tl; $i++) {
-            $tf = ($request->s() != $ta[$i]);
-            if ($st == 'menulevel' || $st == 'sitemaplevel') {
+            if ($st === "menulevel" || $st === "sitemaplevel") {
                 for ($k = $this->pageLevelOrDefault($ta, $i - 1, $b); $k < $this->pages->level($ta[$i]); $k++) {
-                    $t .= "\n" . '<ul class="' . $st . ($k + 1) . '">'
-                        . "\n";
+                    $t .= "\n" . '<ul class="' . $st . ($k + 1) . '">' . "\n";
                 }
             }
             $t .= $this->renderCategoryItem($ta[$i]);
-            $t .= '<li class="';
-            if (!$tf) {
-                $t .= 's';
-            } elseif ($this->conf["menu_sdoc"] == "parent" && $request->s() > -1) {
-                if ($this->pages->level($ta[$i]) < $this->pages->level($request->s())) {
-                    $hasChildren = substr($this->pages->url($request->s()), 0, 1 + strlen($this->pages->url($ta[$i])))
-                        == $this->pages->url($ta[$i]) . $this->conf["uri_separator"];
-                    if ($hasChildren) {
-                        $t .= 's';
-                    }
-                }
-            }
-            $t .= 'doc';
-            for ($j = $ta[$i] + 1; $j < $this->pages->count(); $j++) {
-                if (
-                    !$this->pages->hidden($j)
-                    && $this->pages->level($j) - $this->pages->level($ta[$i]) < 2 + (int) $this->conf["menu_levelcatch"]
-                ) {
-                    if ($this->pages->level($j) > $this->pages->level($ta[$i])) {
-                        $t .= 's';
-                    }
-                    break;
-                }
-            }
-            $t .= $this->renderClass($ta[$i]);
-            $t .= '">';
-            if ($tf) {
-                $pageData = $this->pages->data($ta[$i]);
-                $x = !($request->admin() && $request->edit())
-                    && $pageData['use_header_location'] === '2'
-                        ? '" target="_blank' : '';
-                $t .= $this->a($request, $ta[$i], $x);
-            } else {
-                $t .= '<span>';
-            }
-            $t .= $this->pages->heading($ta[$i]);
-            if ($tf) {
-                $t .= '</a>';
-            } else {
-                $t .= '</span>';
-            }
-            if ($st == 'menulevel' || $st == 'sitemaplevel') {
+            $t .= '<li class="' . $this->renderClasses($request, $ta[$i]) . '">';
+            $t .= $this->renderMenuItem($request, $ta[$i]);
+            if ($st === "menulevel" || $st === "sitemaplevel") {
                 $cond = $this->pageLevelOrDefault($ta, $i + 1, $b) > $this->pages->level($ta[$i]);
                 if ($cond) {
                     $lf[$this->pages->level($ta[$i])] = true;
@@ -136,7 +95,7 @@ class LiCommand
                 $t .= '</li>' . "\n";
             }
         }
-        if ($st == 'submenu' || $st == 'search') {
+        if ($st === "submenu" || $st === "search") {
             $t .= '</ul>' . "\n";
         }
         return Response::create($t);
@@ -146,20 +105,6 @@ class LiCommand
     private function pageLevelOrDefault(array $ta, int $i, int $default): int
     {
         return isset($ta[$i]) ? $this->pages->level($ta[$i]) : $default;
-    }
-
-    private function a(Request $request, int $i, string $x): string
-    {
-        $sn = $request->url()->page("")->relative();
-        if ($i === $this->pages->firstPublished() && !($request->admin())) {
-            $a_href = $sn;
-        } else {
-            $a_href = $sn . '?' . $this->pages->url($i);
-        }
-        if (stripos($a_href, '?') === false) {
-            ($x ? $x = '?' . $x : '');
-        }
-        return '<a href="' . $a_href . $x . '">';
     }
 
     private function renderCategoryItem(int $index): string
@@ -172,13 +117,55 @@ class LiCommand
         return $html;
     }
 
-    private function renderClass(int $index): string
+    private function renderClasses(Request $request, int $page): string
     {
-        $pageData = $this->pages->data($index);
+        $class = "";
+        if (
+            $page === $request->s()
+            || ($this->conf["menu_sdoc"] === "parent" && $this->pages->isPageAncestorOf($page, $request->s()))
+        ) {
+            $class .= 's';
+        }
+        $class .= 'doc';
+        if ($this->pages->children($page, (int) $this->conf["menu_levelcatch"])) {
+            $class .= 's';
+        }
+        $pageData = $this->pages->data($page);
         if ($pageData['toxic_class']) {
-            return ' ' . $pageData['toxic_class'];
+            return $class . ' ' . $pageData['toxic_class'];
         } else {
-            return '';
+            return $class;
+        }
+    }
+
+    private function renderMenuItem(Request $request, int $page): string
+    {
+        $res = "";
+        if ($page !== $request->s()) {
+            $pageData = $this->pages->data($page);
+            $res .= '<a href="' . $this->href($request, $page) . '"';
+            if (!($request->admin() && $request->edit()) && $pageData["use_header_location"] === "2") {
+                $res .= ' target="_blank"';
+            }
+            $res .= '>';
+        } else {
+            $res .= "<span>";
+        }
+        $res .= $this->pages->heading($page);
+        if ($page !== $request->s()) {
+            $res .= "</a>";
+        } else {
+            $res .= "</span>";
+        }
+        return $res;
+    }
+
+    private function href(Request $request, int $page): string
+    {
+        if ($page === $this->pages->firstPublished() && !($request->admin())) {
+            return $request->url()->page("")->relative();
+        } else {
+            return $request->url()->page($this->pages->url($page))->relative();
         }
     }
 }

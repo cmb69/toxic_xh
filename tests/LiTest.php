@@ -90,6 +90,19 @@ class LiTest extends TestCase
             [9, 3],
             [10, 1],
         ]);
+        $this->pages->method("getAncestorsOf")->willReturnMap([
+            [0, true, []],
+            [1, true, []],
+            [2, true, [1]],
+            [3, true, [2, 1]],
+            [4, true, [1]],
+            [5, true, [4, 1]],
+            [6, true, [1]],
+            [7, true, [6, 1]],
+            [8, true, []],
+            [9, true, [8]],
+            [10, true, []],
+        ]);
         $this->pages->method("getCount")->willReturn(11);
     }
 
