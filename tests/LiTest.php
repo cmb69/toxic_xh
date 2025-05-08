@@ -3,7 +3,6 @@
 namespace Toxic;
 
 use ApprovalTests\Approvals;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Plib\FakeRequest;
@@ -22,7 +21,7 @@ class LiTest extends TestCase
     /** @var Publisher&Stub */
     private $publisher;
 
-    /** @var PageDataRouter&MockObject */
+    /** @var PageDataRouter&Stub */
     private $pageData;
 
     public function setUp(): void
@@ -34,9 +33,16 @@ class LiTest extends TestCase
         $this->conf["uri_separator"] = ":";
         $this->pages = $this->createStub(Pages::class);
         $this->publisher = $this->createStub(Publisher::class);
+        $this->publisher->method("getFirstPublishedPage")->willReturn(1000);
         $this->setUpPageStructure();
-        $this->setUpPageDataRouterMock();
-        $this->setUpFunctionStubs();
+        $this->pageData = $this->createStub(PageDataRouter::class);
+        $this->pageData->method("find_page")->willReturnCallback(function ($pageIndex) {
+            return [
+                "toxic_class" => ($pageIndex >= 1 && $pageIndex <= 7) ? "blog" : "",
+                "toxic_category" => ($pageIndex === 8) ? "About category" : "",
+                "use_header_location" => ($pageIndex == 7) ? "2" : "0"
+            ];
+        });
     }
 
     private function setUpPageStructure(): void
@@ -80,33 +86,10 @@ class LiTest extends TestCase
             [9, 3],
             [10, 1],
         ]);
-        $this->pages->method("getCount")->willReturn(11);
-    }
-
-    private function setUpPageDataRouterMock(): void
-    {
-        $this->pageData = $this->getMockBuilder(PageDataRouter::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->pageData->expects($this->any())->method('find_page')->will(
-            $this->returnCallback(
-                function ($pageIndex) {
-                    return [
-                        'toxic_class' => ($pageIndex >= 1 && $pageIndex <= 7)
-                            ? 'blog' : '',
-                        'toxic_category' => ($pageIndex === 8) ? "About category" : "",
-                        'use_header_location' => ($pageIndex == 7) ? '2' : '0'
-                    ];
-                }
-            )
-        );
-    }
-
-    private function setUpFunctionStubs(): void
-    {
-        $this->publisher->method("getFirstPublishedPage")->willReturn(1000);
         $this->pages->method("isHidden")->willReturnCallback(function ($pageIndex) {
             return in_array($pageIndex, [4, 5]);
         });
+        $this->pages->method("getCount")->willReturn(11);
     }
 
     private function sut(): LiCommand
