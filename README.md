@@ -56,7 +56,12 @@ The look of Toxic_XH can be customized under `Stylesheet`.
 
 ## Usage
 
-Prepare your template by replacing the template tags:
+Toxic_XH only works for templates which use the standard CMSimple_XH menu
+functions; custom menu functions which are used by some templates are not
+supported.
+
+To enable the enhanced Toxic_XH features, you need to replace the standard menu
+functions with the drop-in replacements of Toxic_XH, i.e. replace:
 
     <?=toc(…)?>
 

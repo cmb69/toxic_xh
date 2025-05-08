@@ -60,7 +60,8 @@ check if all requirements are fulfilled.</li>--></li>
 <p>Localization is done under <code>Language</code>. You can translate the character strings to your own language if there is no appropriate language file available, or customize them according to your needs.</p>
 <p>The look of Toxic_XH can be customized under <code>Stylesheet</code>.</p>
 <h2 id="usage">Usage</h2>
-<p>Prepare your template by replacing the template tags:</p>
+<p>Toxic_XH only works for templates which use the standard CMSimple_XH menu functions; custom menu functions which are used by some templates are not supported.</p>
+<p>To enable the enhanced Toxic_XH features, you need to replace the standard menu functions with the drop-in replacements of Toxic_XH, i.e. replace:</p>
 <pre><code>&lt;?=toc(…)?&gt;</code></pre>
 <p>with</p>
 <pre><code>&lt;?=toxic(…)?&gt;</code></pre>
