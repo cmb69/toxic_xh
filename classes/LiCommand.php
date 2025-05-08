@@ -74,7 +74,7 @@ class LiCommand
         for ($i = 0; $i < $tl; $i++) {
             $tf = ($request->s() != $ta[$i]);
             if ($st == 'menulevel' || $st == 'sitemaplevel') {
-                for ($k = (isset($ta[$i - 1]) ? $this->pages->level($ta[$i - 1]) : $b); $k < $this->pages->level($ta[$i]); $k++) {
+                for ($k = $this->pageLevelOrDefault($ta, $i - 1, $b); $k < $this->pages->level($ta[$i]); $k++) {
                     $t .= "\n" . '<ul class="' . $st . ($k + 1) . '">'
                         . "\n";
                 }
@@ -122,14 +122,14 @@ class LiCommand
                 $t .= '</span>';
             }
             if ($st == 'menulevel' || $st == 'sitemaplevel') {
-                $cond = (isset($ta[$i + 1]) ? $this->pages->level($ta[$i + 1]) : $b) > $this->pages->level($ta[$i]);
+                $cond = $this->pageLevelOrDefault($ta, $i + 1, $b) > $this->pages->level($ta[$i]);
                 if ($cond) {
                     $lf[$this->pages->level($ta[$i])] = true;
                 } else {
                     $t .= '</li>' . "\n";
                     $lf[$this->pages->level($ta[$i])] = false;
                 }
-                for ($k = $this->pages->level($ta[$i]); $k > (isset($ta[$i + 1]) ? $this->pages->level($ta[$i + 1]) : $b); $k--) {
+                for ($k = $this->pages->level($ta[$i]); $k > $this->pageLevelOrDefault($ta, $i + 1, $b); $k--) {
                     $t .= '</ul>' . "\n";
                     if (isset($lf[$k - 1])) {
                         if ($lf[$k - 1]) {
@@ -146,6 +146,12 @@ class LiCommand
             $t .= '</ul>' . "\n";
         }
         return Response::create($t);
+    }
+
+    /** @param list<int> $ta */
+    private function pageLevelOrDefault(array $ta, int $i, int $default): int
+    {
+        return isset($ta[$i]) ? $this->pages->level($ta[$i]) : $default;
     }
 
     private function a(Request $request, int $i, string $x): string
