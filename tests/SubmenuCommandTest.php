@@ -36,6 +36,7 @@ class SubmenuCommandTest extends TestCase
         $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["toxic"];
         $this->conf["menu_levelcatch"] = "10";
         $this->conf["menu_levels"] = "3";
+        $this->conf["menu_sdoc"] = "parent";
         $this->pages = $this->createStub(Pages::class);
         $this->setUpPageStructure();
         $lang = XH_includeVar("./languages/en.php", "plugin_tx")["toxic"];
@@ -50,8 +51,7 @@ class SubmenuCommandTest extends TestCase
                 "use_header_location" => ($pageIndex == 7) ? "2" : "0"
             ];
         });
-        $this->liCommand = new LiCommand($this->pages, $this->publisher, $this->pageData);
-        $this->setUpConfiguration();
+        $this->liCommand = new LiCommand($this->conf, $this->pages, $this->publisher, $this->pageData);
     }
 
     private function setUpPageStructure(): void
@@ -96,26 +96,6 @@ class SubmenuCommandTest extends TestCase
             [10, 1],
         ]);
         $this->pages->method("getCount")->willReturn(11);
-    }
-
-    private function setUpConfiguration(): void
-    {
-        global $cf;
-
-        $cf = [
-            'locator' => ['show_homepage' => 'true'],
-            'menu' => [
-                'levelcatch' => '10',
-                'levels' => '3',
-                'sdoc' => 'parent'
-            ],
-            'show_hidden' => [
-                'pages_toc' => 'true'
-            ],
-            'uri' => [
-                'seperator' => ':'
-            ],
-        ];
     }
 
     private function sut(): SubmenuCommand

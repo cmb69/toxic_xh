@@ -31,6 +31,9 @@ use XH\Publisher;
 
 class LiCommand
 {
+    /** @var array<string,string> */
+    private $conf;
+
     /** @var Pages */
     private $pages;
 
@@ -40,11 +43,14 @@ class LiCommand
     /** @var PageDataRouter */
     private $pageData;
 
+    /** @param array<string,string> $conf */
     public function __construct(
+        array $conf,
         Pages $pages,
         Publisher $publisher,
         PageDataRouter $pageData
     ) {
+        $this->conf = $conf;
         $this->pages = $pages;
         $this->publisher = $publisher;
         $this->pageData = $pageData;
@@ -57,8 +63,6 @@ class LiCommand
      */
     public function __invoke(Request $request, array $ta, $st): Response
     {
-        global $cf;
-
         $tl = count($ta);
         if ($tl < 1) {
             return Response::create();
@@ -85,10 +89,10 @@ class LiCommand
             $t .= '<li class="';
             if (!$tf) {
                 $t .= 's';
-            } elseif ($cf['menu']['sdoc'] == "parent" && $request->s() > -1) {
+            } elseif ($this->conf["menu_sdoc"] == "parent" && $request->s() > -1) {
                 if ($this->pages->level($ta[$i]) < $this->pages->level($request->s())) {
                     $hasChildren = substr($this->pages->url($request->s()), 0, 1 + strlen($this->pages->url($ta[$i])))
-                        == $this->pages->url($ta[$i]) . $cf['uri']['seperator'];
+                        == $this->pages->url($ta[$i]) . $this->conf["uri_separator"];
                     if ($hasChildren) {
                         $t .= 's';
                     }
@@ -98,7 +102,7 @@ class LiCommand
             for ($j = $ta[$i] + 1; $j < $this->pages->getCount(); $j++) {
                 if (
                     !$this->pages->isHidden($j)
-                    && $this->pages->level($j) - $this->pages->level($ta[$i]) < 2 + $cf['menu']['levelcatch']
+                    && $this->pages->level($j) - $this->pages->level($ta[$i]) < 2 + (int) $this->conf["menu_levelcatch"]
                 ) {
                     if ($this->pages->level($j) > $this->pages->level($ta[$i])) {
                         $t .= 's';

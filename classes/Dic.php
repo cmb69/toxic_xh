@@ -32,7 +32,7 @@ class Dic
     public static function liCommand(): LiCommand
     {
         global $xh_publisher, $pd_router;
-        return new LiCommand(new Pages(), $xh_publisher, $pd_router);
+        return new LiCommand(self::conf(), new Pages(), $xh_publisher, $pd_router);
     }
 
     public static function submenuCommand(): SubmenuCommand
@@ -59,6 +59,8 @@ class Dic
         $conf = $plugin_cf["toxic"];
         $conf["menu_levelcatch"] = $cf["menu"]["levelcatch"];
         $conf["menu_levels"] = $cf["menu"]["levels"];
+        $conf["menu_sdoc"] = $cf["menu"]["sdoc"];
+        $conf["uri_separator"] = $cf["uri"]["seperator"];
         return $conf;
     }
 

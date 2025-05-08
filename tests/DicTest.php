@@ -15,7 +15,7 @@ class DicTest extends TestCase
         $xh_publisher = $this->createStub(Publisher::class);
         $pd_router = $this->createStub(PageDataRouter::class);
         $pth = ["folder" => ["plugins" => ""]];
-        $cf = ["menu" => ["levelcatch" => "", "levels" => ""]];
+        $cf = ["menu" => ["levelcatch" => "", "levels" => "", "sdoc" => ""], "uri" => ["seperator" => ""]];
         $plugin_cf = ["toxic" => []];
         $tx = ["submenu" => ["heading" => ""]];
         $plugin_tx = ["toxic" => []];

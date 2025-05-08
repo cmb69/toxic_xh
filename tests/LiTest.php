@@ -13,6 +13,9 @@ use XH\Publisher;
 
 class LiTest extends TestCase
 {
+    /** @var array<string,string> */
+    private $conf;
+
     /** @var Pages&Stub */
     private $pages;
 
@@ -24,10 +27,14 @@ class LiTest extends TestCase
 
     public function setUp(): void
     {
+        $this->conf = XH_includeVar("./config/config.php", "plugin_cf")["toxic"];
+        $this->conf["menu_levelcatch"] = "10";
+        $this->conf["menu_levels"] = "3";
+        $this->conf["menu_sdoc"] = "parent";
+        $this->conf["uri_separator"] = ":";
         $this->pages = $this->createStub(Pages::class);
         $this->publisher = $this->createStub(Publisher::class);
         $this->setUpPageStructure();
-        $this->setUpConfiguration();
         $this->setUpPageDataRouterMock();
         $this->setUpFunctionStubs();
     }
@@ -76,26 +83,6 @@ class LiTest extends TestCase
         $this->pages->method("getCount")->willReturn(11);
     }
 
-    private function setUpConfiguration(): void
-    {
-        global $cf;
-
-        $cf = [
-            'locator' => ['show_homepage' => 'true'],
-            'menu' => [
-                'levelcatch' => '10',
-                'levels' => '3',
-                'sdoc' => 'parent'
-            ],
-            'show_hidden' => [
-                'pages_toc' => 'true'
-            ],
-            'uri' => [
-                'seperator' => ':'
-            ],
-        ];
-    }
-
     private function setUpPageDataRouterMock(): void
     {
         $this->pageData = $this->getMockBuilder(PageDataRouter::class)
@@ -124,7 +111,7 @@ class LiTest extends TestCase
 
     private function sut(): LiCommand
     {
-        return new LiCommand($this->pages, $this->publisher, $this->pageData);
+        return new LiCommand($this->conf, $this->pages, $this->publisher, $this->pageData);
     }
 
     public function testNoMenuItemsDisplayNothing(): void
@@ -236,9 +223,7 @@ class LiTest extends TestCase
     /** @dataProvider dataForParentOfSelectedPageHasClassDependingOnSdoc */
     public function testParentOfSelectedPageHasClassDependingOnSdoc(string $sdoc, string $class): void
     {
-        global $cf;
-
-        $cf['menu']['sdoc'] = $sdoc;
+        $this->conf["menu_sdoc"] = $sdoc;
         $request = new FakeRequest(["s" => 2]);
         $response = $this->sut()($request, range(0, 10), 1);
         $this->assertStringContainsString(
@@ -258,9 +243,7 @@ class LiTest extends TestCase
     /** @dataProvider dataForH1WithH3HasClassDependingOnLevelcatch */
     public function testH1WithH3HasClassDependingOnLevelcatch(string $levelcatch, string $class): void
     {
-        global $cf;
-
-        $cf['menu']['levelcatch'] = $levelcatch;
+        $this->conf["menu_levelcatch"] = $levelcatch;
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
             "<li class=\"$class\"><a href=\"/?About\">About</a>",
