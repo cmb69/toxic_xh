@@ -76,8 +76,7 @@ class Pages
 
     public function hidden(int $page): bool
     {
-        // TODO use publisher
-        return $this->pages->isHidden($page);
+        return $this->publisher->isHidden($page);
     }
 
     /** @return list<int> */

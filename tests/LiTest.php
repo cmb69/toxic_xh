@@ -35,6 +35,9 @@ class LiTest extends TestCase
         $this->pages = $this->createStub(XHPages::class);
         $this->publisher = $this->createStub(Publisher::class);
         $this->publisher->method("getFirstPublishedPage")->willReturn(1000);
+        $this->publisher->method("isHidden")->willReturnCallback(function ($pageIndex) {
+            return in_array($pageIndex, [4, 5]);
+        });
         $this->setUpPageStructure();
         $this->pageData = $this->createStub(PageDataRouter::class);
         $this->pageData->method("find_page")->willReturnCallback(function ($pageIndex) {
@@ -87,9 +90,6 @@ class LiTest extends TestCase
             [9, 3],
             [10, 1],
         ]);
-        $this->pages->method("isHidden")->willReturnCallback(function ($pageIndex) {
-            return in_array($pageIndex, [4, 5]);
-        });
         $this->pages->method("getCount")->willReturn(11);
     }
 
