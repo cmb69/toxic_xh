@@ -170,7 +170,7 @@ class LiTest extends TestCase
         $this->assertStringContainsString("<span>Welcome</span>", $response->output());
     }
 
-    public function testNotSelectedPageHasAnchor(): void
+    public function testRendersMenu(): void
     {
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         Approvals::verifyHtml($response->output());
@@ -215,12 +215,6 @@ class LiTest extends TestCase
         $request = new FakeRequest(["s" => 1]);
         $response = $this->sut()($request, range(0, 10), 1);
         $this->assertStringContainsString("<li class=\"sdocs blog\"><span>Blog</span>", $response->output());
-    }
-
-    public function testSelectedChildlessPageHasClassSdoc(): void
-    {
-        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
-        Approvals::verifyHtml($response->output());
     }
 
     public function testNotSelectedPageHasClassDocs(): void
@@ -280,12 +274,6 @@ class LiTest extends TestCase
             ['10', 'docs'],
             ['0', 'doc'],
         ];
-    }
-
-    public function testPageOpensInNewWindowInNormalMode(): void
-    {
-        $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
-        Approvals::verifyHtml($response->output());
     }
 
     public function testPageDoesntOpenInNewWindowInEditMode(): void
