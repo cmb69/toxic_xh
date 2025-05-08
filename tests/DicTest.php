@@ -10,11 +10,12 @@ class DicTest extends TestCase
 {
     public function setUp(): void
     {
-        global $c, $xh_publisher, $pd_router, $pth, $plugin_cf, $tx, $plugin_tx;
+        global $c, $xh_publisher, $pd_router, $pth, $cf, $plugin_cf, $tx, $plugin_tx;
         $c = [];
         $xh_publisher = $this->createStub(Publisher::class);
         $pd_router = $this->createStub(PageDataRouter::class);
         $pth = ["folder" => ["plugins" => ""]];
+        $cf = ["menu" => ["levelcatch" => "", "levels" => ""]];
         $plugin_cf = ["toxic" => []];
         $tx = ["submenu" => ["heading" => ""]];
         $plugin_tx = ["toxic" => []];
@@ -23,6 +24,11 @@ class DicTest extends TestCase
     public function testMakesLiCommand(): void
     {
         $this->assertInstanceOf(LiCommand::class, Dic::liCommand([], 1));
+    }
+
+    public function testMakesSubmenuCommand(): void
+    {
+        $this->assertInstanceOf(SubmenuCommand::class, Dic::submenuCommand());
     }
 
     public function testMakeTabCommand(): void
