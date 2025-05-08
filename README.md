@@ -72,6 +72,14 @@ with
 
     <?=toxic_li(…)?>
 
+and/or
+
+    <?=submenu(…)?>
+
+with
+
+    <?=toxic_submenu(…)?>
+
 This enables the settings in the page data tab `Toxic` which you can define
 for each individual page.
 

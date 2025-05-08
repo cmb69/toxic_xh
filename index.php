@@ -43,6 +43,11 @@ function Toxic_li(array $ta, $st): string
     return Dic::liCommand()(Request::current(), $ta, $st)();
 }
 
+function toxic_submenu(string $html = ""): string
+{
+    return Dic::submenuCommand()(Request::current(), $html)();
+}
+
 /**
  * @var PageDataRouter $pd_router
  */

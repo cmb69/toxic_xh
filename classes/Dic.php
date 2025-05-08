@@ -35,6 +35,11 @@ class Dic
         return new LiCommand(new Pages(), $xh_publisher, $pd_router);
     }
 
+    public static function submenuCommand(): SubmenuCommand
+    {
+        return new SubmenuCommand(self::conf(), new Pages(), self::view(), self::liCommand());
+    }
+
     public static function makeTabCommand(): TabCommand
     {
         global $plugin_cf;
@@ -47,9 +52,21 @@ class Dic
         return new InfoCommand($pth["folder"]["plugins"] . "toxic/", new SystemChecker(), self::view());
     }
 
+    /** @return array<string,string> */
+    private static function conf(): array
+    {
+        global $cf, $plugin_cf;
+        $conf = $plugin_cf["toxic"];
+        $conf["menu_levelcatch"] = $cf["menu"]["levelcatch"];
+        $conf["menu_levels"] = $cf["menu"]["levels"];
+        return $conf;
+    }
+
     private static function view(): View
     {
-        global $pth, $plugin_tx;
-        return new View($pth["folder"]["plugins"] . "toxic/views/", $plugin_tx["toxic"]);
+        global $pth, $tx, $plugin_tx;
+        $lang = $plugin_tx["toxic"];
+        $lang["submenu_heading"] = $tx["submenu"]["heading"];
+        return new View($pth["folder"]["plugins"] . "toxic/views/", $lang);
     }
 }

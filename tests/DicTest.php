@@ -10,12 +10,13 @@ class DicTest extends TestCase
 {
     public function setUp(): void
     {
-        global $c, $xh_publisher, $pd_router, $pth, $plugin_cf, $plugin_tx;
+        global $c, $xh_publisher, $pd_router, $pth, $plugin_cf, $tx, $plugin_tx;
         $c = [];
         $xh_publisher = $this->createStub(Publisher::class);
         $pd_router = $this->createStub(PageDataRouter::class);
         $pth = ["folder" => ["plugins" => ""]];
         $plugin_cf = ["toxic" => []];
+        $tx = ["submenu" => ["heading" => ""]];
         $plugin_tx = ["toxic" => []];
     }
 
