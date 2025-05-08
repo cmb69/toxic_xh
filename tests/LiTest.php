@@ -106,7 +106,7 @@ class LiTest extends TestCase
                     return [
                         'toxic_class' => ($pageIndex >= 1 && $pageIndex <= 7)
                             ? 'blog' : '',
-                        'toxic_category' => '',
+                        'toxic_category' => ($pageIndex === 8) ? "About category" : "",
                         'use_header_location' => ($pageIndex == 7) ? '2' : '0'
                     ];
                 }

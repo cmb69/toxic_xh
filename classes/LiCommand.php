@@ -167,8 +167,7 @@ class LiCommand
         $html = '';
         $pageData = $this->pageData->find_page($index);
         if ($pageData['toxic_category']) {
-            $html .= '<li class="toxic_category">' . $pageData['toxic_category']
-                . '</li>';
+            $html .= "<li class=\"toxic_category\">" . $pageData["toxic_category"] . "</li>\n";
         }
         return $html;
     }
