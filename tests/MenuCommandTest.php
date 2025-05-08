@@ -11,7 +11,7 @@ use XH\PageDataRouter;
 use XH\Pages as XHPages;
 use XH\Publisher;
 
-class LiTest extends TestCase
+class MenuCommandTest extends TestCase
 {
     /** @var array<string,string> */
     private $conf;
@@ -106,9 +106,9 @@ class LiTest extends TestCase
         $this->pages->method("getCount")->willReturn(11);
     }
 
-    private function sut(): LiCommand
+    private function sut(): MenuCommand
     {
-        return new LiCommand($this->conf, new Pages($this->pages, $this->publisher, $this->pageData));
+        return new MenuCommand($this->conf, new Pages($this->pages, $this->publisher, $this->pageData));
     }
 
     public function testNoMenuItemsDisplayNothing(): void
@@ -182,15 +182,9 @@ class LiTest extends TestCase
     public function dataForHasUlWithProperClass(): array
     {
         return [
-            ['menulevel', 'menulevel1'],
             [1, 'menulevel1'],
             [1, 'menulevel2'],
             [1, 'menulevel3'],
-            ['sitemaplevel', 'sitemaplevel1'],
-            ['sitemaplevel', 'sitemaplevel2'],
-            ['sitemaplevel', 'sitemaplevel3'],
-            ['submenu', 'submenu'],
-            ['search', 'search'],
         ];
     }
 
@@ -260,19 +254,6 @@ class LiTest extends TestCase
     {
         $request = new FakeRequest(["admin" => true, "edit" => true]);
         $response = $this->sut()($request, range(0, 10), 1);
-        Approvals::verifyHtml($response->output());
-    }
-
-    public function testBlogSubmenuHasExactlyThreeItems(): void
-    {
-        $request = new FakeRequest(["s" => 1]);
-        $response = $this->sut()($request, [2, 4, 6], 'submenu');
-        Approvals::verifyHtml($response->output());
-    }
-
-    public function testBlogSubmenuHasProperStructure(): void
-    {
-        $response = $this->sut()(new FakeRequest(), [2, 4, 6], 'submenu');
         Approvals::verifyHtml($response->output());
     }
 }

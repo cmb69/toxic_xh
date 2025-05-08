@@ -33,14 +33,10 @@ function toxic(?int $start = null, ?int $end = null): string
     return toc($start, $end, 'Toxic_li');
 }
 
-/**
- * @param list<int> $ta
- * @param int|string $st
- * @phpstan-param positive-int|'submenu'|'search'|'menulevel'|'sitemaplevel' $st
- */
-function toxic_li(array $ta, $st): string
+/** @param list<int> $ta */
+function toxic_li(array $ta, int $st): string
 {
-    return Dic::liCommand()(Request::current(), $ta, $st)();
+    return Dic::menuCommand()(Request::current(), $ta, $st)();
 }
 
 function toxic_submenu(string $html = ""): string

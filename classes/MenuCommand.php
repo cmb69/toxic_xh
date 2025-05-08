@@ -27,7 +27,7 @@ use Plib\Request;
 use Plib\Response;
 use Toxic\Model\Pages;
 
-class LiCommand
+class MenuCommand
 {
     use ListRendering;
 
@@ -46,59 +46,39 @@ class LiCommand
         $this->pages = $pages;
     }
 
-    /**
-     * @param list<int> $ta
-     * @param int|string $st
-     * @phpstan-param positive-int|"submenu"|"search"|"menulevel"|"sitemaplevel" $st
-     */
-    public function __invoke(Request $request, array $ta, $st): Response
+    /** @param list<int> $ta */
+    public function __invoke(Request $request, array $ta, int $level): Response
     {
         $tl = count($ta);
         if ($tl < 1) {
             return Response::create();
         }
         $t = '';
-        if ($st === "submenu" || $st === "search") {
-            $t .= '<ul class="' . $st . '">' . "\n";
-        }
-        $b = 0;
-        if ((int) $st > 0) {
-            $b = (int) $st - 1;
-            $st = "menulevel";
-        }
+        $b = $level > 0 ? $level - 1 : 0;
         $lf = [];
         for ($i = 0; $i < $tl; $i++) {
-            if ($st === "menulevel" || $st === "sitemaplevel") {
-                for ($k = $this->pageLevelOrDefault($ta, $i - 1, $b); $k < $this->pages->level($ta[$i]); $k++) {
-                    $t .= "\n" . '<ul class="' . $st . ($k + 1) . '">' . "\n";
-                }
+            for ($k = $this->pageLevelOrDefault($ta, $i - 1, $b); $k < $this->pages->level($ta[$i]); $k++) {
+                $t .= "\n" . '<ul class="menulevel' . ($k + 1) . '">' . "\n";
             }
             $t .= $this->renderCategoryItem($ta[$i]);
             $t .= '<li class="' . $this->renderClasses($request, $ta[$i]) . '">';
             $t .= $this->renderMenuItem($request, $ta[$i]);
-            if ($st === "menulevel" || $st === "sitemaplevel") {
-                $cond = $this->pageLevelOrDefault($ta, $i + 1, $b) > $this->pages->level($ta[$i]);
-                if ($cond) {
-                    $lf[$this->pages->level($ta[$i])] = true;
-                } else {
-                    $t .= '</li>' . "\n";
-                    $lf[$this->pages->level($ta[$i])] = false;
-                }
-                for ($k = $this->pages->level($ta[$i]); $k > $this->pageLevelOrDefault($ta, $i + 1, $b); $k--) {
-                    $t .= '</ul>' . "\n";
-                    if (isset($lf[$k - 1])) {
-                        if ($lf[$k - 1]) {
-                            $t .= '</li>' . "\n";
-                            $lf[$k - 1] = false;
-                        }
-                    }
-                }
+            $cond = $this->pageLevelOrDefault($ta, $i + 1, $b) > $this->pages->level($ta[$i]);
+            if ($cond) {
+                $lf[$this->pages->level($ta[$i])] = true;
             } else {
                 $t .= '</li>' . "\n";
+                $lf[$this->pages->level($ta[$i])] = false;
             }
-        }
-        if ($st === "submenu" || $st === "search") {
-            $t .= '</ul>' . "\n";
+            for ($k = $this->pages->level($ta[$i]); $k > $this->pageLevelOrDefault($ta, $i + 1, $b); $k--) {
+                $t .= '</ul>' . "\n";
+                if (isset($lf[$k - 1])) {
+                    if ($lf[$k - 1]) {
+                        $t .= '</li>' . "\n";
+                        $lf[$k - 1] = false;
+                    }
+                }
+            }
         }
         return Response::create($t);
     }

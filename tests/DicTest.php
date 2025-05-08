@@ -21,9 +21,9 @@ class DicTest extends TestCase
         $plugin_tx = ["toxic" => []];
     }
 
-    public function testMakesLiCommand(): void
+    public function testMakesMenuCommand(): void
     {
-        $this->assertInstanceOf(LiCommand::class, Dic::liCommand([], 1));
+        $this->assertInstanceOf(MenuCommand::class, Dic::menuCommand([], 1));
     }
 
     public function testMakesSubmenuCommand(): void

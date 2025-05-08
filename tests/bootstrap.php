@@ -21,7 +21,7 @@ require_once "./classes/model/Pages.php";
 require_once "./classes/Dic.php";
 require_once "./classes/ListRendering.php";
 require_once "./classes/InfoCommand.php";
-require_once "./classes/LiCommand.php";
+require_once "./classes/MenuCommand.php";
 require_once "./classes/SubmenuCommand.php";
 require_once "./classes/TabCommand.php";
 
