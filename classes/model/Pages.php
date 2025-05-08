@@ -79,4 +79,25 @@ class Pages
         // TODO use publisher
         return $this->pages->isHidden($page);
     }
+
+    /** @return list<int> */
+    public function children(int $page, int $levelCatch, bool $ignoreHidden = true): array
+    {
+        $result = [];
+        $ll = $levelCatch;
+        for ($i = $page + 1; $i < $this->count(); ++$i) {
+            if ($this->level($i) <= $this->level($page)) {
+                break;
+            }
+            if ($this->level($i) <= $ll) {
+                if (!$ignoreHidden || !$this->hidden($i)) {
+                    $result[] = $i;
+                }
+            }
+            if ($this->level($i) < $ll) {
+                $ll = $this->level($i);
+            }
+        }
+        return $result;
+    }
 }

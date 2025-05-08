@@ -23,8 +23,8 @@ namespace Toxic;
 
 use Plib\SystemChecker;
 use Plib\View;
-use Toxic\Model\Pages as ModelPages;
-use XH\Pages;
+use Toxic\Model\Pages;
+use XH\Pages as XHPages;
 
 class Dic
 {
@@ -37,7 +37,7 @@ class Dic
 
     public static function submenuCommand(): SubmenuCommand
     {
-        return new SubmenuCommand(self::conf(), new Pages(), self::view(), self::liCommand());
+        return new SubmenuCommand(self::conf(), self::pages(), self::view(), self::liCommand());
     }
 
     public static function makeTabCommand(): TabCommand
@@ -52,10 +52,10 @@ class Dic
         return new InfoCommand($pth["folder"]["plugins"] . "toxic/", new SystemChecker(), self::view());
     }
 
-    private static function pages(): ModelPages
+    private static function pages(): Pages
     {
         global $xh_publisher, $pd_router;
-        return new ModelPages(new Pages(), $xh_publisher, $pd_router);
+        return new Pages(new XHPages(), $xh_publisher, $pd_router);
     }
 
     /** @return array<string,string> */

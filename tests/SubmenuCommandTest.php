@@ -7,9 +7,9 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Plib\FakeRequest;
 use Plib\View;
-use Toxic\Model\Pages as ModelPages;
+use Toxic\Model\Pages;
 use XH\PageDataRouter;
-use XH\Pages;
+use XH\Pages as XHPages;
 use XH\Publisher;
 
 class SubmenuCommandTest extends TestCase
@@ -17,7 +17,7 @@ class SubmenuCommandTest extends TestCase
     /** @var array<string,string> */
     private $conf;
 
-    /** @var Pages&Stub */
+    /** @var XHPages&Stub */
     private $pages;
 
     /** @var View */
@@ -38,7 +38,7 @@ class SubmenuCommandTest extends TestCase
         $this->conf["menu_levelcatch"] = "10";
         $this->conf["menu_levels"] = "3";
         $this->conf["menu_sdoc"] = "parent";
-        $this->pages = $this->createStub(Pages::class);
+        $this->pages = $this->createStub(XHPages::class);
         $this->setUpPageStructure();
         $lang = XH_includeVar("./languages/en.php", "plugin_tx")["toxic"];
         $lang["submenu_heading"] = "Submenu";
@@ -53,7 +53,7 @@ class SubmenuCommandTest extends TestCase
                 "use_header_location" => ($pageIndex == 7) ? "2" : "0"
             ];
         });
-        $this->liCommand = new LiCommand($this->conf, new ModelPages($this->pages, $this->publisher, $this->pageData));
+        $this->liCommand = new LiCommand($this->conf, new Pages($this->pages, $this->publisher, $this->pageData));
     }
 
     private function setUpPageStructure(): void
@@ -105,7 +105,12 @@ class SubmenuCommandTest extends TestCase
 
     private function sut(): SubmenuCommand
     {
-        return new SubmenuCommand($this->conf, $this->pages, $this->view, $this->liCommand);
+        return new SubmenuCommand(
+            $this->conf,
+            new Pages($this->pages, $this->publisher, $this->pageData),
+            $this->view,
+            $this->liCommand
+        );
     }
 
     public function testDoesNotRenderEmptySubmenu(): void

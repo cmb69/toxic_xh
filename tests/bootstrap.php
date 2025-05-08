@@ -17,7 +17,6 @@ require_once "../plib/classes/FakeRequest.php";
 require_once "../plib/classes/FakeSystemChecker.php";
 
 require_once "./classes/model/Pages.php";
-require_once "./classes/model/TocArray.php";
 require_once "./classes/Dic.php";
 require_once "./classes/InfoCommand.php";
 require_once "./classes/LiCommand.php";

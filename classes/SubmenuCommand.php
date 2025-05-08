@@ -26,15 +26,14 @@ namespace Toxic;
 use Plib\Request;
 use Plib\Response;
 use Plib\View;
-use Toxic\Model\TocArray;
-use XH\Pages;
+use Toxic\Model\Pages as ModelPages;
 
 class SubmenuCommand
 {
     /** @var array<string,string> */
     private $conf;
 
-    /** @var Pages */
+    /** @var ModelPages */
     private $pages;
 
     /** @var View */
@@ -44,7 +43,7 @@ class SubmenuCommand
     private $liCommand;
 
     /** @param array<string,string> $conf */
-    public function __construct(array $conf, Pages $pages, View $view, LiCommand $liCommand)
+    public function __construct(array $conf, ModelPages $pages, View $view, LiCommand $liCommand)
     {
         $this->conf = $conf;
         $this->pages = $pages;
@@ -54,7 +53,7 @@ class SubmenuCommand
 
     public function __invoke(Request $request, string $html): Response
     {
-        $tocArray = TocArray::submenu($this->pages, $request->s(), (int) $this->conf["menu_levelcatch"]);
+        $tocArray = $this->pages->children($request->s(), (int) $this->conf["menu_levelcatch"]);
         if (count($tocArray) <= 0) {
             return Response::create();
         }

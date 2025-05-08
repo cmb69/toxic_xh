@@ -6,9 +6,9 @@ use ApprovalTests\Approvals;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Plib\FakeRequest;
-use Toxic\Model\Pages as ModelPages;
+use Toxic\Model\Pages;
 use XH\PageDataRouter;
-use XH\Pages;
+use XH\Pages as XHPages;
 use XH\Publisher;
 
 class LiTest extends TestCase
@@ -16,7 +16,7 @@ class LiTest extends TestCase
     /** @var array<string,string> */
     private $conf;
 
-    /** @var Pages&Stub */
+    /** @var XHPages&Stub */
     private $pages;
 
     /** @var Publisher&Stub */
@@ -32,7 +32,7 @@ class LiTest extends TestCase
         $this->conf["menu_levels"] = "3";
         $this->conf["menu_sdoc"] = "parent";
         $this->conf["uri_separator"] = ":";
-        $this->pages = $this->createStub(Pages::class);
+        $this->pages = $this->createStub(XHPages::class);
         $this->publisher = $this->createStub(Publisher::class);
         $this->publisher->method("getFirstPublishedPage")->willReturn(1000);
         $this->setUpPageStructure();
@@ -95,7 +95,7 @@ class LiTest extends TestCase
 
     private function sut(): LiCommand
     {
-        return new LiCommand($this->conf, new ModelPages($this->pages, $this->publisher, $this->pageData));
+        return new LiCommand($this->conf, new Pages($this->pages, $this->publisher, $this->pageData));
     }
 
     public function testNoMenuItemsDisplayNothing(): void
