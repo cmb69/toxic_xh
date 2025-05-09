@@ -51,26 +51,27 @@ class MenuCommand
     public function __invoke(Request $request, array $ta, int $level): Response
     {
         $page = Page::fromTocArray($ta, $level, $this->pages);
-        return Response::create($this->renderMenu($request, $page, 1));
+        return Response::create($this->renderMenu($request, $page, $level));
     }
 
-    private function renderMenu(Request $request, ?Page $page, int $indent = 1): string
+    private function renderMenu(Request $request, ?Page $page, int $level, int $indent = 0): string
     {
         if ($page === null) {
             return "";
         }
-        $o = str_repeat("", $indent) . "\n<ul class=\"menulevel{$indent}\">\n";
+        $o = str_repeat("", $indent) . "<ul class=\"menulevel{$level}\">\n";
         $indent++;
         do {
             if ($page->index() !== null) {
                 $classes = $this->renderClasses($request, $page->index());
                 $item = $this->renderMenuItem($request, $page->index());
                 $o .= $this->renderCategoryItem($page->index())
-                    . str_repeat("", $indent) . "<li class=\"$classes\">$item";
+                    . str_repeat("", $indent) . "<li class=\"$classes\">\n"
+                    . str_repeat("", $indent + 1) . $item . "\n";
             }
-            $o .= $this->renderMenu($request, $page->child(), $indent);
+            $o .= $this->renderMenu($request, $page->child(), $level + 1, $indent);
             if ($page->index() !== null) {
-                $o .= "</li>\n";
+                $o .= str_repeat("", $indent) . "</li>\n";
             }
         } while ($page = $page->next());
         $indent--;

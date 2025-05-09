@@ -137,7 +137,7 @@ class MenuCommandTest extends TestCase
     public function testListItemHasUnorderedListChild(string $class): void
     {
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
-        $this->assertStringMatchesFormat("%A<li%s\n<ul class=\"$class\">%A", $response->output());
+        $this->assertStringMatchesFormat("%A<li%A<ul class=\"$class\">%A", $response->output());
     }
 
     public function dataForListItemHasUnorderedListChild(): array
@@ -164,7 +164,7 @@ class MenuCommandTest extends TestCase
     {
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
-            "<li class=\"doc blog\"><a href=\"/?Blog:Hidden\">Hidden</a>",
+            "<li class=\"doc blog\">\n<a href=\"/?Blog:Hidden\">Hidden</a>",
             $response->output()
         );
     }
@@ -192,14 +192,14 @@ class MenuCommandTest extends TestCase
     {
         $request = new FakeRequest(["s" => 1]);
         $response = $this->sut()($request, range(0, 10), 1);
-        $this->assertStringContainsString("<li class=\"sdocs blog\"><span>Blog</span>", $response->output());
+        $this->assertStringContainsString("<li class=\"sdocs blog\">\n<span>Blog</span>", $response->output());
     }
 
     public function testNotSelectedPageHasClassDocs(): void
     {
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
-            "<li class=\"docs blog\"><a href=\"/?Blog\">Blog</a>",
+            "<li class=\"docs blog\">\n<a href=\"/?Blog\">Blog</a>",
             $response->output()
         );
     }
@@ -218,7 +218,7 @@ class MenuCommandTest extends TestCase
         $request = new FakeRequest(["s" => 2]);
         $response = $this->sut()($request, range(0, 10), 1);
         $this->assertStringContainsString(
-            "<li class=\"$class blog\"><a href=\"/?Blog\">Blog</a>",
+            "<li class=\"$class blog\">\n<a href=\"/?Blog\">Blog</a>",
             $response->output()
         );
     }
@@ -237,7 +237,7 @@ class MenuCommandTest extends TestCase
         $this->conf["menu_levelcatch"] = $levelcatch;
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
-            "<li class=\"$class\"><a href=\"/?About\">About</a>",
+            "<li class=\"$class\">\n<a href=\"/?About\">About</a>",
             $response->output()
         );
     }
