@@ -83,7 +83,7 @@
     <delete dir="export"/>
     <copy file="dist/config/config.php" tofile="dist/config/defaultconfig.php"/>
     <copy file="dist/languages/en.php" tofile="dist/languages/default.php"/>
-    <zip destfile="Toxic_XH-1alpha1.zip" basedir="dist" prefix="toxic/"/>
+    <zip destfile="Toxic_XH-1.0.zip" basedir="dist" prefix="toxic/"/>
     <delete dir="dist"/>
   </target>
 

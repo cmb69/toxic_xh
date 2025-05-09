@@ -28,7 +28,7 @@ use XH\Pages as XHPages;
 
 class Dic
 {
-    public const VERSION = "1alpha1";
+    public const VERSION = "1.0";
 
     public static function menuCommand(): MenuCommand
     {
