@@ -70,9 +70,8 @@ final class Page
             assert($page->index() !== null);
             $level = $pages->level($page->index());
         }
-        $page = array_pop($stack);
-        assert($page instanceof self);
-        assert(empty($stack));
+        assert(count($stack) > 0);
+        $page = $stack[0];
         return $page;
     }
 
