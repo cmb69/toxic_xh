@@ -59,23 +59,23 @@ class MenuCommand
         if ($page === null) {
             return "";
         }
-        $o = str_repeat("", $indent) . "<ul class=\"menulevel{$level}\">\n";
+        $o = str_repeat("  ", $indent) . "<ul class=\"menulevel{$level}\">\n";
         $indent++;
         do {
             if ($page->index() !== null) {
                 $classes = $this->renderClasses($request, $page->index());
                 $item = $this->renderMenuItem($request, $page->index());
                 $o .= $this->renderCategoryItem($page->index())
-                    . str_repeat("", $indent) . "<li class=\"$classes\">\n"
-                    . str_repeat("", $indent + 1) . $item . "\n";
+                    . str_repeat("  ", $indent) . "<li class=\"$classes\">\n"
+                    . str_repeat("  ", $indent + 1) . $item . "\n";
             }
-            $o .= $this->renderMenu($request, $page->child(), $level + 1, $indent);
+            $o .= $this->renderMenu($request, $page->child(), $level + 1, $indent + 1);
             if ($page->index() !== null) {
-                $o .= str_repeat("", $indent) . "</li>\n";
+                $o .= str_repeat("  ", $indent) . "</li>\n";
             }
         } while ($page = $page->next());
         $indent--;
-        $o .= str_repeat("", $indent) . "</ul>\n";
+        $o .= str_repeat("  ", $indent) . "</ul>\n";
         return $o;
     }
 }
