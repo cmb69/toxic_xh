@@ -80,7 +80,7 @@ class Pages
     }
 
     /** @return list<int> */
-    public function children(int $page, int $levelCatch, bool $ignoreHidden = true): array
+    public function children(int $page, int $levelCatch): array
     {
         $result = [];
         $ll = $levelCatch;
@@ -88,15 +88,18 @@ class Pages
             if ($this->level($i) <= $this->level($page)) {
                 break;
             }
-            if ($this->level($i) <= $ll) {
-                if (!$ignoreHidden || !$this->hidden($i)) {
-                    $result[] = $i;
-                }
+            if ($this->level($i) <= $ll && !$this->hidden($i)) {
+                $result[] = $i;
             }
             if ($this->level($i) < $ll) {
                 $ll = $this->level($i);
             }
         }
         return $result;
+    }
+
+    public function isPageAncestorOf(int $page, int $other): bool
+    {
+        return in_array($page, $this->pages->getAncestorsOf($other), true);
     }
 }

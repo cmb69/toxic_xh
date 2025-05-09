@@ -11,7 +11,7 @@ use XH\PageDataRouter;
 use XH\Pages as XHPages;
 use XH\Publisher;
 
-class LiTest extends TestCase
+class MenuCommandTest extends TestCase
 {
     /** @var array<string,string> */
     private $conf;
@@ -90,12 +90,25 @@ class LiTest extends TestCase
             [9, 3],
             [10, 1],
         ]);
+        $this->pages->method("getAncestorsOf")->willReturnMap([
+            [0, true, []],
+            [1, true, []],
+            [2, true, [1]],
+            [3, true, [2, 1]],
+            [4, true, [1]],
+            [5, true, [4, 1]],
+            [6, true, [1]],
+            [7, true, [6, 1]],
+            [8, true, []],
+            [9, true, [8]],
+            [10, true, []],
+        ]);
         $this->pages->method("getCount")->willReturn(11);
     }
 
-    private function sut(): LiCommand
+    private function sut(): MenuCommand
     {
-        return new LiCommand($this->conf, new Pages($this->pages, $this->publisher, $this->pageData));
+        return new MenuCommand($this->conf, new Pages($this->pages, $this->publisher, $this->pageData));
     }
 
     public function testNoMenuItemsDisplayNothing(): void
@@ -108,7 +121,7 @@ class LiTest extends TestCase
     public function testUnorderedListHasListItemChild(string $class): void
     {
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
-        $this->assertStringContainsString("<ul class=\"$class\">\n<li ", $response->output());
+        $this->assertStringMatchesFormat("%A<ul class=\"$class\">%w<li %A", $response->output());
     }
 
     public function dataForUnorderedListlHasListItemChild(): array
@@ -124,7 +137,7 @@ class LiTest extends TestCase
     public function testListItemHasUnorderedListChild(string $class): void
     {
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
-        $this->assertStringMatchesFormat("%A<li%s\n<ul class=\"$class\">%A", $response->output());
+        $this->assertStringMatchesFormat("%A<li%A<ul class=\"$class\">%A", $response->output());
     }
 
     public function dataForListItemHasUnorderedListChild(): array
@@ -151,7 +164,7 @@ class LiTest extends TestCase
     {
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
-            "<li class=\"doc blog\"><a href=\"/?Blog:Hidden\">Hidden</a>",
+            "<li class=\"doc blog\">\n        <a href=\"/?Blog:Hidden\">Hidden</a>",
             $response->output()
         );
     }
@@ -169,15 +182,9 @@ class LiTest extends TestCase
     public function dataForHasUlWithProperClass(): array
     {
         return [
-            ['menulevel', 'menulevel1'],
             [1, 'menulevel1'],
             [1, 'menulevel2'],
             [1, 'menulevel3'],
-            ['sitemaplevel', 'sitemaplevel1'],
-            ['sitemaplevel', 'sitemaplevel2'],
-            ['sitemaplevel', 'sitemaplevel3'],
-            ['submenu', 'submenu'],
-            ['search', 'search'],
         ];
     }
 
@@ -185,14 +192,14 @@ class LiTest extends TestCase
     {
         $request = new FakeRequest(["s" => 1]);
         $response = $this->sut()($request, range(0, 10), 1);
-        $this->assertStringContainsString("<li class=\"sdocs blog\"><span>Blog</span>", $response->output());
+        $this->assertStringContainsString("<li class=\"sdocs blog\">\n    <span>Blog</span>", $response->output());
     }
 
     public function testNotSelectedPageHasClassDocs(): void
     {
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
-            "<li class=\"docs blog\"><a href=\"/?Blog\">Blog</a>",
+            "<li class=\"docs blog\">\n    <a href=\"/?Blog\">Blog</a>",
             $response->output()
         );
     }
@@ -211,7 +218,7 @@ class LiTest extends TestCase
         $request = new FakeRequest(["s" => 2]);
         $response = $this->sut()($request, range(0, 10), 1);
         $this->assertStringContainsString(
-            "<li class=\"$class blog\"><a href=\"/?Blog\">Blog</a>",
+            "<li class=\"$class blog\">\n    <a href=\"/?Blog\">Blog</a>",
             $response->output()
         );
     }
@@ -230,7 +237,7 @@ class LiTest extends TestCase
         $this->conf["menu_levelcatch"] = $levelcatch;
         $response = $this->sut()(new FakeRequest(), range(0, 10), 1);
         $this->assertStringContainsString(
-            "<li class=\"$class\"><a href=\"/?About\">About</a>",
+            "<li class=\"$class\">\n    <a href=\"/?About\">About</a>",
             $response->output()
         );
     }
@@ -247,19 +254,6 @@ class LiTest extends TestCase
     {
         $request = new FakeRequest(["admin" => true, "edit" => true]);
         $response = $this->sut()($request, range(0, 10), 1);
-        Approvals::verifyHtml($response->output());
-    }
-
-    public function testBlogSubmenuHasExactlyThreeItems(): void
-    {
-        $request = new FakeRequest(["s" => 1]);
-        $response = $this->sut()($request, [2, 4, 6], 'submenu');
-        Approvals::verifyHtml($response->output());
-    }
-
-    public function testBlogSubmenuHasProperStructure(): void
-    {
-        $response = $this->sut()(new FakeRequest(), [2, 4, 6], 'submenu');
         Approvals::verifyHtml($response->output());
     }
 }

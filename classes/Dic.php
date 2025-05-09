@@ -30,14 +30,14 @@ class Dic
 {
     public const VERSION = "1alpha1";
 
-    public static function liCommand(): LiCommand
+    public static function menuCommand(): MenuCommand
     {
-        return new LiCommand(self::conf(), self::pages());
+        return new MenuCommand(self::conf(), self::pages());
     }
 
     public static function submenuCommand(): SubmenuCommand
     {
-        return new SubmenuCommand(self::conf(), self::pages(), self::view(), self::liCommand());
+        return new SubmenuCommand(self::conf(), self::pages(), self::view());
     }
 
     public static function makeTabCommand(): TabCommand

@@ -16,10 +16,12 @@ require_once "../plib/classes/View.php";
 require_once "../plib/classes/FakeRequest.php";
 require_once "../plib/classes/FakeSystemChecker.php";
 
+require_once "./classes/model/Page.php";
 require_once "./classes/model/Pages.php";
 require_once "./classes/Dic.php";
+require_once "./classes/ListRendering.php";
 require_once "./classes/InfoCommand.php";
-require_once "./classes/LiCommand.php";
+require_once "./classes/MenuCommand.php";
 require_once "./classes/SubmenuCommand.php";
 require_once "./classes/TabCommand.php";
 
