@@ -59,20 +59,22 @@ class MenuCommand
         if ($page === null) {
             return "";
         }
-        $res = str_repeat("", $indent) . "\n<ul class=\"menulevel{$indent}\">\n";
+        $o = str_repeat("", $indent) . "\n<ul class=\"menulevel{$indent}\">\n";
         $indent++;
         do {
             if ($page->index() !== null) {
-                $res .= $this->renderCategoryItem($page->index());
-                $res .= str_repeat("", $indent) . "<li class=\"{$this->renderClasses($request, $page->index())}\">{$this->renderMenuItem($request, $page->index())}";
+                $classes = $this->renderClasses($request, $page->index());
+                $item = $this->renderMenuItem($request, $page->index());
+                $o .= $this->renderCategoryItem($page->index())
+                    . str_repeat("", $indent) . "<li class=\"$classes\">$item";
             }
-            $res .= $this->renderMenu($request, $page->child(), $indent);
+            $o .= $this->renderMenu($request, $page->child(), $indent);
             if ($page->index() !== null) {
-                $res .= "</li>\n";
+                $o .= "</li>\n";
             }
         } while ($page = $page->next());
         $indent--;
-        $res .= str_repeat("", $indent) . "</ul>\n";
-        return $res;
+        $o .= str_repeat("", $indent) . "</ul>\n";
+        return $o;
     }
 }
