@@ -148,4 +148,22 @@ final class Page
             $this->next->release();
         }
     }
+
+    /**
+     * @param list<int> $acc
+     * @return list<int>
+     */
+    public function toTocArray(array &$acc = []): array
+    {
+        $page = $this;
+        do {
+            if ($page->index !== null) {
+                $acc[] = $page->index;
+            }
+            if ($page->child) {
+                $page->child->toTocArray($acc);
+            }
+        } while ($page = $page->next);
+        return $acc;
+    }
 }

@@ -8,6 +8,7 @@ use XH\PageDataRouter;
 use XH\Pages as XHPages;
 use XH\Publisher;
 
+/** @small */
 class PageTest extends TestCase
 {
     /** @var XHPages&Stub */
@@ -44,17 +45,10 @@ class PageTest extends TestCase
         return new Pages($this->pages, $this->publisher, $this->pageData);
     }
 
-    public function testFromTocArray(): void
+    public function testTocArrayRoundtrip(): void
     {
-        $page = Page::fromTocArray(range(0, 10), 1, $this->pages());
-        $expected = new Page(0);
-        $p = $expected->addSibling(1)->addChild(2);
-        $p->addChild(3);
-        $p = $p->addSibling(4);
-        $p->addChild(5);
-        $p->addSibling(6)->addChild(7);
-        $expected->next()->addSibling(8)->addChild(null)->addChild(9);
-        $expected->next()->next()->addSibling(10);
-        $this->assertEquals($expected, $page);
+        $ta = range(0, 10);
+        $page = Page::fromTocArray($ta, 1, $this->pages());
+        $this->assertEquals($ta, $page->toTocArray());
     }
 }
