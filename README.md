@@ -1,8 +1,8 @@
 # Toxic_XH
 
 Toxic_XH facilitates to have enhanced TOCs (table of contents) on your site,
-which add features that are not available via the built-in toc() and
-li() of CMSimple_XH, similar to those offered by the old AdvancedTOC and xtoc add-ons.
+which add features that are not available via the built-in `toc()` and
+`li()` of CMSimple_XH, similar to those offered by the old AdvancedTOC and xtoc add-ons.
 
 - [Requirements](#requirements)
 - [Download](#download)
@@ -37,8 +37,8 @@ The installation is done as with many other CMSimple_XH plugins.
    directory of CMSimple_XH.
 1. Set write permissions to the subdirectories `css/`, `config/` and
    `languages/`.
-<!--<li>Browse to Toxic's administration (Plugins &rarr; Toxic), and
-check if all requirements are fulfilled.</li>-->
+1. Browse to `Plugins` → `Toxic` in the back-end, and
+   check whether all requirements are fulfilled.
 
 ## Settings
 
@@ -135,6 +135,8 @@ Many thanks for publishing this icon under GPL.
 Many thanks to the community at the
 [CMSimple_XH Forum](http://www.cmsimpleforum.com/)
 for tips, suggestions and testing.
+Especially, I like to thank *manu*, who triggered resuming of the plugin
+developement via a question regarding `toc()`.
 
 And last but not least many thanks to [Peter Harteg](http://www.harteg.dk/),
 the “father” of CMSimple, and all developers of [CMSimple_XH](https://www.cmsimple-xh.org/)

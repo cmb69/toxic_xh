@@ -82,8 +82,15 @@
     <!-- description of the plugin, ca. 200 characters, you can use <br/>, <ol></ol>, <ul></ul>, <li></li>, <b></b>, <i></i>. -->
     <description lang="en">
       Toxic_XH facilitates to have enhanced TOCs (table of contents) on your site,
-      which add features that are not available via the built-in toc() and li() of CMSimple_XH,
-      similar to those offered by AdvancedTOC and xtoc.
+      which add features that are not available via the built-in toc() and
+      li() of CMSimple_XH, similar to those offered by the old AdvancedTOC and xtoc add-ons.
+    </description>
+    <description lang="de">
+      Toxic_XH ermöglicht die Verwendung von erweiterten TOCs (engl. Table of Contents;
+      Inhaltsverzeichnissen), die Features bieten, die nicht von den eingebauten
+      toc() und li() Funktionen von CMSimple_XH unterstützt werden, sondern
+      vergleichbar mit denen sind, die von den alten AdvancedTOC und xtoc Add-Ons
+      angeboten wurden.
     </description>
     <!-- additional languages are possible, i.e. da, fr, pl, ... -->
     <!-- The use of this language is limited by the website where the repository is hosted. -->
