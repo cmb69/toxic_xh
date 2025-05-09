@@ -51,7 +51,11 @@ class MenuCommand
     public function __invoke(Request $request, array $ta, int $level): Response
     {
         $page = Page::fromTocArray($ta, $level, $this->pages);
-        return Response::create($this->renderMenu($request, $page, $level));
+        $output = $this->renderMenu($request, $page, $level);
+        if ($page !== null) {
+            $page->release();
+        }
+        return Response::create($output);
     }
 
     private function renderMenu(Request $request, ?Page $page, int $level, int $indent = 0): string

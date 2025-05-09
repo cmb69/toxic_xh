@@ -135,4 +135,17 @@ final class Page
     {
         return $this->next;
     }
+
+    // breaks cycles to avoid GC
+    public function release(): void
+    {
+        $this->parent = null;
+        if ($this->child) {
+            $this->child->release();
+        }
+        $this->prev = null;
+        if ($this->next) {
+            $this->next->release();
+        }
+    }
 }
