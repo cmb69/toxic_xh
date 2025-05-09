@@ -25,6 +25,7 @@ namespace Toxic;
 
 use Plib\Request;
 use Plib\Response;
+use Toxic\Model\Page;
 use Toxic\Model\Pages;
 
 class MenuCommand
@@ -49,43 +50,29 @@ class MenuCommand
     /** @param list<int> $ta */
     public function __invoke(Request $request, array $ta, int $level): Response
     {
-        $tl = count($ta);
-        if ($tl < 1) {
-            return Response::create();
-        }
-        $t = '';
-        $b = $level > 0 ? $level - 1 : 0;
-        $lf = [];
-        for ($i = 0; $i < $tl; $i++) {
-            for ($k = $this->pageLevelOrDefault($ta, $i - 1, $b); $k < $this->pages->level($ta[$i]); $k++) {
-                $t .= "\n" . '<ul class="menulevel' . ($k + 1) . '">' . "\n";
-            }
-            $t .= $this->renderCategoryItem($ta[$i]);
-            $t .= '<li class="' . $this->renderClasses($request, $ta[$i]) . '">';
-            $t .= $this->renderMenuItem($request, $ta[$i]);
-            $cond = $this->pageLevelOrDefault($ta, $i + 1, $b) > $this->pages->level($ta[$i]);
-            if ($cond) {
-                $lf[$this->pages->level($ta[$i])] = true;
-            } else {
-                $t .= '</li>' . "\n";
-                $lf[$this->pages->level($ta[$i])] = false;
-            }
-            for ($k = $this->pages->level($ta[$i]); $k > $this->pageLevelOrDefault($ta, $i + 1, $b); $k--) {
-                $t .= '</ul>' . "\n";
-                if (isset($lf[$k - 1])) {
-                    if ($lf[$k - 1]) {
-                        $t .= '</li>' . "\n";
-                        $lf[$k - 1] = false;
-                    }
-                }
-            }
-        }
-        return Response::create($t);
+        $page = Page::fromTocArray($ta, $level, $this->pages);
+        return Response::create($this->renderMenu($request, $page, 1));
     }
 
-    /** @param list<int> $ta */
-    private function pageLevelOrDefault(array $ta, int $i, int $default): int
+    private function renderMenu(Request $request, ?Page $page, int $indent = 1): string
     {
-        return isset($ta[$i]) ? $this->pages->level($ta[$i]) : $default;
+        if ($page === null) {
+            return "";
+        }
+        $res = str_repeat("", $indent) . "\n<ul class=\"menulevel{$indent}\">\n";
+        $indent++;
+        do {
+            if ($page->index() !== null) {
+                $res .= $this->renderCategoryItem($page->index());
+                $res .= str_repeat("", $indent) . "<li class=\"{$this->renderClasses($request, $page->index())}\">{$this->renderMenuItem($request, $page->index())}";
+            }
+            $res .= $this->renderMenu($request, $page->child(), $indent);
+            if ($page->index() !== null) {
+                $res .= "</li>\n";
+            }
+        } while ($page = $page->next());
+        $indent--;
+        $res .= str_repeat("", $indent) . "</ul>\n";
+        return $res;
     }
 }
