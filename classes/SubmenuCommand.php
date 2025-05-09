@@ -49,6 +49,9 @@ class SubmenuCommand
 
     public function __invoke(Request $request, string $html): Response
     {
+        if ($request->s() < 0) {
+            return Response::create();
+        }
         $tocArray = $this->pages->children($request->s(), (int) $this->conf["menu_levelcatch"]);
         if (count($tocArray) <= 0) {
             return Response::create();
